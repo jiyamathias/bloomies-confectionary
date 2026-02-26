@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ALL KEYFRAMES DEFINED HERE IN PLAIN CSS
+   Reason: Tailwind only emits a keyframe when its paired animate-* class is
+   present in scanned source files. Any keyframe referenced from @layer utilities
+   (like .fu-* using fadeUp) gets tree-shaken out unless defined here.
+───────────────────────────────────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(34px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -250% center; }
+  100% { background-position:  250% center; }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow:
+      0 0 20px rgba(200,145,58,0),
+      0 0 40px rgba(200,145,58,0),
+      0 0 80px rgba(200,145,58,0);
+    filter: brightness(1);
+  }
+  50% {
+    text-shadow:
+      0 0 20px rgba(245,217,138,0.9),
+      0 0 50px rgba(200,145,58,0.8),
+      0 0 100px rgba(200,145,58,0.5),
+      0 0 160px rgba(200,145,58,0.25);
+    filter: brightness(1.18);
+  }
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes orbPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.18); }
+}
+
+@keyframes bobble {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(-7px); }
+}
+
+@keyframes mobSlide {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+@layer base {
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { @apply font-dm bg-cream text-cocoa antialiased overflow-x-hidden; }
+  ::-webkit-scrollbar       { @apply w-[5px]; }
+  ::-webkit-scrollbar-track { @apply bg-cream-2; }
+  ::-webkit-scrollbar-thumb { @apply bg-gold rounded-full; }
+}
+
+/* ─── Utilities ──────────────────────────────────────────────────────────── */
+@layer utilities {
+
+  /* ── Shimmer + radiant glow text effect for "Bite Blooms" ──
+     Two-layer effect:
+     1. Moving shimmer gradient via background-clip  (the colour sweep)
+     2. glowPulse keyframe via text-shadow + filter  (the radiant bloom)
+  ── */
+  .shimmer-text {
+    display: inline-block;  /* text-shadow needs a box to cast from */
+    font-style: italic;
+
+    /* Moving gold shimmer */
+    background: linear-gradient(
+      90deg,
+      #7a4a2e  0%,
+      #c8913a 20%,
+      #f5d98a 45%,
+      #ffffff 50%,
+      #f5d98a 55%,
+      #e6c06a 75%,
+      #c8913a 85%,
+      #7a4a2e 100%
+    );
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    /* Radiant glow pulse — breathing warm gold bloom */
+    animation:
+      shimmer   3.5s linear   infinite,
+      glowPulse 3s   ease-in-out infinite;
+  }
+
+  /* ── Film-grain texture overlay ── */
+  .grain {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 9999; opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px;
+  }
+
+  /* ── Scroll-reveal — IntersectionObserver adds .visible ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition:
+      opacity   0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── Hero content entrance — staggered fade-up ──
+     FIX: fadeUp keyframe is now defined above in plain CSS, not inside
+     Tailwind's extend.keyframes, so it is always emitted regardless of
+     whether animate-fade-up is used in JSX.
+  ── */
+  .fu-1 { opacity: 0; animation: fadeUp 0.8s 0.20s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .fu-2 { opacity: 0; animation: fadeUp 0.9s 0.38s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .fu-3 { opacity: 0; animation: fadeUp 0.9s 0.55s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .fu-4 { opacity: 0; animation: fadeUp 0.9s 0.68s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .fu-5 { opacity: 0; animation: fadeUp 0.9s 0.82s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .fu-6 { opacity: 0; animation: fadeUp 0.9s 0.98s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+  /* ── Transition-delay helpers for section reveal stagger ── */
+  .delay-1 { transition-delay: 0.08s; }
+  .delay-2 { transition-delay: 0.16s; }
+  .delay-3 { transition-delay: 0.24s; }
+  .delay-4 { transition-delay: 0.32s; }
+  .delay-5 { transition-delay: 0.40s; }
+  .delay-6 { transition-delay: 0.48s; }
+}
