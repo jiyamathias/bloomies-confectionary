@@ -90,7 +90,7 @@ export default function OrderSection() {
 
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[10px] font-medium tracking-[.12em] uppercase text-cocoa-3/50">We accept:</span>
-              {['💳 Credit Card','💳 Debit Card'].map(b => (
+              {['💳 Transfer','💳 Debit Card'].map(b => (
                 <span key={b} className="px-3.5 py-1.5 bg-cream-2 border border-cream-3 rounded-full text-[10px] font-medium text-cocoa-3">{b}</span>
               ))}
             </div>
