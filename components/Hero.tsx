@@ -59,27 +59,10 @@ export default function Hero() {
         {/* Headline */}
         <h1
           className="fu-2 font-playfair font-black text-cream mb-5"
-          style={{ fontSize: 'clamp(48px,8.5vw,106px)', lineHeight: 0.92 }}
+          style={{ fontSize: 'clamp(48px,8.5vw,106px)', lineHeight: 0.92, }}
         >
           Where Every<br />
-
-          {/* "Bite Blooms" — shimmer sweep + radiant glow pulse.
-              The glow halo is a sibling div positioned absolutely behind the text.
-              We can't use text-shadow directly on a background-clip:text element
-              (the shadow would be clipped too), so the halo lives separately. */}
-          <span className="relative inline-block">
-            {/* Radiant glow halo — sits behind, bleeds outward */}
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 -z-10 blur-3xl"
-              style={{
-                // background: 'radial-gradient(ellipse 80% 60% at 50% 55%, rgba(245,217,138,0.55) 0%, rgba(200,145,58,0.25) 45%, transparent 75%)',
-                animation: 'glowPulse 3s ease-in-out infinite',
-                transform: 'scale(1.4)',
-              }}
-            />
-            <span className="shimmer-text">Bite Blooms</span>
-          </span>
+            <span className="shimmer-text" style={{animation: 'shimmer 4s linear infinite;'}}>Bite Blooms</span>
 
           <br />Into Joy
         </h1>

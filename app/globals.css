@@ -81,17 +81,7 @@
     font-style: italic;
 
     /* Moving gold shimmer */
-    background: linear-gradient(
-      90deg,
-      #7a4a2e  0%,
-      #c8913a 20%,
-      #f5d98a 45%,
-      #ffffff 50%,
-      #f5d98a 55%,
-      #e6c06a 75%,
-      #c8913a 85%,
-      #7a4a2e 100%
-    );
+    background: linear-gradient(90deg,#c8913a 0%,#f5d98a 35%,#e6c06a 65%,#c8913a 100%);
     background-size: 300% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
