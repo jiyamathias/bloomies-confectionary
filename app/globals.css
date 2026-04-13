@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base ─────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: #FAFAFE;
+  color: #5B2D8E;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #FAFAFE; }
+::-webkit-scrollbar-thumb { background: #C5B0E8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #E8609A; }
+
+/* ─── Marquee ──────────────────────────────────────────────────── */
+.marquee-track { animation: slideMarquee 28s linear infinite; }
+@keyframes slideMarquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Fade-up ──────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp 0.65s ease both; }
+.delay-1 { animation-delay: 0.10s; }
+.delay-2 { animation-delay: 0.20s; }
+.delay-3 { animation-delay: 0.30s; }
+.delay-4 { animation-delay: 0.40s; }
+.delay-5 { animation-delay: 0.50s; }
+
+/* ─── Image zoom ───────────────────────────────────────────────── */
+.img-zoom { overflow: hidden; }
+.img-zoom img { transition: transform 0.5s ease; }
+.img-zoom:hover img { transform: scale(1.06); }
+
+/* ─── Scroll hint bob ──────────────────────────────────────────── */
+@keyframes bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(-8px); }
+}
+.scroll-hint { animation: bob 2.5s ease-in-out infinite; }
+
+/* ─── Focus ────────────────────────────────────────────────────── */
+*:focus-visible { outline: 2px solid #E8609A; outline-offset: 2px; }
+
+/* ─── Cormorant font util ──────────────────────────────────────── */
+.font-cormorant { font-family: 'Cormorant Garamond', Georgia, serif; }
