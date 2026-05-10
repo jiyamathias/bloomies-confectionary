@@ -37,9 +37,9 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
           ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-[rgba(232,96,154,0.15)]">
-          <h2 className="font-cormorant text-2xl font-semibold text-[#5B2D8E]">Your Order</h2>
-          <button onClick={onClose} className="p-1.5 text-[#7B5EA7] hover:text-[#E8609A] transition-colors">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[rgba(165,140,244,0.15)]">
+          <h2 className="font-cormorant text-2xl font-semibold text-[#433075]">Your Order</h2>
+          <button onClick={onClose} className="p-1.5 text-[#6E6A8C] hover:text-[#A58CF4] transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -47,33 +47,33 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
           {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full gap-4 text-[#7B5EA7]">
+            <div className="flex flex-col items-center justify-center h-full gap-4 text-[#6E6A8C]">
               <ShoppingBag size={48} className="opacity-20" />
               <p className="text-sm">Your cart is empty.<br className="hidden sm:block" /> Add something sweet!</p>
             </div>
           ) : (
             <div className="space-y-3">
               {items.map(item => (
-                <div key={item.id} className="flex gap-3 bg-[#FAFAFE] rounded-xl p-3">
+                <div key={item.id} className="flex gap-3 bg-[#FAFAFA] rounded-xl p-3">
                   <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 relative">
                     <Image src={item.image} alt={item.name} fill className="object-cover" sizes="56px" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[0.88rem] font-medium text-[#5B2D8E] truncate">{item.name}</p>
-                    <p className="text-[0.78rem] text-[#E8609A] mt-0.5">{item.price}</p>
+                    <p className="text-[0.88rem] font-medium text-[#433075] truncate">{item.name}</p>
+                    <p className="text-[0.78rem] text-[#A58CF4] mt-0.5">{item.price}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <button
                         onClick={() => changeQty(item.id, -1)}
-                        className="w-6 h-6 rounded-full bg-white border border-[#E8DAFF] flex items-center justify-center
-                          text-[#5B2D8E] hover:bg-[#E8DAFF] transition-colors"
+                        className="w-6 h-6 rounded-full bg-white border border-[#E1D7F0] flex items-center justify-center
+                          text-[#433075] hover:bg-[#E1D7F0] transition-colors"
                       >
                         <Minus size={10} />
                       </button>
-                      <span className="text-[0.88rem] font-semibold text-[#5B2D8E] w-4 text-center">{item.qty}</span>
+                      <span className="text-[0.88rem] font-semibold text-[#433075] w-4 text-center">{item.qty}</span>
                       <button
                         onClick={() => changeQty(item.id, 1)}
-                        className="w-6 h-6 rounded-full bg-white border border-[#E8DAFF] flex items-center justify-center
-                          text-[#5B2D8E] hover:bg-[#E8DAFF] transition-colors"
+                        className="w-6 h-6 rounded-full bg-white border border-[#E1D7F0] flex items-center justify-center
+                          text-[#433075] hover:bg-[#E1D7F0] transition-colors"
                       >
                         <Plus size={10} />
                       </button>
@@ -81,7 +81,7 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
                   </div>
                   <button
                     onClick={() => remove(item.id)}
-                    className="text-[#CCC] hover:text-[#E8609A] transition-colors self-start mt-1"
+                    className="text-[#CCC] hover:text-[#A58CF4] transition-colors self-start mt-1"
                   >
                     <Trash2 size={15} />
                   </button>
@@ -93,11 +93,11 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="px-6 py-5 border-t border-[rgba(232,96,154,0.15)] space-y-4">
-            <div className="flex justify-between text-[0.85rem] text-[#7B5EA7]">
+          <div className="px-6 py-5 border-t border-[rgba(165,140,244,0.15)] space-y-4">
+            <div className="flex justify-between text-[0.85rem] text-[#6E6A8C]">
               <span>Items</span><span>{count}</span>
             </div>
-            <div className="flex justify-between text-[1rem] font-semibold text-[#5B2D8E]">
+            <div className="flex justify-between text-[1rem] font-semibold text-[#433075]">
               <span>Total</span><span>Confirmed on WhatsApp</span>
             </div>
 
@@ -108,16 +108,16 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="Your name…"
-                className="w-full px-4 py-2.5 rounded-xl border border-[rgba(232,96,154,0.25)]
-                  text-[0.85rem] text-[#5B2D8E] bg-[#FAFAFE] focus:border-[#E8609A] focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-[rgba(165,140,244,0.25)]
+                  text-[0.85rem] text-[#433075] bg-[#FAFAFA] focus:border-[#A58CF4] focus:outline-none"
               />
               <input
                 type="tel"
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
                 placeholder="WhatsApp / Phone…"
-                className="w-full px-4 py-2.5 rounded-xl border border-[rgba(232,96,154,0.25)]
-                  text-[0.85rem] text-[#5B2D8E] bg-[#FAFAFE] focus:border-[#E8609A] focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-[rgba(165,140,244,0.25)]
+                  text-[0.85rem] text-[#433075] bg-[#FAFAFA] focus:border-[#A58CF4] focus:outline-none"
               />
             </div>
 

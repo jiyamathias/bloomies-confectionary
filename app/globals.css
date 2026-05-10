@@ -1,60 +1,140 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ─── CSS Variables ─────────────────────────────────────────────── */
+:root {
+  --lav-mist:    #F3F0FA;
+  --lavender:    #A58CF4;
+  --deep-purple: #433075;
+  --thistle:     #E1D7F0;
+  --purple-sage: #6E6A8C;
+  --soft-white:  #FAFAFA;
+  --jet-black:   #0D0D0D;
+  --gold:        #C9A84C;
+}
 
 /* ─── Base ─────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
   font-family: 'DM Sans', system-ui, sans-serif;
-  background: #FAFAFE;
-  color: #5B2D8E;
+  background: var(--soft-white);
+  color: var(--deep-purple);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─── Scrollbar ────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #FAFAFE; }
-::-webkit-scrollbar-thumb { background: #C5B0E8; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #E8609A; }
+/* ─── Scrollbar ─────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--lav-mist); }
+::-webkit-scrollbar-thumb { background: var(--lavender); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--deep-purple); }
 
-/* ─── Marquee ──────────────────────────────────────────────────── */
-.marquee-track { animation: slideMarquee 28s linear infinite; }
+/* ─── Font helpers ──────────────────────────────────────────────── */
+.font-cormorant { font-family: 'Cormorant Garamond', Georgia, serif; }
+
+/* ─── Marquee ───────────────────────────────────────────────────── */
+.marquee-track { animation: slideMarquee 30s linear infinite; }
 @keyframes slideMarquee {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-/* ─── Fade-up ──────────────────────────────────────────────────── */
+/* ─── Fade-up ───────────────────────────────────────────────────── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(32px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.animate-fade-up { animation: fadeUp 0.65s ease both; }
-.delay-1 { animation-delay: 0.10s; }
-.delay-2 { animation-delay: 0.20s; }
-.delay-3 { animation-delay: 0.30s; }
-.delay-4 { animation-delay: 0.40s; }
-.delay-5 { animation-delay: 0.50s; }
+.animate-fade-up { animation: fadeUp 0.75s cubic-bezier(0.16,1,0.3,1) both; }
+.delay-1 { animation-delay: 0.12s; }
+.delay-2 { animation-delay: 0.24s; }
+.delay-3 { animation-delay: 0.38s; }
+.delay-4 { animation-delay: 0.52s; }
+.delay-5 { animation-delay: 0.66s; }
 
-/* ─── Image zoom ───────────────────────────────────────────────── */
-.img-zoom { overflow: hidden; }
-.img-zoom img { transition: transform 0.5s ease; }
-.img-zoom:hover img { transform: scale(1.06); }
-
-/* ─── Scroll hint bob ──────────────────────────────────────────── */
-@keyframes bob {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%       { transform: translateX(-50%) translateY(-8px); }
+/* ─── Float animations for hero elements ───────────────────────── */
+@keyframes floatA {
+  0%,100% { transform: translateY(0px) rotate(-2deg); }
+  50%     { transform: translateY(-18px) rotate(2deg); }
 }
-.scroll-hint { animation: bob 2.5s ease-in-out infinite; }
+@keyframes floatB {
+  0%,100% { transform: translateY(0px) rotate(3deg); }
+  50%     { transform: translateY(-14px) rotate(-1deg); }
+}
+@keyframes floatC {
+  0%,100% { transform: translateY(0px) rotate(-1deg); }
+  50%     { transform: translateY(-22px) rotate(3deg); }
+}
+@keyframes floatD {
+  0%,100% { transform: translateY(0px) scale(1); }
+  50%     { transform: translateY(-10px) scale(1.03); }
+}
+.float-a { animation: floatA 7s ease-in-out infinite; }
+.float-b { animation: floatB 9s ease-in-out infinite; }
+.float-c { animation: floatC 11s ease-in-out infinite 1s; }
+.float-d { animation: floatD 6s ease-in-out infinite 0.5s; }
 
-/* ─── Focus ────────────────────────────────────────────────────── */
-*:focus-visible { outline: 2px solid #E8609A; outline-offset: 2px; }
+/* ─── Scroll hint ───────────────────────────────────────────────── */
+@keyframes bob {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50%     { transform: translateX(-50%) translateY(-8px); }
+}
+.scroll-hint { animation: bob 2.8s ease-in-out infinite; }
 
-/* ─── Cormorant font util ──────────────────────────────────────── */
-.font-cormorant { font-family: 'Cormorant Garamond', Georgia, serif; }
+/* ─── Image hover zoom ──────────────────────────────────────────── */
+.img-zoom { overflow: hidden; }
+.img-zoom img { transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94); }
+.img-zoom:hover img { transform: scale(1.07); }
+
+/* ─── Glass card effect ─────────────────────────────────────────── */
+.glass {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+/* ─── Grain texture overlay ─────────────────────────────────────── */
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* ─── Shimmer line ──────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.shimmer-text {
+  background: linear-gradient(90deg, #A58CF4 0%, #E1D7F0 40%, #A58CF4 60%, #433075 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ─── Focus ─────────────────────────────────────────────────────── */
+*:focus-visible { outline: 2px solid var(--lavender); outline-offset: 3px; }
+
+/* ─── Category card hover ───────────────────────────────────────── */
+.cat-card { transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease; }
+.cat-card:hover { transform: translateY(-6px) scale(1.015); box-shadow: 0 24px 56px rgba(67,48,117,0.16); }
+
+/* ─── Horizontal rule with ornament ────────────────────────────── */
+.ornament-line {
+  display: flex; align-items: center; gap: 12px;
+}
+.ornament-line::before,
+.ornament-line::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(165,140,244,0.35), transparent);
+}
