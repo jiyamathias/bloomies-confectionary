@@ -3,17 +3,17 @@ import { MapPin, Phone, Clock, Instagram } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#5B2D8E] text-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-14 lg:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-10">
+    <footer className="bg-[#433075] text-white">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-14 lg:py-16">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-10">
 
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="font-cormorant text-[1.75rem] font-semibold mb-2">
-              Bloomies<span className="text-[#F0D0E8]">.</span>
+              Bloomies<span className="text-[#E1D7F0]">.</span>
             </div>
-            <p className="font-cormorant italic text-[#F0D0E8] text-[0.95rem] mb-4">
-              &ldquo;When quality matters, choose Bloomies.&rdquo;
+            <p className="font-cormorant italic text-[#E1D7F0] text-[0.95rem] mb-4">
+              &ldquo;Baked with love, for people with good taste.&rdquo;
             </p>
             <p className="text-[0.8rem] text-white/40 leading-relaxed">
               Premium cakes, pastries &amp; confections crafted with love in Port Harcourt, Rivers State.
@@ -34,7 +34,7 @@ export default function Footer() {
               ].map(([href, label]) => (
                 <li key={href}>
                   <Link href={href}
-                    className="text-[0.82rem] text-white/45 hover:text-[#F0D0E8] transition-colors">
+                    className="text-[0.82rem] text-white/45 hover:text-[#E1D7F0] transition-colors">
                     {label}
                   </Link>
                 </li>
@@ -53,21 +53,15 @@ export default function Footer() {
               ].map(([href, label]) => (
                 <li key={label}>
                   <Link href={href}
-                    className="text-[0.82rem] text-white/45 hover:text-[#F0D0E8] transition-colors">
+                    className="text-[0.82rem] text-white/45 hover:text-[#E1D7F0] transition-colors">
                     {label}
                   </Link>
                 </li>
               ))}
               <li>
                 <a href="https://wa.me/2348181154270" target="_blank" rel="noopener noreferrer"
-                  className="text-[0.82rem] text-white/45 hover:text-[#F0D0E8] transition-colors">
+                  className="text-[0.82rem] text-white/45 hover:text-[#E1D7F0] transition-colors">
                   Custom Order
-                </a>
-              </li>
-              <li>
-                <a href="https://bakersmerch.com" target="_blank" rel="noopener noreferrer"
-                  className="text-[0.82rem] text-white/45 hover:text-[#F0D0E8] transition-colors">
-                  BakersMerch ↗
                 </a>
               </li>
             </ul>
@@ -78,19 +72,19 @@ export default function Footer() {
             <h4 className="text-[0.72rem] tracking-[0.14em] uppercase text-white/40 mb-4">Contact</h4>
             <div className="space-y-3">
               <a href="tel:08181154270"
-                className="flex gap-2.5 text-[0.8rem] text-white/45 hover:text-[#F0D0E8] transition-colors">
-                <Phone size={14} className="text-[#F0D0E8] shrink-0 mt-0.5" /> 08181154270
+                className="flex gap-2.5 text-[0.8rem] text-white/45 hover:text-[#E1D7F0] transition-colors">
+                <Phone size={14} className="text-[#E1D7F0] shrink-0 mt-0.5" /> 08181154270
               </a>
               <a href="https://instagram.com/bloomies.ng" target="_blank" rel="noopener noreferrer"
-                className="flex gap-2.5 text-[0.8rem] text-white/45 hover:text-[#F0D0E8] transition-colors">
-                <Instagram size={14} className="text-[#F0D0E8] shrink-0 mt-0.5" /> @bloomies.ng
+                className="flex gap-2.5 text-[0.8rem] text-white/45 hover:text-[#E1D7F0] transition-colors">
+                <Instagram size={14} className="text-[#E1D7F0] shrink-0 mt-0.5" /> @bloomies.ng
               </a>
               <div className="flex gap-2.5 text-[0.8rem] text-white/45">
-                <MapPin size={14} className="text-[#F0D0E8] shrink-0 mt-0.5" />
+                <MapPin size={14} className="text-[#E1D7F0] shrink-0 mt-0.5" />
                 <span>No 33 Amadimati Street, Mgbuoba, Port Harcourt</span>
               </div>
               <div className="flex gap-2.5 text-[0.8rem] text-white/45">
-                <Clock size={14} className="text-[#F0D0E8] shrink-0 mt-0.5" />
+                <Clock size={14} className="text-[#E1D7F0] shrink-0 mt-0.5" />
                 Open daily · Closes 5 PM
               </div>
             </div>
@@ -113,7 +107,7 @@ export default function Footer() {
                 target={href.startsWith('http') ? '_blank' : undefined}
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-full bg-white/[0.07] flex items-center justify-center
-                  text-[0.85rem] hover:bg-[#E8609A] transition-all duration-200">
+                  text-[0.85rem] hover:bg-[#A58CF4] transition-all duration-200">
                 {icon}
               </a>
             ))}

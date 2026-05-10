@@ -31,16 +31,16 @@ export default function DailyTreatsPage() {
         }
       />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10 lg:py-14">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-14">
         {/* Mobile: 2-col grid | Desktop: 6-col */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {treats.map(p => (
             <div
               key={p.id}
-              className="group bg-white rounded-2xl overflow-hidden border border-[rgba(232,96,154,0.15)]
+              className="group bg-white rounded-2xl overflow-hidden border border-[rgba(165,140,244,0.15)]
                 transition-all duration-300 hover:-translate-y-1.5
-                hover:shadow-[0_14px_32px_rgba(232,96,154,0.15)]
-                hover:border-[#E8DAFF] flex flex-col"
+                hover:shadow-[0_14px_32px_rgba(165,140,244,0.15)]
+                hover:border-[#E1D7F0] flex flex-col"
             >
               <div className="relative w-full overflow-hidden" style={{ paddingBottom: '80%' }}>
                 <Image
@@ -50,13 +50,13 @@ export default function DailyTreatsPage() {
                 />
               </div>
               <div className="p-3 flex flex-col flex-1 text-center">
-                <p className="text-[0.82rem] font-medium text-[#5B2D8E] mb-0.5">{p.name}</p>
-                <p className="text-[0.75rem] text-[#E8609A] mb-3">{p.price}</p>
+                <p className="text-[0.82rem] font-medium text-[#433075] mb-0.5">{p.name}</p>
+                <p className="text-[0.75rem] text-[#A58CF4] mb-3">{p.price}</p>
                 <button
                   onClick={() => handleAdd(p)}
-                  className="mt-auto w-full bg-[#5B2D8E] text-white text-[0.72rem] font-semibold
+                  className="mt-auto w-full bg-[#433075] text-white text-[0.72rem] font-semibold
                     py-2 rounded-full transition-all duration-200
-                    hover:bg-[#E8609A] active:scale-[0.97]"
+                    hover:bg-[#A58CF4] active:scale-[0.97]"
                 >
                   + Add to Cart
                 </button>
@@ -66,7 +66,7 @@ export default function DailyTreatsPage() {
         </div>
 
         {/* Note */}
-        <p className="text-center text-[0.8rem] text-[#7B5EA7] mt-8">
+        <p className="text-center text-[0.8rem] text-[#6E6A8C] mt-8">
           Tap any item to add to your cart, then checkout via WhatsApp 🛒
         </p>
       </div>

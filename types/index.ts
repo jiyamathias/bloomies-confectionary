@@ -6,6 +6,36 @@ export type ProductCategory =
   | 'daily-treats'
   | 'events';
 
+// Customization fields that an admin can enable per cake
+export type OneLayerCustomField =
+  | 'flavour'
+  | 'icing'
+  | 'colour'
+  | 'message'
+  | 'occasion'
+  | 'gender'
+  | 'delivery'
+  | 'addon_card'
+  | 'addon_chamdor'
+  | 'addon_candles'
+  | 'notes';
+
+export type BiggerCakeCustomField =
+  | 'size_layers'
+  | 'flavour_regular'
+  | 'flavour_deluxe'
+  | 'colour'
+  | 'topper'
+  | 'occasion'
+  | 'gender'
+  | 'delivery'
+  | 'addon_card'
+  | 'addon_chamdor'
+  | 'addon_candles'
+  | 'notes';
+
+export type CakeCustomField = OneLayerCustomField | BiggerCakeCustomField;
+
 export interface Product {
   id: string;
   name: string;
@@ -20,6 +50,10 @@ export interface Product {
   moq?: string;
   featured: boolean;
   sort_order: number;
+  // Which customization fields are enabled for this cake (undefined = all enabled for backward compat)
+  customizationOptions?: CakeCustomField[];
+  // Design style set by admin at creation time (bigger cakes only) — shown to customer as info
+  designStyle?: string;
 }
 
 export interface CartItem {

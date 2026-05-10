@@ -178,22 +178,28 @@ export const PRODUCTS: Product[] = [
 
   // ── Events ────────────────────────────────────────────────────────────────
   {
-    id: 'ev-1', name: 'Premium Treat Box', category: 'events',
-    description: 'Curated mix of our finest pastries and treats, beautifully boxed.',
+    id: 'ev-1', name: 'Premium Treat Boxes', category: 'events',
+    description: 'Beautifully curated boxes of our finest pastries and confections — perfect for gifting and corporate appreciation.',
     price: 'Custom Pricing', image: '/images/events-treatbox.jpg',
     badge: 'Most Popular', badge_color: 'rose', in_stock: true, featured: false, sort_order: 1,
   },
   {
-    id: 'ev-2', name: 'Cupcake Box', category: 'events',
-    description: 'Custom-decorated cupcakes in your brand colours or event theme.',
+    id: 'ev-2', name: 'Office Breakfast Boxes', category: 'events',
+    description: 'Start the workday right. Freshly baked pastries and treats delivered directly to your office.',
     price: 'Custom Pricing', image: '/images/events-cupcakebox.jpg',
     in_stock: true, featured: false, sort_order: 2,
   },
   {
-    id: 'ev-3', name: 'Bulk Custom Package', category: 'events',
-    description: 'Large-scale orders for conferences, weddings, or corporate events.',
-    price: 'Custom Pricing', image: '/images/events-bulkorder.jpg',
-    in_stock: true, featured: false, sort_order: 3,
+    id: 'ev-3', name: 'Small Chops Event Catering', category: 'events',
+    description: 'Full small chops catering for weddings, parties, and corporate events. We handle everything.',
+    price: 'Via WhatsApp', image: '/images/events-bulkorder.jpg',
+    badge: 'Events', badge_color: 'mauve', in_stock: true, featured: false, sort_order: 3,
+  },
+  {
+    id: 'ev-4', name: 'Bulk Custom Packages', category: 'events',
+    description: 'Large-scale custom orders for conferences, product launches, and large celebrations. MOQ applies.',
+    price: 'Custom Pricing', image: '/images/cat-events.jpg',
+    in_stock: true, featured: false, sort_order: 4,
   },
 ];
 

@@ -25,7 +25,7 @@ export default function PastriesPage() {
         }
       />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10 lg:py-14">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-14">
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
           {products.map(p => (
             <ProductCard key={p.id} product={p} onToast={show} />
@@ -33,12 +33,12 @@ export default function PastriesPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 pb-14">
-        <div className="bg-[#5B2D8E] rounded-2xl p-8 sm:p-12 flex flex-col sm:flex-row
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 pb-14">
+        <div className="bg-[#433075] rounded-2xl p-8 sm:p-12 flex flex-col sm:flex-row
           items-center justify-between gap-6 text-center sm:text-left">
           <div>
             <h3 className="font-cormorant text-[1.8rem] text-white font-normal mb-1">
-              Need a <em className="italic text-[#E8DAFF]">bulk pastry order?</em>
+              Need a <em className="italic text-[#E1D7F0]">bulk pastry order?</em>
             </h3>
             <p className="text-white/50 text-[0.88rem]">
               Planning an event or office treat? We handle large orders with the same love and quality.
