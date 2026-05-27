@@ -54,6 +54,10 @@ export interface Product {
   customizationOptions?: CakeCustomField[];
   // Design style set by admin at creation time (bigger cakes only) — shown to customer as info
   designStyle?: string;
+  // Admin-defined colour options the customer can pick from
+  cakeColors?: string[];
+  // Admin-defined size options with per-size pricing
+  cakeSizes?: { label: string; price: number }[];
 }
 
 export interface CartItem {

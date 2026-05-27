@@ -127,9 +127,9 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ── RIGHT: Floating pastry photo circles ── */}
-          <div className="relative flex items-center justify-center lg:justify-end
-            h-[400px] sm:h-[500px] lg:h-screen lg:max-h-[800px]">
+          {/* ── RIGHT: Floating pastry photo circles — desktop only ── */}
+          <div className="hidden lg:flex relative items-center justify-end
+            lg:h-screen lg:max-h-[800px]">
 
             {/* LARGE circle — Cinnamon Rolls */}
             <div className="float-a absolute"
