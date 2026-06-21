@@ -171,7 +171,10 @@ export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
             </a>
             <div className="text-center space-y-1">
               <p className="text-[0.72rem] text-[#6E6A8C]">📍 Mgbuoba, Port Harcourt</p>
-              <p className="text-[0.72rem] text-[#6E6A8C]">🕐 Open daily · Closes 5 PM</p>
+              <p className="text-[0.72rem] text-[#6E6A8C]">🕐 Mon – Sat · Closes 5 PM</p>
+              <Link href="/policy" className="text-[0.7rem] text-[#A58CF4] underline-offset-2 hover:underline inline-block pt-1">
+                Our Policy
+              </Link>
             </div>
           </div>
         </div>

@@ -50,6 +50,7 @@ export default function Footer() {
                 ['/about',   'Our Story'    ],
                 ['/about',   'Reviews'      ],
                 ['/gallery', 'Portfolio'    ],
+                ['/policy',  'Our Policy'   ],
               ].map(([href, label]) => (
                 <li key={label}>
                   <Link href={href}
@@ -85,7 +86,7 @@ export default function Footer() {
               </div>
               <div className="flex gap-2.5 text-[0.8rem] text-white/45">
                 <Clock size={14} className="text-[#E1D7F0] shrink-0 mt-0.5" />
-                Open daily · Closes 5 PM
+                <span>Mon – Sat · Closes 5 PM<br/><span className="text-white/30">Closed on Sundays</span></span>
               </div>
             </div>
           </div>
@@ -94,8 +95,11 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/[0.08] pt-6 flex flex-col sm:flex-row
           items-center justify-between gap-3">
-          <p className="text-[0.74rem] text-white/20 text-center">
-            © {new Date().getFullYear()} Bloomies Confectioneries · Port Harcourt
+          <p className="text-[0.74rem] text-white/20 text-center flex items-center gap-3 flex-wrap justify-center">
+            <span>© {new Date().getFullYear()} Bloomies Confectioneries · Port Harcourt</span>
+            <Link href="/policy" className="text-white/35 hover:text-[#E1D7F0] transition-colors underline-offset-2 hover:underline">
+              Our Policy
+            </Link>
           </p>
           <div className="flex gap-3">
             {[

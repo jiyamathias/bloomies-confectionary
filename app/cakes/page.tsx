@@ -95,7 +95,7 @@ export default function CakesPage() {
               <em className="italic text-[#E1D7F0]">Let's bring it to life.</em>
             </h3>
             <p className="text-white/50 text-[0.88rem]">
-              Send us a reference photo and we'll create your dream cake from scratch.
+              Attach a reference photo in the chat and we'll create your dream cake from scratch.
             </p>
           </div>
           <WhatsAppBtn

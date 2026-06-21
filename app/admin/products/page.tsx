@@ -69,6 +69,7 @@ const DEFAULT_COLORS = ['White','Blush Pink','Lilac / Purple','Gold & White','Ch
 
 const EMPTY: Omit<Product, 'id'> = {
   name: '', description: '', price: '', image: '/images/cake-vanilla.jpg',
+  images: ['/images/cake-vanilla.jpg'],
   category: 'one-layer', badge: '', badge_color: 'rose',
   in_stock: true, featured: false, sort_order: 99, moq: '',
   customizationOptions: [...DEFAULT_ONE_LAYER],
@@ -117,13 +118,14 @@ function ProductsContent() {
   const flash = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 2800); };
 
   function openNew() {
-    setEditing({ ...EMPTY, cakeColors: [...DEFAULT_COLORS], cakeSizes: [], customizationOptions: [...DEFAULT_ONE_LAYER] });
+    setEditing({ ...EMPTY, images: [...(EMPTY.images ?? [])], cakeColors: [...DEFAULT_COLORS], cakeSizes: [], customizationOptions: [...DEFAULT_ONE_LAYER] });
     setNewColor(''); setNewSizeLabel(''); setNewSizePrice('');
     setStep('type'); setModal('new');
   }
   function openEdit(p: Product) {
     setEditing({
       ...p,
+      images: p.images?.length ? [...p.images] : (p.image ? [p.image] : []),
       cakeColors: p.cakeColors ?? [...DEFAULT_COLORS],
       cakeSizes:  p.cakeSizes  ?? [],
       customizationOptions: p.customizationOptions ??
@@ -151,6 +153,33 @@ function ProductsContent() {
 
   function set(key: string, val: unknown) {
     setEditing(prev => ({ ...prev, [key]: val }));
+  }
+
+  // ── Product photo management (multiple images, first = cover) ──
+  function addImages(files: FileList | null) {
+    if (!files || !files.length) return;
+    const urls = Array.from(files).map(f => URL.createObjectURL(f));
+    setEditing(prev => {
+      const existing = prev.images?.length ? prev.images : (prev.image ? [prev.image] : []);
+      const imgs = [...existing, ...urls];
+      return { ...prev, images: imgs, image: imgs[0] };
+    });
+  }
+  function removeImage(i: number) {
+    setEditing(prev => {
+      const existing = prev.images?.length ? prev.images : (prev.image ? [prev.image] : []);
+      const imgs = existing.filter((_, idx) => idx !== i);
+      return { ...prev, images: imgs, image: imgs[0] ?? '' };
+    });
+  }
+  function makeCoverImage(i: number) {
+    setEditing(prev => {
+      const existing = prev.images?.length ? prev.images : (prev.image ? [prev.image] : []);
+      const imgs = [...existing];
+      const [chosen] = imgs.splice(i, 1);
+      imgs.unshift(chosen);
+      return { ...prev, images: imgs, image: imgs[0] };
+    });
   }
 
   function toggleCustomField(field: CakeCustomField) {
@@ -292,6 +321,7 @@ function ProductsContent() {
                         <p className="text-[0.88rem] font-medium text-[#433075] leading-tight">{p.name}</p>
                         {p.designStyle && <p className="text-[0.65rem] text-[#A58CF4]">🎨 {p.designStyle}</p>}
                         {p.featured && <p className="text-[0.65rem] text-[#A58CF4]">★ Featured</p>}
+                        {(p.images?.length ?? 0) > 1 && <p className="text-[0.65rem] text-[#6E6A8C]">📷 {p.images!.length} photos</p>}
                       </div>
                     </div>
                   </td>
@@ -446,27 +476,48 @@ function ProductsContent() {
                   {isCake(editing.category ?? '') && <span className="text-[0.65rem] text-[#A58CF4]">🎂 Cake product</span>}
                 </div>
 
-                {/* Image */}
+                {/* Photos */}
                 <div>
-                  <label className="block text-[0.7rem] tracking-[0.1em] uppercase text-[#6E6A8C] mb-1.5">Product Image</label>
-                  <label className="relative block cursor-pointer group">
-                    <input type="file" accept="image/*" capture="environment" className="sr-only"
-                      onChange={e => { const f = e.target.files?.[0]; if (f) set('image', URL.createObjectURL(f)); }}/>
-                    {editing.image ? (
-                      <div className="relative w-full h-36 rounded-xl overflow-hidden bg-[#F3F0FA]">
-                        <Image src={editing.image} alt="preview" fill className="object-cover" sizes="500px"/>
-                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <span className="text-white text-[0.78rem] font-medium bg-black/50 px-3 py-1.5 rounded-full">📷 Change photo</span>
+                  <label className="block text-[0.7rem] tracking-[0.1em] uppercase text-[#6E6A8C] mb-1.5">Product Photos</label>
+                  <p className="text-[0.68rem] text-[#6E6A8C]/70 mb-2.5 leading-snug">
+                    Add as many angles as you like — customers can swipe through them. The first photo is the cover image shown on the storefront.
+                  </p>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
+                    {(editing.images?.length ? editing.images : editing.image ? [editing.image] : []).map((src, i) => (
+                      <div key={src + i} className="relative aspect-square rounded-xl overflow-hidden bg-[#F3F0FA] group">
+                        <Image src={src} alt={`Photo ${i + 1}`} fill className="object-cover" sizes="150px"/>
+                        {i === 0 && (
+                          <span className="absolute top-1 left-1 bg-[#433075] text-white text-[0.55rem] font-semibold px-1.5 py-0.5 rounded-full">
+                            Cover
+                          </span>
+                        )}
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/45 transition-colors
+                          flex items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100">
+                          {i !== 0 && (
+                            <button type="button" onClick={() => makeCoverImage(i)}
+                              className="text-white text-[0.58rem] font-medium bg-white/20 hover:bg-white/30 px-2 py-1 rounded-full backdrop-blur-sm">
+                              Make cover
+                            </button>
+                          )}
+                          <button type="button" onClick={() => removeImage(i)} aria-label="Remove photo"
+                            className="text-white w-6 h-6 rounded-full bg-white/20 hover:bg-red-500/80 flex items-center justify-center backdrop-blur-sm transition-colors">
+                            <X size={12}/>
+                          </button>
                         </div>
                       </div>
-                    ) : (
-                      <div className="w-full h-28 rounded-xl border-2 border-dashed border-[#A58CF4]
-                        bg-[#F3F0FA]/40 flex flex-col items-center justify-center gap-2">
-                        <span className="text-2xl">📷</span>
-                        <span className="text-[0.78rem] text-[#A58CF4] font-medium">Tap to choose or take a photo</span>
-                      </div>
-                    )}
-                  </label>
+                    ))}
+                    <label className="aspect-square rounded-xl border-2 border-dashed border-[#A58CF4]
+                      bg-[#F3F0FA]/40 flex flex-col items-center justify-center gap-1 cursor-pointer
+                      hover:bg-[#F3F0FA] transition-colors text-center px-1">
+                      <input type="file" accept="image/*" multiple capture="environment" className="sr-only"
+                        onChange={e => { addImages(e.target.files); e.target.value = ''; }}/>
+                      <span className="text-xl">📷</span>
+                      <span className="text-[0.6rem] text-[#A58CF4] font-medium">Add Photos</span>
+                    </label>
+                  </div>
+                  {!(editing.images?.length || editing.image) && (
+                    <p className="text-[0.7rem] text-[#6E6A8C]/50 italic mt-2">No photos yet — add at least a cover photo.</p>
+                  )}
                 </div>
 
                 {/* Name / Price / Badge / MOQ */}

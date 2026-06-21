@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Zap, MapPin, ChevronRight, Star } from 'lucide-react';
 import BestSellers from '@/components/BestSellers';
+import HeroBackdrop from '@/components/HeroBackdrop';
 
 const CATS = [
   { label: 'Cakes',              sub: 'One layer · Custom designs',   href: '/cakes',        img: '/images/cat-cakes.jpg'      },
@@ -35,6 +36,7 @@ export default function HomePage() {
 
         {/* Background decorations */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <HeroBackdrop/>
           <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-[0.18]"
             style={{ background: 'radial-gradient(circle,#A58CF4,transparent 70%)' }}/>
           <div className="absolute -bottom-24 -left-24 w-[400px] h-[400px] rounded-full opacity-[0.12]"
@@ -51,12 +53,12 @@ export default function HomePage() {
 
         <div className="relative z-10 w-full max-w-7xl mx-auto
           px-5 sm:px-6 lg:px-10
-          pt-24 pb-16 sm:pt-28 sm:pb-20 lg:py-0
-          grid lg:grid-cols-2 gap-10 lg:gap-0
-          items-center lg:min-h-screen">
+          pt-24 pb-16 sm:pt-28 sm:pb-20 md:py-0
+          grid md:grid-cols-2 gap-10 lg:gap-0
+          items-center md:min-h-[680px] lg:min-h-screen">
 
           {/* ── LEFT: copy ── */}
-          <div className="flex flex-col justify-center lg:pr-10 xl:pr-20">
+          <div className="flex flex-col justify-center md:pr-6 lg:pr-10 xl:pr-20">
 
             <div className="inline-flex items-center gap-2 self-start
               bg-white/80 backdrop-blur-sm border border-[rgba(165,140,244,0.3)]
@@ -127,9 +129,9 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ── RIGHT: Floating pastry photo circles — desktop only ── */}
-          <div className="hidden lg:flex relative items-center justify-end
-            lg:h-screen lg:max-h-[800px]">
+          {/* ── RIGHT: Floating pastry photo circles — tablet & desktop ── */}
+          <div className="hidden md:flex relative items-center justify-end
+            md:h-[560px] lg:h-screen lg:max-h-[800px]">
 
             {/* LARGE circle — Cinnamon Rolls */}
             <div className="float-a absolute"
@@ -382,7 +384,7 @@ export default function HomePage() {
           ))}
           <div className="hidden sm:block w-px h-5 bg-[rgba(165,140,244,0.2)]"/>
           <span className="flex items-center gap-2 text-[0.78rem] text-[#6E6A8C]">
-            <span className="w-2 h-2 rounded-full bg-[#4CAF50]"/> Open daily · Closes 5 PM
+            <span className="w-2 h-2 rounded-full bg-[#4CAF50]"/> Mon – Sat · Closes 5 PM
           </span>
           <span className="flex items-center gap-1.5 text-[0.78rem] text-[#6E6A8C]">
             <MapPin size={12}/> Mgbuoba, Port Harcourt
@@ -420,7 +422,7 @@ export default function HomePage() {
                 <em className="italic font-light text-[#E1D7F0] block">Place a custom order.</em>
               </h2>
               <p className="text-white/55 text-[0.88rem] mb-8 max-w-md mx-auto lg:mx-0 leading-relaxed">
-                Share a reference photo and let&apos;s create something extraordinary together.
+                Share a reference photo on WhatsApp and let&apos;s create something extraordinary together.
               </p>
               <a href="https://wa.me/2348181154270?text=Hi%20Bloomies%2C%20I%27d%20like%20to%20place%20a%20custom%20order!"
                 target="_blank" rel="noopener noreferrer"
