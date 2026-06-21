@@ -72,7 +72,9 @@ export const PRODUCTS: Product[] = [
   {
     id: 'pa-1', name: 'Meat Pies', category: 'pastries',
     description: 'Flaky golden pastry filled with seasoned minced meat and vegetables.',
-    price: '₦5,000 (10pcs)', image: '/images/pastry-meatpie.jpg', moq: 'MOQ: 10 pieces',
+    price: '₦5,000 (10pcs)', image: '/images/pastry-meatpie.jpg',
+    images: ['/images/pastry-meatpie.jpg', 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=900&q=85&fit=crop&crop=center'],
+    moq: 'MOQ: 10 pieces',
     badge: '⚡ Same Day', badge_color: 'green', in_stock: true, featured: true, sort_order: 1,
   },
   {
@@ -90,13 +92,17 @@ export const PRODUCTS: Product[] = [
   {
     id: 'pa-4', name: 'Donuts', category: 'pastries',
     description: 'Fluffy glazed rings dusted with sugar or filled with jam and cream.',
-    price: '₦3,500 (6pcs)', image: '/images/pastry-donuts.jpg', moq: 'MOQ: 6 pieces',
+    price: '₦3,500 (6pcs)', image: '/images/pastry-donuts.jpg',
+    images: ['/images/pastry-donuts.jpg', 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=900&q=85&fit=crop&crop=center'],
+    moq: 'MOQ: 6 pieces',
     in_stock: true, featured: false, sort_order: 4,
   },
   {
     id: 'pa-5', name: 'Cinnamon Rolls', category: 'pastries',
     description: 'Warm pillowy rolls swirled with cinnamon sugar and drizzled with vanilla glaze.',
-    price: '₦6,000 (10pcs)', image: '/images/pastry-cinnamon.jpg', moq: 'MOQ: 10 pieces',
+    price: '₦6,000 (10pcs)', image: '/images/pastry-cinnamon.jpg',
+    images: ['/images/pastry-cinnamon.jpg', 'https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=900&q=85&fit=crop&crop=center'],
+    moq: 'MOQ: 10 pieces',
     badge: 'New', badge_color: 'mauve', in_stock: true, featured: true, sort_order: 5,
   },
   {

@@ -1,9 +1,10 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import { X, ShoppingBag, Sparkles } from 'lucide-react';
+import { X, ShoppingBag, Sparkles, Images } from 'lucide-react';
 import { useCart } from '@/lib/cart';
 import CakeOrderForm from '@/components/CakeOrderForm';
+import ProductGallery from '@/components/ProductGallery';
 import type { Product } from '@/types';
 
 const BADGE_STYLES: Record<string, string> = {
@@ -20,6 +21,9 @@ export default function ProductCard({ product, onToast }: {
 }) {
   const { add } = useCart();
   const [modalOpen, setModalOpen] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const galleryImages = product.images?.length ? product.images : [product.image];
+  const hasGallery = galleryImages.length > 1;
 
   function handleClick() {
     if (!product.in_stock) return;
@@ -83,6 +87,18 @@ export default function ProductCard({ product, onToast }: {
               ${BADGE_STYLES[product.badge_color || 'rose']}`}>
               {product.badge}
             </span>
+          )}
+
+          {/* View photos (only when there's more than one image to toggle through) */}
+          {hasGallery && (
+            <button type="button"
+              onClick={e => { e.stopPropagation(); setGalleryOpen(true); }}
+              aria-label={`View ${galleryImages.length} photos of ${product.name}`}
+              className="absolute top-3 right-3 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm
+                text-[#433075] text-[0.62rem] font-semibold px-2.5 py-1.5 rounded-full shadow-sm
+                hover:bg-white transition-all duration-200">
+              <Images size={12}/> {galleryImages.length}
+            </button>
           )}
 
           {/* Out of stock */}
@@ -174,8 +190,33 @@ export default function ProductCard({ product, onToast }: {
             </div>
 
             <div className="px-5 py-5 flex-1">
+              <div className="mb-5">
+                <ProductGallery images={galleryImages} alt={product.name} aspect="62%"/>
+              </div>
               <CakeOrderForm product={product} onClose={() => setModalOpen(false)}/>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Quick-view photo lightbox (non-cake products, or a closer look before customising) ── */}
+      {galleryOpen && (
+        <div className="fixed inset-0 z-[75] flex items-center justify-center p-4"
+          style={{ background: 'rgba(67,48,117,0.55)', backdropFilter: 'blur(8px)' }}
+          onClick={() => setGalleryOpen(false)}>
+          <div className="bg-white rounded-2xl p-4 sm:p-5 max-w-md w-full shadow-2xl"
+            onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-cormorant text-[1.2rem] font-semibold text-[#433075] leading-tight">
+                {product.name}
+              </h3>
+              <button onClick={() => setGalleryOpen(false)}
+                className="w-8 h-8 rounded-full bg-[#F3F0FA] flex items-center justify-center
+                  text-[#6E6A8C] hover:text-[#433075] transition-colors shrink-0">
+                <X size={15}/>
+              </button>
+            </div>
+            <ProductGallery images={galleryImages} alt={product.name} aspect="80%"/>
           </div>
         </div>
       )}

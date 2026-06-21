@@ -43,6 +43,9 @@ export interface Product {
   price: string;
   basePrice?: number;
   image: string;
+  // Optional additional photos for the multi-image gallery view (main + toggle).
+  // `image` above always acts as the cover/fallback when this is empty.
+  images?: string[];
   category: ProductCategory;
   badge?: string;
   badge_color?: 'rose' | 'green' | 'mauve';

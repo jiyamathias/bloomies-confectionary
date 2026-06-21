@@ -83,6 +83,17 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+function ReferencePhotoTip() {
+  return (
+    <div className="flex items-start gap-3 bg-[rgba(37,211,102,0.08)] border border-[rgba(37,211,102,0.25)] rounded-xl px-4 py-3">
+      <span className="text-base shrink-0">📎</span>
+      <p className="text-[0.74rem] text-[#1f7a44] leading-relaxed">
+        Got a reference photo or inspiration picture? No need to upload it here — just attach it directly in the chat after you tap <strong>Order via WhatsApp</strong> below.
+      </p>
+    </div>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════
    ONE-LAYER CAKE FORM
 ═══════════════════════════════════════════════════════════════ */
@@ -144,6 +155,7 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
       (has('delivery')      ? `📅 Delivery date: ${delivDate||'TBD'}\n📍 Address: ${delivAddr||'TBD'}\n` : '') +
       `✨ Add-ons: ${addOns}\n` +
       (has('notes') && notes? `💬 Notes: ${notes}\n`                                           : '') +
+      `📎 Reference photo (if any): attaching it in this chat\n` +
       `\n💰 *Estimated Total: ${fmt(total)}*\n\nPlease confirm availability and final price. Thank you!`;
 
     window.open(`https://wa.me/2348181154270?text=${encodeURIComponent(msg)}`, '_blank');
@@ -305,7 +317,7 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
       {has('notes') && (
         <Section title={`${s++}. 💬 Additional Notes`}>
           <Textarea label="Any other requests?" value={notes} onChange={setNotes}
-            placeholder="Reference photos, allergies, special instructions…"/>
+            placeholder="Allergies, special instructions…"/>
         </Section>
       )}
 
@@ -320,6 +332,8 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
         candles={has('addon_candles') ? candles : 0}
         total={total}
       />
+
+      <ReferencePhotoTip/>
 
       <div className="grid grid-cols-2 gap-3 pt-1">
         <button onClick={addToCart}
@@ -400,6 +414,7 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
       (has('delivery')      ? `📅 Delivery date: ${delivDate||'TBD'}\n📍 Address: ${delivAddr||'TBD'}\n` : '') +
       `✨ Add-ons: ${addOns}\n` +
       (has('notes') && notes? `💬 Notes: ${notes}\n`              : '') +
+      `📎 Reference photo (if any): attaching it in this chat\n` +
       `\n💰 *Estimated Total: ${fmt(total)}*\n\nPlease confirm availability and final price. Thank you!`;
 
     window.open(`https://wa.me/2348181154270?text=${encodeURIComponent(msg)}`, '_blank');
@@ -579,7 +594,7 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
       {has('notes') && (
         <Section title={`${s++}. 💬 Additional Notes`}>
           <Textarea label="Any other requests?" value={notes} onChange={setNotes}
-            placeholder="Reference photos, allergies, special instructions…"/>
+            placeholder="Allergies, special instructions…"/>
         </Section>
       )}
 
@@ -593,6 +608,8 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
         candles={has('addon_candles') ? candles : 0}
         total={total}
       />
+
+      <ReferencePhotoTip/>
 
       <div className="grid grid-cols-2 gap-3 pt-1">
         <button onClick={addToCart}
