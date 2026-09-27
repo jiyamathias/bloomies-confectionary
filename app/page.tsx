@@ -249,9 +249,9 @@ export default function HomePage() {
           <span className="flex items-center gap-2 text-[0.78rem] text-[#6E6A8C]">
             <span className="w-2 h-2 rounded-full bg-[#4CAF50]"/> Mon – Sat · Closes 5 PM
           </span>
-          <span className="flex items-center gap-1.5 text-[0.78rem] text-[#6E6A8C]">
+          {/* <span className="flex items-center gap-1.5 text-[0.78rem] text-[#6E6A8C]">
             <MapPin size={12}/> Mgbuoba, Port Harcourt
-          </span>
+          </span> */}
         </div>
       </section>
 
