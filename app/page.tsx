@@ -42,7 +42,7 @@ export default function HomePage() {
           pt-28 pb-20 sm:pt-32 sm:pb-24
           flex flex-col items-center text-center">
 
-          <div className="inline-flex items-center gap-2
+          {/* <div className="inline-flex items-center gap-2
             bg-white/90 border border-[rgba(165,140,244,0.3)]
             px-4 py-2 rounded-full shadow-sm mb-7 animate-fade-up">
             <span className="flex gap-0.5">
@@ -51,7 +51,7 @@ export default function HomePage() {
             <span className="text-[0.7rem] tracking-[0.06em] text-[#6E6A8C] font-medium">
               5.0 · 1,000+ happy clients in Port Harcourt
             </span>
-          </div>
+          </div> */}
 
           <p className="font-cormorant font-bold leading-none mb-4 animate-fade-up delay-1"
             style={{ fontSize:'clamp(3rem,8vw,6.5rem)', color:'#433075', letterSpacing:'-0.02em',
@@ -68,11 +68,11 @@ export default function HomePage() {
             </em>
           </h1>
 
-          <p className="leading-relaxed mb-9 max-w-lg animate-fade-up delay-3 font-medium"
+          {/* <p className="leading-relaxed mb-9 max-w-lg animate-fade-up delay-3 font-medium"
             style={{ fontSize:'clamp(0.88rem,1.3vw,1rem)', color:'#2D1F55',
               textShadow:'0 1px 12px rgba(255,255,255,0.9)' }}>
             Premium cakes, pastries &amp; confections crafted fresh every day in Port Harcourt. Every bite, an experience.
-          </p>
+          </p> */}
 
           <div className="flex flex-col sm:flex-row gap-3 mb-7 animate-fade-up delay-3">
             <a href="https://wa.me/2348181154270?text=Hi%20Bloomies!%20I%27d%20like%20to%20place%20an%20order."
