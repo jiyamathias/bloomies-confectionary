@@ -36,63 +36,69 @@ export default function HomePage() {
         {/* 50/50 sliding background images + overlay */}
         <HeroBackdrop/>
 
-        {/* ── Centered hero content (on top of overlay) ── */}
+        {/* ── Centered hero content ── */}
         <div className="relative z-10 w-full max-w-3xl mx-auto
           px-5 sm:px-6 lg:px-10
           pt-28 pb-20 sm:pt-32 sm:pb-24
           flex flex-col items-center text-center">
 
-          <div className="inline-flex items-center gap-2
-            bg-white/15 backdrop-blur-md border border-white/20
+          {/* <div className="inline-flex items-center gap-2
+            bg-white/90 border border-[rgba(165,140,244,0.3)]
             px-4 py-2 rounded-full shadow-sm mb-7 animate-fade-up">
             <span className="flex gap-0.5">
-              {[...Array(5)].map((_,i)=>(<Star key={i} size={10} fill="#E1D7F0" className="text-[#E1D7F0]"/>))}
+              {[...Array(5)].map((_,i)=>(<Star key={i} size={10} fill="#A58CF4" className="text-[#A58CF4]"/>))}
             </span>
-            <span className="text-[0.7rem] tracking-[0.06em] text-white/80 font-medium">
+            <span className="text-[0.7rem] tracking-[0.06em] text-[#6E6A8C] font-medium">
               5.0 · 1,000+ happy clients in Port Harcourt
             </span>
-          </div>
+          </div> */}
 
           <p className="font-cormorant font-bold leading-none mb-4 animate-fade-up delay-1"
-            style={{ fontSize:'clamp(3rem,8vw,6.5rem)', color:'#FFFFFF', letterSpacing:'-0.02em' }}>
-            Bloomies<span style={{ color:'#E1D7F0' }}>.</span>
+            style={{ fontSize:'clamp(3rem,8vw,6.5rem)', color:'#433075', letterSpacing:'-0.02em',
+              textShadow:'0 2px 24px rgba(255,255,255,0.8)' }}>
+            Bloomies<span style={{ color:'#A58CF4' }}>.</span>
           </p>
 
           <h1 className="font-cormorant leading-[1.08] mb-7 animate-fade-up delay-2"
-            style={{ fontSize:'clamp(1.8rem,4vw,3.4rem)', color:'rgba(255,255,255,0.92)' }}>
+            style={{ fontSize:'clamp(1.8rem,4vw,3.4rem)', color:'#433075',
+              textShadow:'0 2px 20px rgba(255,255,255,0.75)' }}>
             Baked with love,{' '}
-            <em className="font-light italic" style={{ color:'#E1D7F0' }}>
+            <em className="font-light italic" style={{ color:'#6B4C9A' }}>
               for people with good taste.
             </em>
           </h1>
 
-          <p className="text-white/65 leading-relaxed mb-9 max-w-lg animate-fade-up delay-3"
-            style={{ fontSize:'clamp(0.88rem,1.3vw,1rem)' }}>
+          {/* <p className="leading-relaxed mb-9 max-w-lg animate-fade-up delay-3 font-medium"
+            style={{ fontSize:'clamp(0.88rem,1.3vw,1rem)', color:'#2D1F55',
+              textShadow:'0 1px 12px rgba(255,255,255,0.9)' }}>
             Premium cakes, pastries &amp; confections crafted fresh every day in Port Harcourt. Every bite, an experience.
-          </p>
+          </p> */}
 
           <div className="flex flex-col sm:flex-row gap-3 mb-7 animate-fade-up delay-3">
             <a href="https://wa.me/2348181154270?text=Hi%20Bloomies!%20I%27d%20like%20to%20place%20an%20order."
               target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2.5 text-[#433075]
-                px-7 py-4 rounded-full font-semibold text-[0.9rem] bg-white
+              className="inline-flex items-center justify-center gap-2.5 text-white
+                px-7 py-4 rounded-full font-semibold text-[0.9rem]
                 transition-all duration-300 hover:-translate-y-1 active:scale-[0.97]"
-              style={{ boxShadow:'0 8px 28px rgba(0,0,0,0.2)' }}>
-              <WAIcon dark/> Order on WhatsApp
+              style={{
+                background:'linear-gradient(135deg,#433075 0%,#6B4C9A 100%)',
+                boxShadow:'0 8px 28px rgba(67,48,117,0.45)',
+              }}>
+              <WAIcon/> Order on WhatsApp
             </a>
             <Link href="/cakes"
               className="inline-flex items-center justify-center gap-2
                 px-7 py-4 rounded-full font-semibold text-[0.9rem]
-                border-2 border-white/50 text-white
-                hover:bg-white hover:text-[#433075] hover:-translate-y-1
+                bg-white/90 border-2 border-[#433075] text-[#433075]
+                hover:bg-[#433075] hover:text-white hover:-translate-y-1
                 transition-all duration-300 active:scale-[0.97]">
               Explore Cakes <ChevronRight size={15}/>
             </Link>
           </div>
 
           <div className="inline-flex items-center gap-2 animate-fade-up delay-4
-            bg-white/10 backdrop-blur-sm border border-white/15
-            text-[#a5d6a7] px-4 py-2 rounded-full text-[0.72rem] font-medium mb-9">
+            bg-white/90 border border-[rgba(46,125,50,0.35)]
+            text-[#2E7D32] px-4 py-2 rounded-full text-[0.72rem] font-medium mb-9">
             <Zap size={12} fill="currentColor"/>
             Same-day delivery available on select items
           </div>
@@ -100,9 +106,11 @@ export default function HomePage() {
           <div className="flex gap-8 sm:gap-12 animate-fade-up delay-5">
             {[['1,000+','Happy Clients'],['★ 5.0','Google Rating'],['Daily','Freshly Baked']].map(([n,l])=>(
               <div key={l}>
-                <div className="font-cormorant font-bold text-white leading-none"
-                  style={{ fontSize:'clamp(1.4rem,2.8vw,2rem)' }}>{n}</div>
-                <div className="text-[0.66rem] text-white/50 mt-1 tracking-[0.04em]">{l}</div>
+                <div className="font-cormorant font-bold leading-none"
+                  style={{ fontSize:'clamp(1.4rem,2.8vw,2rem)', color:'#433075',
+                    textShadow:'0 2px 16px rgba(255,255,255,0.85)' }}>{n}</div>
+                <div className="text-[0.66rem] mt-1 tracking-[0.04em] font-medium"
+                  style={{ color:'#2D1F55', textShadow:'0 1px 8px rgba(255,255,255,0.8)' }}>{l}</div>
               </div>
             ))}
           </div>
@@ -111,8 +119,8 @@ export default function HomePage() {
         {/* Scroll hint */}
         <div className="absolute bottom-6 left-1/2 scroll-hint z-[2] hidden lg:flex flex-col items-center gap-1.5"
           style={{ transform:'translateX(-50%)' }}>
-          <span style={{ fontSize:'0.58rem', letterSpacing:'0.16em', color:'rgba(255,255,255,0.35)', textTransform:'uppercase' }}>Scroll</span>
-          <div style={{ width:'1px', height:'36px', background:'linear-gradient(to bottom,rgba(255,255,255,0.4),transparent)' }}/>
+          <span style={{ fontSize:'0.58rem', letterSpacing:'0.16em', color:'rgba(67,48,117,0.4)', textTransform:'uppercase' }}>Scroll</span>
+          <div style={{ width:'1px', height:'36px', background:'linear-gradient(to bottom,rgba(165,140,244,0.5),transparent)' }}/>
         </div>
       </section>
 
