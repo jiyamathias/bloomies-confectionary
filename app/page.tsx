@@ -235,7 +235,7 @@ export default function HomePage() {
 
       {/* ════════════════ PLATFORMS ══════════════════ */}
       <section className="border-y border-[rgba(165,140,244,0.12)] py-6 sm:py-8 bg-white">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 flex flex-wrap items-center gap-3 sm:gap-5">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-center">
           <span className="text-[0.68rem] tracking-[0.14em] uppercase text-[#6E6A8C]/60 font-medium">Also available on</span>
           {[['🟢 Glovo','#'],['🟠 Chowdeck','#']].map(([label,href])=>(
             <a key={label} href={href}
@@ -249,9 +249,9 @@ export default function HomePage() {
           <span className="flex items-center gap-2 text-[0.78rem] text-[#6E6A8C]">
             <span className="w-2 h-2 rounded-full bg-[#4CAF50]"/> Mon – Sat · Closes 5 PM
           </span>
-          <span className="flex items-center gap-1.5 text-[0.78rem] text-[#6E6A8C]">
+          {/* <span className="flex items-center gap-1.5 text-[0.78rem] text-[#6E6A8C]">
             <MapPin size={12}/> Mgbuoba, Port Harcourt
-          </span>
+          </span> */}
         </div>
       </section>
 
