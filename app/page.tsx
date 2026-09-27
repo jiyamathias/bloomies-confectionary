@@ -103,7 +103,7 @@ export default function HomePage() {
             Same-day delivery available on select items
           </div>
 
-          {/* <div className="flex gap-8 sm:gap-12 animate-fade-up delay-5">
+          <div className="flex gap-8 sm:gap-12 animate-fade-up delay-5">
             {[['1,000+','Happy Clients'],['★ 5.0','Google Rating'],['Daily','Freshly Baked']].map(([n,l])=>(
               <div key={l}>
                 <div className="font-cormorant font-bold leading-none"
@@ -113,7 +113,7 @@ export default function HomePage() {
                   style={{ color:'#2D1F55', textShadow:'0 1px 8px rgba(255,255,255,0.8)' }}>{l}</div>
               </div>
             ))}
-          </div> */}
+          </div>
         </div>
 
         {/* Scroll hint */}
@@ -125,14 +125,14 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════ MARQUEE ════════════════════ */}
-      {/* <div className="overflow-hidden border-y border-[rgba(165,140,244,0.15)]"
+      <div className="overflow-hidden border-y border-[rgba(165,140,244,0.15)]"
         style={{ background:'linear-gradient(90deg,#433075 0%,#5B3E8A 50%,#433075 100%)' }}>
         <div className="marquee-track flex gap-14 py-3.5 w-max">
           {[...MARQUEE,...MARQUEE].map((item,i)=>(
             <span key={i} className="font-cormorant italic text-white/70 whitespace-nowrap text-[0.9rem]">{item}</span>
           ))}
         </div>
-      </div> */}
+      </div>
 
       {/* ════════════════ CATEGORIES ═════════════════ */}
       <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-12 sm:py-16 lg:py-24">
@@ -235,7 +235,7 @@ export default function HomePage() {
 
       {/* ════════════════ PLATFORMS ══════════════════ */}
       <section className="border-y border-[rgba(165,140,244,0.12)] py-6 sm:py-8 bg-white">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 flex flex-wrap items-center gap-3 sm:gap-5">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-center">
           <span className="text-[0.68rem] tracking-[0.14em] uppercase text-[#6E6A8C]/60 font-medium">Also available on</span>
           {[['🟢 Glovo','#'],['🟠 Chowdeck','#']].map(([label,href])=>(
             <a key={label} href={href}
