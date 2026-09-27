@@ -4,14 +4,14 @@ import { useEffect, useState, useCallback } from 'react';
 const LEFT_IMAGES = [
   '/images/cakes/1.jpg',
   '/images/cakes/3.jpg',
-  '/images/cakes/4.jpg',
   '/images/cakes/5.jpg',
+  '/images/cakes/7.jpg',
 ];
 
 const RIGHT_IMAGES = [
   '/images/cakes/2.jpg',
+  '/images/cakes/4.jpg',
   '/images/cakes/6.jpg',
-  '/images/cakes/7.jpg',
   '/images/cakes/8.jpg',
 ];
 
