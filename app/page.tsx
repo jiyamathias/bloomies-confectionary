@@ -31,233 +31,88 @@ export default function HomePage() {
       {/* ═══════════════════════════════════════════════════
           HERO
       ═══════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden min-h-screen flex items-center"
-        style={{ background: 'linear-gradient(135deg,#F3F0FA 0%,#EDE8F7 55%,#F8F5FF 100%)' }}>
+      <section className="relative overflow-hidden min-h-screen flex items-center">
 
-        {/* Background decorations */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <HeroBackdrop/>
-          <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-[0.18]"
-            style={{ background: 'radial-gradient(circle,#A58CF4,transparent 70%)' }}/>
-          <div className="absolute -bottom-24 -left-24 w-[400px] h-[400px] rounded-full opacity-[0.12]"
-            style={{ background: 'radial-gradient(circle,#433075,transparent 70%)' }}/>
-          <svg className="absolute inset-0 w-full h-full opacity-[0.03]" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <pattern id="diag" width="60" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
-                <line x1="0" y1="0" x2="0" y2="60" stroke="#433075" strokeWidth="1"/>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#diag)"/>
-          </svg>
-        </div>
+        {/* 50/50 sliding background images + overlay */}
+        <HeroBackdrop/>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto
+        {/* ── Centered hero content (on top of overlay) ── */}
+        <div className="relative z-10 w-full max-w-3xl mx-auto
           px-5 sm:px-6 lg:px-10
-          pt-24 pb-16 sm:pt-28 sm:pb-20 md:py-0
-          grid md:grid-cols-2 gap-10 lg:gap-0
-          items-center md:min-h-[680px] lg:min-h-screen">
+          pt-28 pb-20 sm:pt-32 sm:pb-24
+          flex flex-col items-center text-center">
 
-          {/* ── LEFT: copy ── */}
-          <div className="flex flex-col justify-center md:pr-6 lg:pr-10 xl:pr-20">
-
-            <div className="inline-flex items-center gap-2 self-start
-              bg-white/80 backdrop-blur-sm border border-[rgba(165,140,244,0.3)]
-              px-4 py-2 rounded-full shadow-sm mb-6 animate-fade-up">
-              <span className="flex gap-0.5">
-                {[...Array(5)].map((_,i)=>(<Star key={i} size={10} fill="#A58CF4" className="text-[#A58CF4]"/>))}
-              </span>
-              <span className="text-[0.7rem] tracking-[0.06em] text-[#6E6A8C] font-medium">
-                5.0 · 1,000+ happy clients in Port Harcourt
-              </span>
-            </div>
-
-            <p className="font-cormorant font-bold leading-none mb-5 animate-fade-up delay-1"
-              style={{ fontSize:'clamp(2.8rem,7vw,6rem)', color:'#433075', letterSpacing:'-0.02em' }}>
-              Bloomies<span style={{ color:'#A58CF4' }}>.</span>
-            </p>
-
-            <h1 className="font-cormorant leading-[1.06] mb-6 animate-fade-up delay-2"
-              style={{ fontSize:'clamp(1.9rem,4vw,3.7rem)', color:'#433075' }}>
-              Baked with love,<br/>
-              <em className="font-light italic" style={{ color:'#A58CF4' }}>
-                For people with<br className="hidden sm:block"/> good taste.
-              </em>
-            </h1>
-
-            {/* <p className="text-[#6E6A8C] leading-relaxed mb-8 max-w-md animate-fade-up delay-3"
-              style={{ fontSize:'clamp(0.88rem,1.4vw,1rem)' }}>
-              Premium cakes, pastries &amp; confections crafted fresh every day in Port Harcourt. Every bite, an experience.
-            </p> */}
-
-            <div className="flex flex-col sm:flex-row gap-3 mb-7 animate-fade-up delay-3">
-              <a href="https://wa.me/2348181154270?text=Hi%20Bloomies!%20I%27d%20like%20to%20place%20an%20order."
-                target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2.5 text-white
-                  px-7 py-4 rounded-full font-semibold text-[0.9rem]
-                  transition-all duration-300 hover:-translate-y-1 active:scale-[0.97]"
-                style={{
-                  background:'linear-gradient(135deg,#433075 0%,#6B4C9A 100%)',
-                  boxShadow:'0 8px 28px rgba(67,48,117,0.35)',
-                }}>
-                <WAIcon/> Order on WhatsApp
-              </a>
-              <Link href="/cakes"
-                className="inline-flex items-center justify-center gap-2
-                  px-7 py-4 rounded-full font-semibold text-[0.9rem]
-                  border-2 border-[#433075] text-[#433075]
-                  hover:bg-[#433075] hover:text-white hover:-translate-y-1
-                  transition-all duration-300 active:scale-[0.97]">
-                Explore Cakes <ChevronRight size={15}/>
-              </Link>
-            </div>
-
-            <div className="inline-flex items-center gap-2 self-start animate-fade-up delay-4
-              bg-[rgba(46,125,50,0.09)] border border-[rgba(46,125,50,0.25)]
-              text-[#2E7D32] px-4 py-2 rounded-full text-[0.72rem] font-medium mb-8">
-              <Zap size={12} fill="currentColor"/>
-              Same-day delivery available on select items
-            </div>
-
-            <div className="flex gap-6 sm:gap-10 animate-fade-up delay-5">
-              {[['1,000+','Happy Clients'],['★ 5.0','Google Rating'],['Daily','Freshly Baked']].map(([n,l])=>(
-                <div key={l}>
-                  <div className="font-cormorant font-bold text-[#433075] leading-none"
-                    style={{ fontSize:'clamp(1.3rem,2.5vw,1.8rem)' }}>{n}</div>
-                  <div className="text-[0.64rem] text-[#6E6A8C] mt-0.5 tracking-[0.04em]">{l}</div>
-                </div>
-              ))}
-            </div>
+          <div className="inline-flex items-center gap-2
+            bg-white/15 backdrop-blur-md border border-white/20
+            px-4 py-2 rounded-full shadow-sm mb-7 animate-fade-up">
+            <span className="flex gap-0.5">
+              {[...Array(5)].map((_,i)=>(<Star key={i} size={10} fill="#E1D7F0" className="text-[#E1D7F0]"/>))}
+            </span>
+            <span className="text-[0.7rem] tracking-[0.06em] text-white/80 font-medium">
+              5.0 · 1,000+ happy clients in Port Harcourt
+            </span>
           </div>
 
-          {/* ── RIGHT: Floating pastry photo circles — tablet & desktop ── */}
-          <div className="hidden md:flex relative items-center justify-end
-            md:h-[560px] lg:h-screen lg:max-h-[800px]">
+          <p className="font-cormorant font-bold leading-none mb-4 animate-fade-up delay-1"
+            style={{ fontSize:'clamp(3rem,8vw,6.5rem)', color:'#FFFFFF', letterSpacing:'-0.02em' }}>
+            Bloomies<span style={{ color:'#E1D7F0' }}>.</span>
+          </p>
 
-            {/* LARGE circle — Cinnamon Rolls */}
-            <div className="float-a absolute"
-              style={{
-                width:'clamp(200px,28vw,310px)',
-                height:'clamp(200px,28vw,310px)',
-                right:'clamp(0px,4%,40px)',
-                top:'50%',
-                transform:'translateY(-50%) rotate(-2deg)',
-              }}>
-              <CircleImg
-                src="https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=620&q=85&fit=crop&crop=center"
-                alt="Fresh Cinnamon Rolls"
-                shadow="0 24px 64px rgba(67,48,117,0.28)"
-                ring={4}
-                priority
-              />
-            </div>
+          <h1 className="font-cormorant leading-[1.08] mb-7 animate-fade-up delay-2"
+            style={{ fontSize:'clamp(1.8rem,4vw,3.4rem)', color:'rgba(255,255,255,0.92)' }}>
+            Baked with love,{' '}
+            <em className="font-light italic" style={{ color:'#E1D7F0' }}>
+              for people with good taste.
+            </em>
+          </h1>
 
-            {/* MEDIUM circle — Meat Pies */}
-            <div className="float-b absolute hidden sm:block"
-              style={{
-                width:'clamp(120px,16vw,190px)',
-                height:'clamp(120px,16vw,190px)',
-                right:'clamp(38%,46%,52%)',
-                top:'7%',
-              }}>
-              <CircleImg
-                src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400&q=85&fit=crop&crop=center"
-                alt="Golden Meat Pies"
-                shadow="0 16px 40px rgba(67,48,117,0.22)"
-                ring={3}
-              />
-            </div>
+          <p className="text-white/65 leading-relaxed mb-9 max-w-lg animate-fade-up delay-3"
+            style={{ fontSize:'clamp(0.88rem,1.3vw,1rem)' }}>
+            Premium cakes, pastries &amp; confections crafted fresh every day in Port Harcourt. Every bite, an experience.
+          </p>
 
-            {/* SMALL circle — Croissants */}
-            <div className="float-c absolute"
-              style={{
-                width:'clamp(90px,12vw,155px)',
-                height:'clamp(90px,12vw,155px)',
-                right:'clamp(40%,50%,58%)',
-                bottom:'10%',
-              }}>
-              <CircleImg
-                src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=320&q=85&fit=crop&crop=center"
-                alt="Freshly Baked Croissants"
-                shadow="0 12px 32px rgba(67,48,117,0.2)"
-                ring={2}
-              />
-            </div>
+          <div className="flex flex-col sm:flex-row gap-3 mb-7 animate-fade-up delay-3">
+            <a href="https://wa.me/2348181154270?text=Hi%20Bloomies!%20I%27d%20like%20to%20place%20an%20order."
+              target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2.5 text-[#433075]
+                px-7 py-4 rounded-full font-semibold text-[0.9rem] bg-white
+                transition-all duration-300 hover:-translate-y-1 active:scale-[0.97]"
+              style={{ boxShadow:'0 8px 28px rgba(0,0,0,0.2)' }}>
+              <WAIcon dark/> Order on WhatsApp
+            </a>
+            <Link href="/cakes"
+              className="inline-flex items-center justify-center gap-2
+                px-7 py-4 rounded-full font-semibold text-[0.9rem]
+                border-2 border-white/50 text-white
+                hover:bg-white hover:text-[#433075] hover:-translate-y-1
+                transition-all duration-300 active:scale-[0.97]">
+              Explore Cakes <ChevronRight size={15}/>
+            </Link>
+          </div>
 
-            {/* TINY circle — Glazed Donuts */}
-            <div className="float-d absolute hidden sm:block"
-              style={{
-                width:'clamp(70px,8vw,110px)',
-                height:'clamp(70px,8vw,110px)',
-                right:'1%',
-                top:'8%',
-              }}>
-              <CircleImg
-                src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=220&q=85&fit=crop&crop=center"
-                alt="Glazed Donuts"
-                shadow="0 10px 24px rgba(67,48,117,0.18)"
-                ring={2}
-              />
-            </div>
+          <div className="inline-flex items-center gap-2 animate-fade-up delay-4
+            bg-white/10 backdrop-blur-sm border border-white/15
+            text-[#a5d6a7] px-4 py-2 rounded-full text-[0.72rem] font-medium mb-9">
+            <Zap size={12} fill="currentColor"/>
+            Same-day delivery available on select items
+          </div>
 
-            {/* MINI circle — Birthday Cake */}
-            <div className="float-b absolute hidden lg:block"
-              style={{ width:'88px', height:'88px', right:'1%', bottom:'22%' }}>
-              <CircleImg
-                src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=180&q=85&fit=crop&crop=center"
-                alt="Beautiful Cake"
-                shadow="0 8px 20px rgba(67,48,117,0.16)"
-                ring={2}
-              />
-            </div>
-
-            {/* Floating info card */}
-            <div className="float-b absolute left-0 lg:-left-6 top-1/2 -translate-y-1/2 hidden sm:block"
-              style={{
-                background:'rgba(255,255,255,0.92)',
-                backdropFilter:'blur(16px)',
-                borderRadius:'16px',
-                padding:'14px 18px',
-                boxShadow:'0 12px 40px rgba(67,48,117,0.15)',
-                border:'1px solid rgba(255,255,255,0.7)',
-                minWidth:'152px',
-              }}>
-              <div style={{ fontSize:'0.58rem', color:'#6E6A8C', letterSpacing:'0.12em', textTransform:'uppercase', marginBottom:'4px' }}>Fan Favourite</div>
-              <div className="font-cormorant font-semibold text-[#433075]" style={{ fontSize:'1.05rem', lineHeight:1.2 }}>Cinnamon Rolls</div>
-              <div style={{ fontSize:'0.68rem', color:'#A58CF4', fontWeight:600, marginTop:'4px' }}>From ₦3,500</div>
-              <div className="flex items-center gap-0.5 mt-2">
-                {[...Array(5)].map((_,i)=>(<Star key={i} size={8} fill="#A58CF4" className="text-[#A58CF4]"/>))}
-                <span style={{ fontSize:'0.58rem', color:'#6E6A8C', marginLeft:'3px' }}>5.0</span>
+          <div className="flex gap-8 sm:gap-12 animate-fade-up delay-5">
+            {[['1,000+','Happy Clients'],['★ 5.0','Google Rating'],['Daily','Freshly Baked']].map(([n,l])=>(
+              <div key={l}>
+                <div className="font-cormorant font-bold text-white leading-none"
+                  style={{ fontSize:'clamp(1.4rem,2.8vw,2rem)' }}>{n}</div>
+                <div className="text-[0.66rem] text-white/50 mt-1 tracking-[0.04em]">{l}</div>
               </div>
-            </div>
-
-            {/* Order badge */}
-            <div className="float-a absolute right-0 bottom-[18%] hidden lg:block"
-              style={{
-                background:'#433075',
-                borderRadius:'14px',
-                padding:'10px 16px',
-                boxShadow:'0 10px 32px rgba(67,48,117,0.3)',
-              }}>
-              <div style={{ fontSize:'0.56rem', color:'rgba(255,255,255,0.5)', letterSpacing:'0.12em', textTransform:'uppercase', marginBottom:'3px' }}>Fresh Today</div>
-              <div className="font-cormorant font-bold text-white" style={{ fontSize:'1.15rem', lineHeight:1 }}>12 orders 🥐</div>
-            </div>
-
-            {/* Dot pattern */}
-            <div className="absolute top-4 right-0 opacity-[0.12] pointer-events-none hidden lg:block">
-              <svg width="90" height="90" viewBox="0 0 90 90">
-                {[...Array(4)].map((_,row)=>[...Array(4)].map((_,col)=>(
-                  <circle key={`${row}-${col}`} cx={col*22+11} cy={row*22+11} r="2.5" fill="#433075"/>
-                )))}
-              </svg>
-            </div>
+            ))}
           </div>
         </div>
 
         {/* Scroll hint */}
         <div className="absolute bottom-6 left-1/2 scroll-hint z-[2] hidden lg:flex flex-col items-center gap-1.5"
           style={{ transform:'translateX(-50%)' }}>
-          <span style={{ fontSize:'0.58rem', letterSpacing:'0.16em', color:'rgba(110,106,140,0.4)', textTransform:'uppercase' }}>Scroll</span>
-          <div style={{ width:'1px', height:'36px', background:'linear-gradient(to bottom,rgba(165,140,244,0.5),transparent)' }}/>
+          <span style={{ fontSize:'0.58rem', letterSpacing:'0.16em', color:'rgba(255,255,255,0.35)', textTransform:'uppercase' }}>Scroll</span>
+          <div style={{ width:'1px', height:'36px', background:'linear-gradient(to bottom,rgba(255,255,255,0.4),transparent)' }}/>
         </div>
       </section>
 
@@ -464,45 +319,7 @@ function CategoryCard({ label, sub, href, img, className='' }: {
 }
 
 
-/* ─── CircleImg — guaranteed circular, works on hard refresh ─────
-   Uses a plain <img> with border-radius:50% and object-fit:cover
-   applied directly to the element — no Next.js fill clipping issues.
-─────────────────────────────────────────────────────────────────── */
-function CircleImg({
-  src, alt, shadow, ring, priority
-}: {
-  src: string;
-  alt: string;
-  shadow: string;
-  ring: number;
-  priority?: boolean;
-}) {
-  const ringColor = 'rgba(255,255,255,0.8)';
-  return (
-    <div style={{
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      overflow: 'hidden',
-      boxShadow: `${shadow}, 0 0 0 ${ring * 2}px ${ringColor}`,
-      flexShrink: 0,
-    }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={src}
-        alt={alt}
-        loading={priority ? 'eager' : 'lazy'}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          borderRadius: '50%',
-          display: 'block',
-        }}
-      />
-    </div>
-  );
-}
+
 function WAIcon({ dark }: { dark?: boolean }) {
   return (
     <svg viewBox="0 0 24 24" width="16" height="16" fill={dark ? '#433075' : 'white'}>

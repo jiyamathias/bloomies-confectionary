@@ -56,27 +56,71 @@ body {
 .delay-4 { animation-delay: 0.52s; }
 .delay-5 { animation-delay: 0.66s; }
 
-/* ─── Float animations for hero elements ───────────────────────── */
-@keyframes floatA {
-  0%,100% { transform: translateY(0px) rotate(-2deg); }
-  50%     { transform: translateY(-18px) rotate(2deg); }
+/* ─── Hero 50/50 Background Split ──────────────────────────────── */
+.hero-bg-split {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  z-index: 0;
+  overflow: hidden;
 }
-@keyframes floatB {
-  0%,100% { transform: translateY(0px) rotate(3deg); }
-  50%     { transform: translateY(-14px) rotate(-1deg); }
+
+.hero-bg-half {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
 }
-@keyframes floatC {
-  0%,100% { transform: translateY(0px) rotate(-1deg); }
-  50%     { transform: translateY(-22px) rotate(3deg); }
+
+/* Thin divider line between the two halves */
+.hero-bg-half-left {
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
 }
-@keyframes floatD {
-  0%,100% { transform: translateY(0px) scale(1); }
-  50%     { transform: translateY(-10px) scale(1.03); }
+
+.hero-bg-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.float-a { animation: floatA 7s ease-in-out infinite; }
-.float-b { animation: floatB 9s ease-in-out infinite; }
-.float-c { animation: floatC 11s ease-in-out infinite 1s; }
-.float-d { animation: floatD 6s ease-in-out infinite 0.5s; }
+.hero-bg-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Left: enter from top, exit downward */
+.hero-bg-slide-left          { transform: translateY(-100%); }
+.hero-bg-slide-left.active   { transform: translateY(0);     opacity: 1; }
+.hero-bg-slide-left.exiting  { transform: translateY(100%);  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.55, 0, 1, 0.45),
+              opacity 0.7s cubic-bezier(0.55, 0, 1, 0.45);
+}
+
+/* Right: enter from bottom, exit upward */
+.hero-bg-slide-right         { transform: translateY(100%); }
+.hero-bg-slide-right.active  { transform: translateY(0);    opacity: 1; }
+.hero-bg-slide-right.exiting { transform: translateY(-100%); opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.55, 0, 1, 0.45),
+              opacity 0.7s cubic-bezier(0.55, 0, 1, 0.45);
+}
+
+/* Dark overlay so white/light text stays readable */
+.hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(67, 48, 117, 0.72) 0%,
+    rgba(45, 31, 85, 0.62) 50%,
+    rgba(67, 48, 117, 0.72) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
 
 /* ─── Scroll hint ───────────────────────────────────────────────── */
 @keyframes bob {
