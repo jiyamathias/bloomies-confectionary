@@ -141,7 +141,7 @@ export default function HomePage() {
 
         <div className="mt-5 text-center">
           <Link href="/gallery"
-            className="inline-flex items-center gap-1.5 text-[0.8rem] text-[#A58CF4] font-medium hover:gap-3 transition-all duration-200">
+            className="inline-flex items-center gap-1.5 py-2.5 text-[0.88rem] text-[#433075] font-semibold hover:gap-3 transition-all duration-200">
             View full gallery <ChevronRight size={13}/>
           </Link>
         </div>

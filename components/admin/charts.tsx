@@ -48,7 +48,7 @@ export function ChartCard({ title, subtitle, children, table, className = '', as
 }) {
   const [asTable, setAsTable] = useState(false);
   return (
-    <section className={`bg-white rounded-2xl border border-[#E6E0F3] p-5 ${className}`}>
+    <section className={`bg-white rounded-2xl border border-[#E6E0F3] p-4 sm:p-5 min-w-0 ${className}`}>
       <div className="flex items-start justify-between gap-3 mb-4">
         <div>
           <h2 className="text-[0.98rem] font-semibold text-[#2B2147]">{title}</h2>
@@ -58,8 +58,8 @@ export function ChartCard({ title, subtitle, children, table, className = '', as
           {aside}
           {table && (
             <button type="button" onClick={() => setAsTable(v => !v)}
-              className="inline-flex items-center gap-1.5 text-[0.75rem] text-[#5E5A7C] hover:text-[#433075]
-                border border-[#E6E0F3] rounded-lg px-2.5 py-1.5"
+              className="inline-flex items-center gap-1.5 text-[0.78rem] text-[#5E5A7C] hover:text-[#433075]
+                border border-[#E6E0F3] rounded-lg px-3 py-2"
               aria-label={asTable ? 'Show chart' : 'Show as table'}>
               {asTable ? <BarChart3 size={13}/> : <Table2 size={13}/>} {asTable ? 'Chart' : 'Table'}
             </button>
@@ -107,17 +107,17 @@ function Tip({ x, y, width, children }: { x: number; y: number; width: number; c
 }
 
 /* ─── Stat tile ─────────────────────────────────────────────────────────── */
-export function StatTile({ label, value, delta, goodWhenUp = true, sub, hero = false }: {
-  label: string; value: string; delta?: number | null; goodWhenUp?: boolean; sub?: string; hero?: boolean;
+export function StatTile({ label, value, delta, goodWhenUp = true, sub, hero = false, className = '' }: {
+  label: string; value: string; delta?: number | null; goodWhenUp?: boolean; sub?: string; hero?: boolean; className?: string;
 }) {
   const hasDelta = typeof delta === 'number' && isFinite(delta) && Math.round(Math.abs(delta) * 100) > 0;
   const up = hasDelta && delta! >= 0;
   const good = hasDelta && (up === goodWhenUp);
   return (
-    <div className="bg-white rounded-2xl border border-[#E6E0F3] p-5">
+    <div className={`bg-white rounded-2xl border border-[#E6E0F3] p-4 sm:p-5 ${className}`}>
       <p className="text-[0.8rem] text-[#5E5A7C]">{label}</p>
       <p className={`font-semibold text-[#2B2147] mt-1 leading-none ${hero ? 'text-[2.1rem] sm:text-[3rem]' : 'text-[1.5rem] sm:text-[1.7rem]'}`}>{value}</p>
-      <div className="flex items-center gap-2 mt-2.5 text-[0.78rem] min-h-[1.2rem]">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-2.5 text-[0.78rem] min-h-[1.2rem]">
         {hasDelta && (
           <span className={`inline-flex items-center gap-0.5 font-semibold ${good ? 'text-[#1F6B2E]' : 'text-[#B42318]'}`}>
             {up ? <ArrowUpRight size={14}/> : <ArrowDownRight size={14}/>}

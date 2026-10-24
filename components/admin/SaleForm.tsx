@@ -94,7 +94,7 @@ export default function SaleForm({ open, onClose, onSave }: {
       <div className="space-y-5">
         {error && <p role="alert" className="text-[0.85rem] text-[#B42318] bg-[#FDECEC] rounded-xl px-3 py-2">{error}</p>}
 
-        <div className="grid sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Field label="Customer name"><input className={field} value={customerName} onChange={e => setName(e.target.value)} placeholder="e.g. Chioma Okafor"/></Field>
           <Field label="Phone"><input className={field} value={customerPhone} onChange={e => setPhone(e.target.value)} placeholder="080…" inputMode="tel"/></Field>
           <Field label="Order came in through">
@@ -135,19 +135,19 @@ export default function SaleForm({ open, onClose, onSave }: {
                   <span className="text-[0.82rem] font-semibold text-[#2B2147] tabular-nums">{naira(l.qty * l.unitPrice, true)}</span>
                   {lines.length > 1 && (
                     <button type="button" onClick={() => setLines(ls => ls.filter((_, j) => j !== i))} aria-label="Remove item"
-                      className="text-[#8A86A6] hover:text-[#B42318]"><Trash2 size={15}/></button>
+                      className="w-9 h-9 -mr-1 rounded-full flex items-center justify-center text-[#8A86A6] hover:text-[#B42318] hover:bg-[#FDECEC]"><Trash2 size={15}/></button>
                   )}
                 </div>
               </div>
             ))}
           </div>
           <button type="button" onClick={() => setLines(ls => [...ls, blankLine()])}
-            className="mt-2 inline-flex items-center gap-1.5 text-[0.82rem] font-semibold text-[#433075] hover:underline">
+            className="mt-1 inline-flex items-center gap-1.5 py-2.5 text-[0.85rem] font-semibold text-[#433075] hover:underline">
             <Plus size={14}/> Add another item
           </button>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Field label="Pickup or delivery">
             <select className={field} value={fulfilment} onChange={e => setFulfilment(e.target.value as 'pickup' | 'delivery')}>
               <option value="pickup">Pickup</option><option value="delivery">Delivery</option>
@@ -166,7 +166,7 @@ export default function SaleForm({ open, onClose, onSave }: {
           </Field>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Field label="Payment method">
             <select className={field} value={paymentMethod} onChange={e => setPaymentMethod(e.target.value as PaymentMethod)}>
               {Object.entries(PAYMENT_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}

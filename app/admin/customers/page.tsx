@@ -80,9 +80,9 @@ export default function CustomersPage() {
               <h2 className="text-[0.98rem] font-semibold">Win back {stats.lapsed.length} regulars</h2>
               <p className="text-[0.82rem] text-white/80">They&apos;ve ordered 4+ times but not in the last 45 days. A quick message often brings them back.</p>
             </div>
-            <button onClick={() => setSegment('lapsed')} className="text-[0.82rem] font-semibold underline underline-offset-2">See all</button>
+            <button onClick={() => setSegment('lapsed')} className="text-[0.85rem] font-semibold underline underline-offset-2 py-2">See all</button>
           </div>
-          <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {stats.lapsed.slice(0, 6).map(c => (
               <li key={c.phone} className="bg-white/10 rounded-xl px-3 py-2.5 flex items-center justify-between gap-2">
                 <div className="min-w-0">
@@ -90,7 +90,7 @@ export default function CustomersPage() {
                   <p className="text-[0.75rem] text-white/75">{c.orders} orders · last {ago(c.lastOrder).toLowerCase()}</p>
                 </div>
                 <a href={waLink(c.phone, c.name)} target="_blank" rel="noopener noreferrer"
-                  className="shrink-0 inline-flex items-center gap-1 bg-white text-[#433075] text-[0.75rem] font-semibold px-2.5 py-1.5 rounded-lg">
+                  className="shrink-0 inline-flex items-center gap-1 bg-white text-[#433075] text-[0.78rem] font-semibold px-3 py-2 rounded-lg">
                   <MessageCircle size={13}/> Message
                 </a>
               </li>
@@ -100,10 +100,10 @@ export default function CustomersPage() {
       )}
 
       <FilterRow>
-        <div role="radiogroup" aria-label="Customer group" className="inline-flex bg-white border border-[#E6E0F3] rounded-xl p-1">
-          {([['all', 'Everyone'], ['regular', 'Regulars'], ['new', 'New'], ['lapsed', 'Need a nudge']] as [Segment, string][]).map(([k, l]) => (
+        <div role="radiogroup" aria-label="Customer group" className="grid grid-cols-4 w-full sm:w-auto sm:inline-flex bg-white border border-[#E6E0F3] rounded-xl p-1">
+          {([['all', 'Everyone'], ['regular', 'Regulars'], ['new', 'New'], ['lapsed', 'Nudge']] as [Segment, string][]).map(([k, l]) => (
             <button key={k} role="radio" aria-checked={segment === k} onClick={() => setSegment(k)}
-              className={`px-3 py-1.5 rounded-lg text-[0.8rem] ${segment === k ? 'bg-[#433075] text-white font-semibold' : 'text-[#5E5A7C] hover:bg-[#F3F0FA]'}`}>{l}</button>
+              className={`px-2 sm:px-3 py-2.5 sm:py-2 rounded-lg text-[0.8rem] whitespace-nowrap ${segment === k ? 'bg-[#433075] text-white font-semibold' : 'text-[#5E5A7C] hover:bg-[#F3F0FA]'}`}>{l}</button>
           ))}
         </div>
         <Select label="Sort by" value={sort} onChange={v => setSort(v as Sort)}
@@ -116,7 +116,32 @@ export default function CustomersPage() {
       </FilterRow>
 
       <div className="bg-white border border-[#E6E0F3] rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Phones: one card per customer */}
+        <ul className="md:hidden divide-y divide-[#F1EEF8]">
+          {rows.slice(0, 100).map(c => (
+            <li key={c.phone} className="px-4 py-3.5 flex justify-between gap-3">
+              <div className="min-w-0">
+                <p className="flex flex-wrap items-center gap-1.5 text-[0.92rem] font-semibold text-[#2B2147]">
+                  <span className="truncate">{c.name}</span>
+                  {isRegular(c) && <span className="text-[0.7rem] font-semibold bg-[#E2BBFA] text-[#2B2147] px-1.5 py-0.5 rounded-full">Regular</span>}
+                  {isNew(c) && <span className="text-[0.7rem] font-semibold bg-[#DDF3E3] text-[#1F6B2E] px-1.5 py-0.5 rounded-full">New</span>}
+                </p>
+                <p className="text-[0.78rem] text-[#5E5A7C] mt-0.5">{c.orders} orders · <span className={isLapsed(c) ? 'text-[#B42318]' : ''}>last {ago(c.lastOrder).toLowerCase()}</span></p>
+                <p className="text-[0.78rem] text-[#5E5A7C] truncate">Loves {c.favourite}</p>
+              </div>
+              <div className="text-right shrink-0 flex flex-col items-end gap-1.5">
+                <p className="text-[0.92rem] font-semibold text-[#2B2147] tabular-nums">{naira(c.spent)}</p>
+                <a href={waLink(c.phone, c.name)} target="_blank" rel="noopener noreferrer" aria-label={`Message ${c.name} on WhatsApp`}
+                  className="inline-flex items-center gap-1 text-[#433075] text-[0.8rem] font-semibold border border-[#D5D0E4] rounded-full px-3 py-2">
+                  <MessageCircle size={14}/> Message
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        {/* Tablets and up: full table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-[0.83rem]">
             <thead className="bg-[#FAF9FD] text-[#5E5A7C] text-left">
               <tr>{['Customer', 'Orders', 'Total spent', 'Last order', 'Favourite', 'Usually via', ''].map((h, i) => (

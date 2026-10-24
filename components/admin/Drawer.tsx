@@ -22,7 +22,7 @@ export default function Drawer({ open, onClose, title, children, footer, wide = 
         className={`absolute top-0 right-0 bottom-0 w-full ${wide ? 'sm:w-[720px]' : 'sm:w-[480px]'} bg-[#F6F4FB] flex flex-col shadow-2xl`}>
         <div className="flex items-center justify-between px-5 py-4 bg-white border-b border-[#E6E0F3]">
           <h2 className="text-[1.05rem] font-semibold text-[#2B2147]">{title}</h2>
-          <button onClick={onClose} aria-label="Close" className="p-1.5 text-[#5E5A7C] hover:text-[#433075]"><X size={20}/></button>
+          <button onClick={onClose} aria-label="Close" className="w-10 h-10 -mr-2 rounded-full flex items-center justify-center text-[#5E5A7C] hover:text-[#433075] hover:bg-[#F3F0FA]"><X size={20}/></button>
         </div>
         <div className="flex-1 overflow-y-auto px-5 py-5">{children}</div>
         {footer && <div className="px-5 py-4 bg-white border-t border-[#E6E0F3]">{footer}</div>}

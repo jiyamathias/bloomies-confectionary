@@ -213,12 +213,12 @@ export default function AdminBestSellersPage() {
                   {/* Order controls */}
                   <div className="flex flex-col gap-0.5 shrink-0">
                     <button onClick={() => moveUp(idx)} disabled={idx === 0}
-                      className="w-6 h-5 rounded text-[#6E6A8C] hover:text-[#433075] hover:bg-[#E1D7F0]
+                      className="w-9 h-8 rounded-lg text-[0.9rem] text-[#6E6A8C] hover:text-[#433075] hover:bg-[#E1D7F0]
                         transition-all flex items-center justify-center disabled:opacity-20 text-[0.7rem]">
                       ▲
                     </button>
                     <button onClick={() => moveDown(idx)} disabled={idx === config.productIds.length - 1}
-                      className="w-6 h-5 rounded text-[#6E6A8C] hover:text-[#433075] hover:bg-[#E1D7F0]
+                      className="w-9 h-8 rounded-lg text-[0.9rem] text-[#6E6A8C] hover:text-[#433075] hover:bg-[#E1D7F0]
                         transition-all flex items-center justify-center disabled:opacity-20 text-[0.7rem]">
                       ▼
                     </button>
@@ -279,7 +279,7 @@ export default function AdminBestSellersPage() {
       {/* ── Reset ── */}
       <div className="flex justify-between items-center">
         <button onClick={resetToDefault}
-          className="text-[0.78rem] text-[#6E6A8C] hover:text-[#A58CF4] underline underline-offset-2
+          className="py-2 text-[0.82rem] text-[#5E5A7C] hover:text-[#433075] underline underline-offset-2
             transition-colors">
           Reset to defaults
         </button>

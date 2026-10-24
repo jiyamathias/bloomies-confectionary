@@ -92,7 +92,7 @@ export default function ImportSheet({ open, onClose, onImport }: {
             <div>
               <p className="text-[0.9rem] font-semibold text-[#2B2147] mb-1">Check the columns</p>
               <p className="text-[0.78rem] text-[#5E5A7C] mb-3">We guessed these from your headings. Change any that are wrong.</p>
-              <div className="grid sm:grid-cols-2 gap-x-4 gap-y-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5">
                 {IMPORT_FIELDS.map(f => (
                   <label key={f.key} className="flex items-center justify-between gap-3 text-[0.82rem]">
                     <span className="text-[#2B2147]">{f.label}{f.required && <span className="text-[#B42318]"> *</span>}</span>

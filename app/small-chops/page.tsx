@@ -86,7 +86,7 @@ export default function SmallChopsPage() {
                   </div>
                   {platter.badge && (
                     <span className="absolute top-3 left-3 bg-[#433075] text-white
-                      text-[0.6rem] font-bold tracking-[0.08em] px-2.5 py-1 rounded-full uppercase">
+                      text-[0.68rem] font-bold tracking-[0.08em] px-2.5 py-1 rounded-full uppercase">
                       {platter.badge}
                     </span>
                   )}

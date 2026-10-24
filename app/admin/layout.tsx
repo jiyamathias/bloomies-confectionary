@@ -149,7 +149,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             Bloomies<span className="text-[#E2BBFA]">.</span>
             <span className="font-dm text-white/60 text-[0.75rem] ml-2 tracking-normal">Admin</span>
           </div>
-          <button onClick={() => setSideOpen(v => !v)} className="text-white p-1.5" aria-label="Menu">
+          <button onClick={() => setSideOpen(v => !v)} className="text-white w-10 h-10 -mr-2 flex items-center justify-center" aria-label="Menu" aria-expanded={sideOpen}>
             {sideOpen ? <X size={22}/> : <Menu size={22}/>}
           </button>
         </div>

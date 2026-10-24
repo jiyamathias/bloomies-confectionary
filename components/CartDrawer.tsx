@@ -106,15 +106,16 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
       {/* Drawer */}
       <div
         role="dialog" aria-modal="true" aria-label="Your order"
+        aria-hidden={!open}
         className={`fixed top-0 right-0 bottom-0 z-[61] bg-[#FAFAFE] shadow-2xl
           w-full sm:w-[440px] flex flex-col
-          transition-transform duration-300 ease-out
-          ${open ? 'translate-x-0' : 'translate-x-full'}`}
+          transition-[transform,visibility] duration-300 ease-out
+          ${open ? 'translate-x-0 visible' : 'translate-x-full invisible'}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 bg-white border-b border-[rgba(165,140,244,0.18)]">
           <h2 className="font-luckiest tracking-[0.02em] text-[1.6rem] text-[#433075] pt-1">Your Order</h2>
-          <button onClick={onClose} aria-label="Close cart" className="p-1.5 text-[#5E5A7C] hover:text-[#433075] transition-colors">
+          <button onClick={onClose} aria-label="Close cart" className="w-10 h-10 -mr-2 rounded-full flex items-center justify-center text-[#5E5A7C] hover:text-[#433075] hover:bg-[#F3F0FA] transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -148,20 +149,20 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                           <button onClick={() => changeQty(item.id, -1)} aria-label={`Fewer ${item.name}`}
-                            className="w-7 h-7 rounded-full bg-white border border-[#E1D7F0] flex items-center justify-center
+                            className="w-9 h-9 rounded-full bg-white border border-[#E1D7F0] flex items-center justify-center
                               text-[#433075] hover:bg-[#F3F0FA] transition-colors">
-                            <Minus size={11} />
+                            <Minus size={13} />
                           </button>
                           <span className="text-[0.88rem] font-semibold text-[#433075] w-5 text-center">{item.qty}</span>
                           <button onClick={() => changeQty(item.id, 1)} aria-label={`More ${item.name}`}
-                            className="w-7 h-7 rounded-full bg-white border border-[#E1D7F0] flex items-center justify-center
+                            className="w-9 h-9 rounded-full bg-white border border-[#E1D7F0] flex items-center justify-center
                               text-[#433075] hover:bg-[#F3F0FA] transition-colors">
-                            <Plus size={11} />
+                            <Plus size={13} />
                           </button>
                         </div>
                       </div>
                       <button onClick={() => remove(item.id)} aria-label={`Remove ${item.name}`}
-                        className="text-[#A9A5BF] hover:text-[#433075] transition-colors self-start mt-1">
+                        className="w-9 h-9 -mr-1 -mt-1 rounded-full flex items-center justify-center text-[#A9A5BF] hover:text-[#433075] hover:bg-[#F3F0FA] transition-colors self-start">
                         <Trash2 size={15} />
                       </button>
                     </li>

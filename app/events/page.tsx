@@ -27,7 +27,7 @@ export default function EventsPage() {
 
         {/* Hero card */}
         <div className="bg-[#433075] rounded-2xl lg:rounded-3xl overflow-hidden">
-          <div className="grid lg:grid-cols-2 gap-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             <div className="p-8 sm:p-12 flex flex-col justify-center">
               <h2 className="font-luckiest tracking-[0.02em] text-[clamp(1.8rem,3.5vw,2.6rem)] text-white leading-[1.08] mb-4">
                 Feeding a room full of people?
@@ -45,7 +45,7 @@ export default function EventsPage() {
                 Plan your event on WhatsApp
               </a>
             </div>
-            <div className="grid grid-cols-2 gap-3 p-6 self-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-6 pt-0 lg:pt-6 self-center">
               {EVENT_OPTIONS.map(opt => (
                 <div key={opt.text}
                   className="bg-white/[0.08] border border-white/[0.14] rounded-xl p-4
