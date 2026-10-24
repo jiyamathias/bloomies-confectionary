@@ -1,13 +1,29 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { X, Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
-import { useCart, buildWhatsAppMessage } from '@/lib/cart';
+import { X, Minus, Plus, Trash2, ShoppingBag, Lock, Loader2 } from 'lucide-react';
+import { useCart, buildWhatsAppMessage, whatsappLink, payableTotal } from '@/lib/cart';
+import { formatNaira } from '@/lib/pricing';
+import { WAIcon } from '@/components/WhatsAppBtn';
+
+export const PENDING_ORDER_KEY = 'bloomies_pending_order';
+const CONTACT_KEY = 'bloomies_contact';
+
+type Method = 'pickup' | 'delivery';
 
 export default function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, count, changeQty, remove } = useCart();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [method, setMethod] = useState<Method>('pickup');
+  const [address, setAddress] = useState('');
+  const [payEnabled, setPayEnabled] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const [error, setError] = useState('');
+
+  const total = payableTotal(items);
+  const canPayOnline = payEnabled && total !== null;
 
   // Lock body scroll when open
   useEffect(() => {
@@ -15,10 +31,68 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
-  function checkout() {
-    const msg = buildWhatsAppMessage(items, name || 'Customer', phone || '—');
-    window.open(`https://wa.me/2348181154270?text=${encodeURIComponent(msg)}`, '_blank');
+  // Is online payment switched on for this site?
+  useEffect(() => {
+    if (!open) return;
+    fetch('/api/checkout').then(r => r.json()).then(d => setPayEnabled(!!d.enabled)).catch(() => setPayEnabled(false));
+  }, [open]);
+
+  // Remember contact details for next time (this browser only).
+  useEffect(() => {
+    try {
+      const c = JSON.parse(localStorage.getItem(CONTACT_KEY) || '{}');
+      setName(c.name || ''); setPhone(c.phone || ''); setEmail(c.email || '');
+      setMethod(c.method === 'delivery' ? 'delivery' : 'pickup'); setAddress(c.address || '');
+    } catch { /* ignore */ }
+  }, []);
+  function saveContact() {
+    try { localStorage.setItem(CONTACT_KEY, JSON.stringify({ name, phone, email, method, address })); } catch { /* ignore */ }
   }
+
+  function validate(forPayment: boolean) {
+    if (!name.trim()) return 'Please enter your name.';
+    if (phone.replace(/\D/g, '').length < 10) return 'Please enter your phone number.';
+    if (forPayment && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return 'Please enter your email for the payment receipt.';
+    if (method === 'delivery' && !address.trim()) return 'Please enter your delivery address.';
+    return '';
+  }
+
+  function orderOnWhatsApp() {
+    const problem = validate(false);
+    if (problem) { setError(problem); return; }
+    setError(''); saveContact();
+    window.open(whatsappLink(buildWhatsAppMessage(items, { name, phone, method, address })), '_blank');
+  }
+
+  async function payNow() {
+    const problem = validate(true);
+    if (problem) { setError(problem); return; }
+    setError(''); setPaying(true); saveContact();
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer: { name, phone, email, method, address },
+          items: items.map(i => ({ productId: i.productId, qty: i.qty, options: i.options, details: i.details })),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.link) throw new Error(data.error || 'Something went wrong. Please try again.');
+      // Keep a copy so the confirmation page can show it and send it on WhatsApp.
+      sessionStorage.setItem(PENDING_ORDER_KEY, JSON.stringify({
+        txRef: data.txRef, amount: data.amount, items, contact: { name, phone, method, address },
+      }));
+      window.location.href = data.link;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Something went wrong. Please try again.');
+      setPaying(false);
+    }
+  }
+
+  const field = `w-full px-4 py-2.5 rounded-xl border border-[rgba(165,140,244,0.35)]
+    text-[0.88rem] text-[#433075] bg-white placeholder:text-[#8A86A6]
+    focus:border-[#433075] focus:outline-none`;
 
   return (
     <>
@@ -31,116 +105,154 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 bottom-0 z-[61] bg-white shadow-2xl
-          w-full sm:w-[420px] flex flex-col
-          transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)]
+        role="dialog" aria-modal="true" aria-label="Your order"
+        className={`fixed top-0 right-0 bottom-0 z-[61] bg-[#FAFAFE] shadow-2xl
+          w-full sm:w-[440px] flex flex-col
+          transition-transform duration-300 ease-out
           ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-[rgba(165,140,244,0.15)]">
-          <h2 className="font-cormorant text-2xl font-semibold text-[#433075]">Your Order</h2>
-          <button onClick={onClose} className="p-1.5 text-[#6E6A8C] hover:text-[#A58CF4] transition-colors">
+        <div className="flex items-center justify-between px-6 py-5 bg-white border-b border-[rgba(165,140,244,0.18)]">
+          <h2 className="font-luckiest tracking-[0.02em] text-[1.6rem] text-[#433075] pt-1">Your Order</h2>
+          <button onClick={onClose} aria-label="Close cart" className="p-1.5 text-[#5E5A7C] hover:text-[#433075] transition-colors">
             <X size={20} />
           </button>
         </div>
 
-        {/* Items */}
-        <div className="flex-1 overflow-y-auto px-6 py-4">
-          {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full gap-4 text-[#6E6A8C]">
-              <ShoppingBag size={48} className="opacity-20" />
-              <p className="text-sm">Your cart is empty.<br className="hidden sm:block" /> Add something sweet!</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {items.map(item => (
-                <div key={item.id} className="flex gap-3 bg-[#FAFAFA] rounded-xl p-3">
-                  <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 relative">
-                    <Image src={item.image} alt={item.name} fill className="object-cover" sizes="56px" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[0.88rem] font-medium text-[#433075] truncate">{item.name}</p>
-                    <p className="text-[0.78rem] text-[#A58CF4] mt-0.5">{item.price}</p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <button
-                        onClick={() => changeQty(item.id, -1)}
-                        className="w-6 h-6 rounded-full bg-white border border-[#E1D7F0] flex items-center justify-center
-                          text-[#433075] hover:bg-[#E1D7F0] transition-colors"
-                      >
-                        <Minus size={10} />
-                      </button>
-                      <span className="text-[0.88rem] font-semibold text-[#433075] w-4 text-center">{item.qty}</span>
-                      <button
-                        onClick={() => changeQty(item.id, 1)}
-                        className="w-6 h-6 rounded-full bg-white border border-[#E1D7F0] flex items-center justify-center
-                          text-[#433075] hover:bg-[#E1D7F0] transition-colors"
-                      >
-                        <Plus size={10} />
-                      </button>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => remove(item.id)}
-                    className="text-[#CCC] hover:text-[#A58CF4] transition-colors self-start mt-1"
-                  >
-                    <Trash2 size={15} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        {items.length > 0 && (
-          <div className="px-6 py-5 border-t border-[rgba(165,140,244,0.15)] space-y-4">
-            <div className="flex justify-between text-[0.85rem] text-[#6E6A8C]">
-              <span>Items</span><span>{count}</span>
-            </div>
-            <div className="flex justify-between text-[1rem] font-semibold text-[#433075]">
-              <span>Total</span><span>Confirmed on WhatsApp</span>
-            </div>
-
-            {/* Customer details */}
-            <div className="space-y-2.5">
-              <input
-                type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="Your name…"
-                className="w-full px-4 py-2.5 rounded-xl border border-[rgba(165,140,244,0.25)]
-                  text-[0.85rem] text-[#433075] bg-[#FAFAFA] focus:border-[#A58CF4] focus:outline-none"
-              />
-              <input
-                type="tel"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                placeholder="WhatsApp / Phone…"
-                className="w-full px-4 py-2.5 rounded-xl border border-[rgba(165,140,244,0.25)]
-                  text-[0.85rem] text-[#433075] bg-[#FAFAFA] focus:border-[#A58CF4] focus:outline-none"
-              />
-            </div>
-
-            <button
-              onClick={checkout}
-              className="w-full bg-[#25D366] text-white rounded-full py-3.5 font-semibold
-                text-[0.9rem] flex items-center justify-center gap-2
-                hover:bg-[#1BBE5C] transition-all duration-300 active:scale-[0.98]"
-            >
-              <WhatsAppIcon />
-              Checkout via WhatsApp
-            </button>
+        {items.length === 0 ? (
+          <div className="flex-1 flex flex-col items-center justify-center gap-4 text-[#5E5A7C] px-6">
+            <ShoppingBag size={44} className="opacity-25" />
+            <p className="text-sm text-center">Your cart is empty.</p>
           </div>
+        ) : (
+          <>
+            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+              {/* Items */}
+              <ul className="space-y-2.5">
+                {items.map(item => {
+                  const lineTotal = typeof item.unitPrice === 'number' ? formatNaira(item.unitPrice * item.qty) : null;
+                  return (
+                    <li key={item.id} className="flex gap-3 bg-white border border-[rgba(165,140,244,0.15)] rounded-xl p-3">
+                      <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 relative">
+                        <Image src={item.image} alt="" fill className="object-cover" sizes="56px" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[0.9rem] font-semibold text-[#433075] truncate">{item.name}</p>
+                        {item.customisation && (
+                          <p className="text-[0.75rem] text-[#5E5A7C] truncate">{item.customisation}</p>
+                        )}
+                        <p className="text-[0.8rem] mt-0.5">
+                          {lineTotal
+                            ? <span className="font-semibold text-[#433075]">{lineTotal}</span>
+                            : <span className="text-[#5E5A7C]">{item.price} · price confirmed on WhatsApp</span>}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <button onClick={() => changeQty(item.id, -1)} aria-label={`Fewer ${item.name}`}
+                            className="w-7 h-7 rounded-full bg-white border border-[#E1D7F0] flex items-center justify-center
+                              text-[#433075] hover:bg-[#F3F0FA] transition-colors">
+                            <Minus size={11} />
+                          </button>
+                          <span className="text-[0.88rem] font-semibold text-[#433075] w-5 text-center">{item.qty}</span>
+                          <button onClick={() => changeQty(item.id, 1)} aria-label={`More ${item.name}`}
+                            className="w-7 h-7 rounded-full bg-white border border-[#E1D7F0] flex items-center justify-center
+                              text-[#433075] hover:bg-[#F3F0FA] transition-colors">
+                            <Plus size={11} />
+                          </button>
+                        </div>
+                      </div>
+                      <button onClick={() => remove(item.id)} aria-label={`Remove ${item.name}`}
+                        className="text-[#A9A5BF] hover:text-[#433075] transition-colors self-start mt-1">
+                        <Trash2 size={15} />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              {/* Totals */}
+              <div className="bg-white border border-[rgba(165,140,244,0.15)] rounded-xl px-4 py-3 space-y-1.5">
+                <div className="flex justify-between text-[0.85rem] text-[#5E5A7C]">
+                  <span>Items</span><span>{count}</span>
+                </div>
+                <div className="flex justify-between text-[1rem] font-semibold text-[#433075]">
+                  <span>Total</span>
+                  <span>{total !== null ? formatNaira(total) : 'Confirmed on WhatsApp'}</span>
+                </div>
+                <p className="text-[0.75rem] text-[#5E5A7C] leading-snug pt-1">
+                  {total !== null
+                    ? 'Delivery fee is not included. We\'ll confirm it with you on WhatsApp.'
+                    : 'Some items need a price from us first, so this order goes through WhatsApp.'}
+                </p>
+              </div>
+
+              {/* Customer details */}
+              <div className="space-y-2.5">
+                <p className="text-[0.9rem] font-semibold text-[#433075]">Your details</p>
+                <input className={field} value={name} onChange={e => setName(e.target.value)}
+                  placeholder="Your name" autoComplete="name" />
+                <input className={field} type="tel" value={phone} onChange={e => setPhone(e.target.value)}
+                  placeholder="Phone / WhatsApp number" autoComplete="tel" />
+                {canPayOnline && (
+                  <input className={field} type="email" value={email} onChange={e => setEmail(e.target.value)}
+                    placeholder="Email (for your receipt)" autoComplete="email" />
+                )}
+
+                <div className="grid grid-cols-2 gap-2 pt-1" role="radiogroup" aria-label="Pickup or delivery">
+                  {(['pickup', 'delivery'] as Method[]).map(m => (
+                    <button key={m} type="button" role="radio" aria-checked={method === m}
+                      onClick={() => setMethod(m)}
+                      className={`py-2.5 rounded-xl text-[0.85rem] font-semibold border transition-colors
+                        ${method === m
+                          ? 'bg-[#433075] text-white border-[#433075]'
+                          : 'bg-white text-[#433075] border-[rgba(165,140,244,0.35)] hover:bg-[#F3F0FA]'}`}>
+                      {m === 'pickup' ? 'Pickup' : 'Delivery'}
+                    </button>
+                  ))}
+                </div>
+                {method === 'delivery' ? (
+                  <textarea className={`${field} resize-none`} rows={2} value={address}
+                    onChange={e => setAddress(e.target.value)} placeholder="Delivery address" autoComplete="street-address" />
+                ) : (
+                  <p className="text-[0.75rem] text-[#5E5A7C]">Pick up from No 33 Amadimati Street, Mgbuoba. Mon – Sat, till 5 PM.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="px-5 py-4 bg-white border-t border-[rgba(165,140,244,0.18)] space-y-2.5">
+              {error && <p role="alert" className="text-[0.8rem] text-[#B42318] text-center">{error}</p>}
+
+              {canPayOnline ? (
+                <>
+                  <button onClick={payNow} disabled={paying}
+                    className="w-full bg-[#433075] text-white rounded-full py-3.5 font-semibold text-[0.92rem]
+                      flex items-center justify-center gap-2 hover:bg-[#5B3E8A] transition-colors
+                      disabled:opacity-70 disabled:cursor-wait active:scale-[0.98]">
+                    {paying ? <Loader2 size={17} className="animate-spin" /> : <Lock size={15} />}
+                    {paying ? 'Opening secure payment…' : `Pay ${formatNaira(total!)} now`}
+                  </button>
+                  <button onClick={orderOnWhatsApp} disabled={paying}
+                    className="w-full text-[#433075] rounded-full py-3 font-semibold text-[0.85rem]
+                      flex items-center justify-center gap-2 border border-[rgba(67,48,117,0.25)]
+                      hover:bg-[#F3F0FA] transition-colors">
+                    Or order on WhatsApp
+                  </button>
+                  <p className="text-[0.72rem] text-[#5E5A7C] text-center">
+                    Card, bank transfer or USSD, processed securely by Flutterwave.
+                  </p>
+                </>
+              ) : (
+                <button onClick={orderOnWhatsApp}
+                  className="w-full bg-[#25D366] text-white rounded-full py-3.5 font-semibold
+                    text-[0.92rem] flex items-center justify-center gap-2
+                    hover:bg-[#1BBE5C] transition-colors active:scale-[0.98]">
+                  <WAIcon /> Send order on WhatsApp
+                </button>
+              )}
+            </div>
+          </>
         )}
       </div>
     </>
-  );
-}
-
-function WhatsAppIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="white">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-    </svg>
   );
 }

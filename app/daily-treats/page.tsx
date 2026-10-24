@@ -4,7 +4,8 @@ import PageHeader from '@/components/PageHeader';
 import { ToastContainer, useToast } from '@/components/Toast';
 import { useCart } from '@/lib/cart';
 import { PRODUCTS } from '@/lib/products';
-import { Zap } from 'lucide-react';
+import { onlineUnitPrice } from '@/lib/pricing';
+import SameDayTag from '@/components/SameDayTag';
 
 export default function DailyTreatsPage() {
   const treats = PRODUCTS.filter(p => p.category === 'daily-treats');
@@ -12,7 +13,7 @@ export default function DailyTreatsPage() {
   const { toasts, show } = useToast();
 
   function handleAdd(p: typeof treats[0]) {
-    add({ id: p.id, name: p.name, price: p.price, image: p.image });
+    add({ id: p.id, name: p.name, price: p.price, image: p.image, productId: p.id, unitPrice: onlineUnitPrice(p.id) });
     show(`${p.name} added to cart`);
   }
 
@@ -21,14 +22,8 @@ export default function DailyTreatsPage() {
       <PageHeader
         title="Daily"
         titleEm="Treats"
-        subtitle="Made fresh every day. Grab-and-go favourites to brighten your mornings and everything in between."
-        tag={
-          <span className="inline-flex items-center gap-1.5 bg-[rgba(92,184,92,0.1)]
-            border border-[rgba(92,184,92,0.3)] text-[#3A7A3A] px-4 py-2 rounded-full
-            text-[0.72rem] font-medium">
-            <Zap size={12} /> All items available same day
-          </span>
-        }
+        subtitle="Cake slices, banana bread, cupcakes and other grab-and-go treats, made fresh each day."
+        tag={<SameDayTag>All items same day</SameDayTag>}
       />
 
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-14">
@@ -38,9 +33,8 @@ export default function DailyTreatsPage() {
             <div
               key={p.id}
               className="group bg-white rounded-2xl overflow-hidden border border-[rgba(165,140,244,0.15)]
-                transition-all duration-300 hover:-translate-y-1.5
-                hover:shadow-[0_14px_32px_rgba(165,140,244,0.15)]
-                hover:border-[#E1D7F0] flex flex-col"
+                transition-shadow duration-200 hover:shadow-[0_12px_28px_rgba(67,48,117,0.12)]
+                flex flex-col"
             >
               <div className="relative w-full overflow-hidden" style={{ paddingBottom: '80%' }}>
                 <Image
@@ -51,24 +45,21 @@ export default function DailyTreatsPage() {
               </div>
               <div className="p-3 flex flex-col flex-1 text-center">
                 <p className="text-[0.82rem] font-medium text-[#433075] mb-0.5">{p.name}</p>
-                <p className="text-[0.75rem] text-[#A58CF4] mb-3">{p.price}</p>
+                <p className="text-[0.8rem] font-semibold text-[#5E5A7C] mb-3">{p.price}</p>
                 <button
                   onClick={() => handleAdd(p)}
                   className="mt-auto w-full bg-[#433075] text-white text-[0.72rem] font-semibold
                     py-2 rounded-full transition-all duration-200
-                    hover:bg-[#A58CF4] active:scale-[0.97]"
+                    hover:bg-[#5B3E8A] active:scale-[0.97]"
                 >
-                  + Add to Cart
+                  Add to cart
                 </button>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Note */}
-        <p className="text-center text-[0.8rem] text-[#6E6A8C] mt-8">
-          Tap any item to add to your cart, then checkout via WhatsApp 🛒
-        </p>
+
       </div>
 
       <ToastContainer toasts={toasts} />

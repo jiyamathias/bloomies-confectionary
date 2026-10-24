@@ -13,14 +13,20 @@ const SECTIONS: { letter: string; title: string; body: React.ReactNode }[] = [
           We accept the following payment methods:
         </p>
         <ul className="list-disc pl-5 space-y-1 marker:text-[#A58CF4]">
+          <li>Online on this website: card, bank transfer or USSD, processed by Flutterwave</li>
           <li>Bank transfer</li>
           <li>POS on pickup or delivery</li>
           <li>Cash on pickup</li>
         </ul>
         <p>
-          Custom and bigger cakes require a minimum deposit of 50% of the total cost to begin work, with the
-          balance cleared before the cake leaves our kitchen. Prices shown on the website are estimates —
-          your final price is always confirmed on WhatsApp before we proceed.
+          You can pay online for items with a fixed price and for cakes you build on our cakes page.
+          You pay the price shown at checkout. Delivery fees are not included and are confirmed with you on
+          WhatsApp.
+        </p>
+        <p>
+          Prices marked &ldquo;From&rdquo;, custom designs, deluxe flavours and event orders are quoted on
+          WhatsApp before you pay. Custom and bigger cakes ordered this way require a minimum deposit of 50%
+          of the total cost to begin work, with the balance cleared before the cake leaves our kitchen.
         </p>
       </>
     ),
@@ -81,11 +87,12 @@ const SECTIONS: { letter: string; title: string; body: React.ReactNode }[] = [
     body: (
       <p>
         We only collect the information you choose to share with us — your name, phone number, delivery
-        address and order details — to prepare, deliver and communicate with you about your order. Since
-        ordering happens over WhatsApp, your conversation history is stored within WhatsApp itself under
-        Meta&apos;s own privacy terms, not on our servers. We never sell or share your details with third
-        parties, and we only use your contact information to follow up on orders or respond to enquiries you
-        initiate.
+        address, email and order details — to prepare, deliver and communicate with you about your order.
+        WhatsApp conversations are stored within WhatsApp under Meta&apos;s own privacy terms. If you pay
+        online, your payment is handled by Flutterwave: we never see or store your card details, and
+        Flutterwave keeps a record of the payment and your order summary so we can match it to your order.
+        We never sell your details, and we only use your contact information to follow up on orders or
+        respond to enquiries you initiate.
       </p>
     ),
   },
@@ -107,9 +114,8 @@ export default function PolicyPage() {
   return (
     <>
       <PageHeader
-        title="Our"
-        titleEm="Policy"
-        subtitle="The terms, conditions and privacy practices that guide every order, delivery and conversation with Bloomies — written plainly, so you always know where you stand."
+        title="Our Policy"
+        subtitle="How ordering, payment, delivery, cancellations and your information work at Bloomies."
       />
 
       <div className="max-w-3xl mx-auto px-5 sm:px-6 lg:px-10 py-10 sm:py-14">
@@ -118,15 +124,15 @@ export default function PolicyPage() {
             <section key={s.letter}
               className="bg-white border border-[rgba(165,140,244,0.14)] rounded-2xl p-6 sm:p-7">
               <div className="flex items-start gap-4">
-                <span className="shrink-0 w-9 h-9 rounded-full bg-[#F3F0FA] border border-[rgba(165,140,244,0.25)]
-                  flex items-center justify-center font-cormorant text-[1.05rem] font-semibold text-[#433075]">
+                <span className="shrink-0 w-9 h-9 rounded-full bg-[#E2BBFA]
+                  flex items-center justify-center font-luckiest text-[1.05rem] text-[#433075] pt-0.5">
                   {s.letter}
                 </span>
                 <div className="min-w-0">
-                  <h2 className="font-cormorant text-[1.35rem] font-semibold text-[#433075] mb-2 leading-tight">
+                  <h2 className="text-[1.08rem] font-semibold text-[#433075] mb-2 leading-snug">
                     {s.title}
                   </h2>
-                  <div className="text-[0.86rem] text-[#6E6A8C] leading-relaxed space-y-3">
+                  <div className="text-[0.92rem] text-[#5E5A7C] leading-relaxed space-y-3">
                     {s.body}
                   </div>
                 </div>
@@ -139,14 +145,14 @@ export default function PolicyPage() {
         <div className="mt-8 bg-[#433075] rounded-2xl p-7 sm:p-9 text-center sm:text-left
           sm:flex sm:items-center sm:justify-between gap-6">
           <div className="mb-5 sm:mb-0">
-            <h3 className="font-cormorant text-[1.4rem] text-white font-normal mb-2">
+            <h3 className="font-luckiest tracking-[0.02em] text-[1.5rem] text-white mb-2">
               Questions about any of this?
             </h3>
             <div className="space-y-1.5">
-              <p className="text-white/55 text-[0.82rem] flex items-center gap-2 justify-center sm:justify-start">
+              <p className="text-white/80 text-[0.85rem] flex items-center gap-2 justify-center sm:justify-start">
                 <Clock size={13}/> Mon – Sat, closes 5 PM · Closed Sundays
               </p>
-              <p className="text-white/55 text-[0.82rem] flex items-center gap-2 justify-center sm:justify-start">
+              <p className="text-white/80 text-[0.85rem] flex items-center gap-2 justify-center sm:justify-start">
                 <MapPin size={13}/> No 33 Amadimati Street, Mgbuoba, Port Harcourt
               </p>
             </div>
@@ -158,8 +164,8 @@ export default function PolicyPage() {
           </WhatsAppBtn>
         </div>
 
-        <p className="text-[0.7rem] text-[#6E6A8C]/50 text-center mt-6">
-          Last updated June 2026 · Bloomies Confectioneries, Port Harcourt
+        <p className="text-[0.75rem] text-[#5E5A7C] text-center mt-6">
+          Last updated October 2026 · Bloomies Confectioneries, Port Harcourt
         </p>
       </div>
     </>

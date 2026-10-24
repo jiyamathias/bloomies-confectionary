@@ -9,8 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        cormorant: ['"Cormorant Garamond"', 'Georgia', 'serif'],
         dm:        ['"DM Sans"', 'system-ui', 'sans-serif'],
+        luckiest:  ['var(--font-luckiest)', '"Luckiest Guy"', 'Impact', 'system-ui', 'sans-serif'],
       },
       colors: {
         // New Bloomies palette

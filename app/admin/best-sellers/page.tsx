@@ -104,7 +104,7 @@ export default function AdminBestSellersPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div>
-          <h1 className="font-cormorant text-[1.9rem] font-semibold text-[#433075]">
+          <h1 className="font-luckiest tracking-[0.02em] text-[2.1rem] leading-none text-[#433075]">
             Best Sellers Section
           </h1>
           <p className="text-[0.82rem] text-[#6E6A8C] mt-0.5">
@@ -158,7 +158,7 @@ export default function AdminBestSellersPage() {
         ) : (
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-cormorant text-[2rem] font-semibold text-[#433075]">{config.title}</p>
+              <p className="text-[2rem] font-semibold text-[#433075]">{config.title}</p>
               <p className="text-[0.75rem] text-[#6E6A8C] mt-0.5">Displayed as the section heading on the home page</p>
             </div>
             <button onClick={() => setEditingTitle(true)}
@@ -296,7 +296,7 @@ export default function AdminBestSellersPage() {
             <div className="sticky top-0 bg-white z-10 px-6 py-4 border-b border-[rgba(165,140,244,0.12)]
               flex items-center justify-between">
               <div>
-                <h3 className="font-cormorant text-[1.3rem] font-semibold text-[#433075]">
+                <h3 className="text-[1.3rem] font-semibold text-[#433075]">
                   Add Product
                 </h3>
                 <p className="text-[0.75rem] text-[#6E6A8C]">

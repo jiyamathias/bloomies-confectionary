@@ -25,12 +25,12 @@ export function ToastContainer({ toasts }: { toasts: Toast[] }) {
       {toasts.map(t => (
         <div
           key={t.id}
-          className="bg-[#5B2D8E] text-white px-6 py-3 rounded-full text-[0.84rem]
-            shadow-[0_10px_36px_rgba(91,45,142,0.28)] flex items-center gap-2
+          className="bg-[#433075] text-white px-6 py-3 rounded-full text-[0.84rem]
+            shadow-[0_10px_30px_rgba(67,48,117,0.3)] flex items-center gap-2
             animate-[slideUp_0.4s_cubic-bezier(0.34,1.56,0.64,1)_forwards]"
           style={{ animation: 'slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards' }}
         >
-          <CheckCircle size={14} className="text-[#5CB85C]" />
+          <CheckCircle size={15} className="text-[#E2BBFA]" />
           {t.msg}
         </div>
       ))}

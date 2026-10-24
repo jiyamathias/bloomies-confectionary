@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import { X, ShoppingBag, Sparkles, Images } from 'lucide-react';
+import { X, ShoppingBag, Images } from 'lucide-react';
 import { useCart } from '@/lib/cart';
+import { onlineUnitPrice } from '@/lib/pricing';
 import CakeOrderForm from '@/components/CakeOrderForm';
 import ProductGallery from '@/components/ProductGallery';
 import type { Product } from '@/types';
@@ -30,8 +31,9 @@ export default function ProductCard({ product, onToast }: {
     if (isCake(product.category)) {
       setModalOpen(true);
     } else {
-      add({ id: product.id, name: product.name, price: product.price, image: product.image });
-      onToast?.(`${product.name} added to cart ✓`);
+      add({ id: product.id, name: product.name, price: product.price, image: product.image,
+        productId: product.id, unitPrice: onlineUnitPrice(product.id) });
+      onToast?.(`${product.name} added to cart`);
     }
   }
 
@@ -42,10 +44,10 @@ export default function ProductCard({ product, onToast }: {
       <div
         onClick={product.in_stock ? handleClick : undefined}
         className={`group relative bg-white rounded-2xl overflow-hidden flex flex-col
-          border border-[rgba(165,140,244,0.12)]
-          transition-all duration-350
+          border border-[rgba(165,140,244,0.18)]
+          transition-shadow duration-200
           ${product.in_stock
-            ? 'cursor-pointer hover:-translate-y-2 hover:shadow-[0_24px_56px_rgba(67,48,117,0.13)] hover:border-[rgba(165,140,244,0.3)]'
+            ? 'cursor-pointer hover:shadow-[0_14px_34px_rgba(67,48,117,0.13)]'
             : 'opacity-65 select-none'}`}>
 
         {/* Image */}
@@ -62,7 +64,7 @@ export default function ProductCard({ product, onToast }: {
                 translate-y-2 group-hover:translate-y-0
                 bg-white text-[#433075] text-[0.78rem] font-semibold px-5 py-2.5
                 rounded-full shadow-xl flex items-center gap-2">
-                <Sparkles size={13}/> Customise & Order
+                Customise &amp; order
               </div>
             </div>
           )}
@@ -114,35 +116,34 @@ export default function ProductCard({ product, onToast }: {
 
         {/* Body */}
         <div className="p-4 flex flex-col flex-1">
-          <h3 className="font-cormorant text-[1.15rem] font-semibold text-[#433075]
-            mb-1 leading-tight group-hover:text-[#5B3E8A] transition-colors">
+          <h3 className="text-[0.98rem] font-semibold text-[#433075] mb-1 leading-snug">
             {product.name}
           </h3>
-          <p className="text-[0.75rem] text-[#6E6A8C] leading-relaxed mb-2 flex-1 line-clamp-2">
+          <p className="text-[0.8rem] text-[#5E5A7C] leading-relaxed mb-2 flex-1 line-clamp-2">
             {product.description}
           </p>
           {product.moq && (
-            <p className="text-[0.67rem] text-[#A58CF4] italic mb-2">{product.moq}</p>
+            <p className="text-[0.72rem] text-[#5E5A7C] mb-2">{product.moq}</p>
           )}
 
           <div className="flex items-center justify-between mt-auto pt-3
             border-t border-[rgba(165,140,244,0.1)]">
-            <span className="font-cormorant text-[1rem] font-semibold text-[#433075]">
+            <span className="text-[0.9rem] font-semibold text-[#433075]">
               {product.price}
             </span>
 
             {isCake(product.category) && product.in_stock && (
               <span className="text-[0.7rem] text-[#433075] bg-[#F3F0FA]
                 px-3 py-1.5 rounded-full font-medium border border-[rgba(165,140,244,0.2)]">
-                Customise →
+                Customise
               </span>
             )}
             {!isCake(product.category) && !isWA && product.in_stock && (
               <button
                 onClick={e => { e.stopPropagation(); handleClick(); }}
                 className="text-[0.72rem] bg-[#433075] text-white px-3.5 py-2 rounded-full
-                  font-medium hover:bg-[#A58CF4] transition-all duration-200 active:scale-[0.96]">
-                + Add
+                  font-medium hover:bg-[#5B3E8A] transition-colors duration-200 active:scale-[0.96]">
+                Add
               </button>
             )}
             {isWA && (
@@ -151,7 +152,7 @@ export default function ProductCard({ product, onToast }: {
                 onClick={e => e.stopPropagation()}
                 className="text-[0.72rem] bg-[#25D366] text-white px-3.5 py-2 rounded-full
                   font-medium hover:bg-[#1EB85A] transition-all duration-200">
-                Order →
+                Ask on WhatsApp
               </a>
             )}
           </div>
@@ -175,7 +176,7 @@ export default function ProductCard({ product, onToast }: {
                     className="object-cover" sizes="56px"/>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h2 className="font-cormorant text-[1.4rem] font-semibold text-[#433075] leading-tight">
+                  <h2 className="font-luckiest tracking-[0.02em] text-[1.35rem] text-[#433075] leading-tight">
                     {product.name}
                   </h2>
                   <p className="text-[0.78rem] text-[#A58CF4] font-medium">{product.price}</p>
@@ -207,7 +208,7 @@ export default function ProductCard({ product, onToast }: {
           <div className="bg-white rounded-2xl p-4 sm:p-5 max-w-md w-full shadow-2xl"
             onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-cormorant text-[1.2rem] font-semibold text-[#433075] leading-tight">
+              <h3 className="text-[1.02rem] font-semibold text-[#433075] leading-tight">
                 {product.name}
               </h3>
               <button onClick={() => setGalleryOpen(false)}

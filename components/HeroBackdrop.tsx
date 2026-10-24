@@ -1,18 +1,19 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
 
+// Resized WebP copies of /images/cakes (max 1800px) so the hero loads fast on mobile.
 const LEFT_IMAGES = [
-  '/images/cakes/1.jpg',
-  '/images/cakes/3.jpg',
-  '/images/cakes/5.jpg',
-  '/images/cakes/7.jpg',
+  '/images/hero/1.webp',
+  '/images/hero/3.webp',
+  '/images/hero/5.webp',
+  '/images/hero/7.webp',
 ];
 
 const RIGHT_IMAGES = [
-  '/images/cakes/2.jpg',
-  '/images/cakes/4.jpg',
-  '/images/cakes/6.jpg',
-  '/images/cakes/8.jpg',
+  '/images/hero/2.webp',
+  '/images/hero/4.webp',
+  '/images/hero/6.webp',
+  '/images/hero/8.webp',
 ];
 
 const INTERVAL = 4200;
