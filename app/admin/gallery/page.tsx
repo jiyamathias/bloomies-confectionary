@@ -39,7 +39,7 @@ export default function GalleryAdminPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-cormorant text-[2rem] font-semibold text-[#433075]">Gallery Manager</h1>
+          <h1 className="font-luckiest tracking-[0.02em] text-[2.1rem] leading-none text-[#433075]">Gallery Manager</h1>
           <p className="text-[#6E6A8C] text-[0.85rem] mt-1">Manage cakes displayed in the public gallery.</p>
         </div>
         <button onClick={() => setModal(true)}
@@ -68,7 +68,7 @@ export default function GalleryAdminPage() {
               </div>
             </div>
             <div className="p-3">
-              <p className="font-cormorant text-[1rem] font-semibold text-[#433075] leading-tight mb-0.5">{item.title}</p>
+              <p className="text-[1rem] font-semibold text-[#433075] leading-tight mb-0.5">{item.title}</p>
               <p className="text-[0.68rem] text-[#6E6A8C]">{item.category}</p>
             </div>
           </div>
@@ -80,7 +80,7 @@ export default function GalleryAdminPage() {
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="font-cormorant text-[1.5rem] font-semibold text-[#433075]">Upload Cake to Gallery</h2>
+              <h2 className="text-[1.15rem] font-semibold text-[#433075]">Upload Cake to Gallery</h2>
               <button onClick={() => setModal(false)}
                 className="w-8 h-8 rounded-full border border-[rgba(165,140,244,0.3)] flex items-center justify-center
                   text-[#6E6A8C] hover:border-[#A58CF4] transition-all">
@@ -141,7 +141,7 @@ export default function GalleryAdminPage() {
       {delId && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl text-center">
-            <h3 className="font-cormorant text-[1.4rem] font-semibold text-[#433075] mb-2">Remove from gallery?</h3>
+            <h3 className="text-[1.1rem] font-semibold text-[#433075] mb-2">Remove from gallery?</h3>
             <p className="text-[0.85rem] text-[#6E6A8C] mb-6">This will remove the cake from the public gallery.</p>
             <div className="flex gap-3">
               <button onClick={() => setDelId(null)}

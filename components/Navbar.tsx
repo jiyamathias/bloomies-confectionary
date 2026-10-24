@@ -1,20 +1,55 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ShoppingBag, Menu, X, ChevronRight } from 'lucide-react';
+import { ShoppingBag, Menu, X, ChevronRight, ChevronDown, MapPin, Clock, ArrowUpRight } from 'lucide-react';
 import { useCart } from '@/lib/cart';
 
-const NAV_LINKS = [
-  { href: '/cakes',        label: 'Cakes'        },
-  { href: '/pastries',     label: 'Pastries'     },
-  { href: '/small-chops',  label: 'Small Chops'  },
-  { href: '/daily-treats', label: 'Daily Treats' },
-  { href: '/events',       label: 'Events'       },
-  { href: '/gallery',      label: 'Gallery'      },
-  { href: '/about',        label: 'About'        },
-  { href: '/policy',       label: 'Our Policy'   },
+type NavLink  = { href: string; label: string; sub?: string };
+type NavGroup = { label: string; items: NavLink[]; wide?: boolean };
+type NavEntry = NavLink | NavGroup;
+
+const isGroup = (e: NavEntry): e is NavGroup => 'items' in e;
+
+// Grouped so the bar stays short: products in one dropdown, info pages in another.
+const NAV: NavEntry[] = [
+  {
+    label: 'Our Treats',
+    wide: true,
+    items: [
+      { href: '/cakes',        label: 'Cakes',        sub: 'One layer · Custom designs'   },
+      { href: '/pastries',     label: 'Pastries',     sub: 'Pies · Rolls · Cinnamon buns' },
+      { href: '/small-chops',  label: 'Small Chops',  sub: 'Packages for every gathering' },
+      { href: '/daily-treats', label: 'Daily Treats', sub: 'Banana bread · Slices · More' },
+    ],
+  },
+  { href: '/events',  label: 'Events'  },
+  { href: '/gallery', label: 'Gallery' },
+  {
+    label: 'About',
+    items: [
+      { href: '/about',  label: 'Our Story',  sub: 'Who we are & how we bake'    },
+      { href: '/policy', label: 'Our Policy', sub: 'Ordering, delivery & refunds' },
+    ],
+  },
 ];
+
+// Mobile drawer: each dropdown becomes a section; plain links share an "Explore" section.
+const MOBILE_SECTIONS = NAV.reduce<{ title: string; links: NavLink[] }[]>((out, e) => {
+  if (isGroup(e)) return [...out, { title: e.label, links: e.items }];
+  const explore = out.find(sec => sec.title === 'Explore');
+  if (explore) explore.links.push(e);
+  else out.push({ title: 'Explore', links: [e] });
+  return out;
+}, []);
+
+const linkBase = `text-[0.78rem] tracking-[0.08em] transition-colors duration-200 relative
+  after:absolute after:bottom-[-3px] after:left-0 after:w-full after:h-px
+  after:bg-[#A58CF4] after:scale-x-0 after:transition-transform after:duration-200
+  hover:after:scale-x-100`;
+const linkState = (active: boolean) => active
+  ? 'text-[#433075] font-semibold after:scale-x-100'
+  : 'text-[#6E6A8C] hover:text-[#433075] font-normal';
 
 export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
   const [scrolled,   setScrolled]   = useState(false);
@@ -33,58 +68,55 @@ export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300
-        border-b border-[rgba(165,140,244,0.15)]
-        ${scrolled
-          ? 'bg-white/98 backdrop-blur-[20px] shadow-[0_2px_24px_rgba(67,48,117,0.1)]'
-          : 'bg-white/85 backdrop-blur-[16px] shadow-[0_1px_12px_rgba(67,48,117,0.06)]'
-        }`}>
-        <div className="max-w-7xl mx-auto px-5 lg:px-10 h-[70px] flex items-center justify-between gap-4">
+      {/* Floating pill: sits over the hero and page banners instead of spanning the full width */}
+      <nav className="fixed top-3 sm:top-4 inset-x-3 sm:inset-x-6 z-50 flex justify-center pointer-events-none">
+        <div className={`pointer-events-auto w-full max-w-6xl h-[60px] rounded-full
+          flex items-center justify-between gap-4 pl-5 pr-2 sm:pl-6 sm:pr-2.5
+          border transition-all duration-300
+          ${scrolled
+            ? 'bg-white/95 backdrop-blur-[20px] border-[rgba(67,48,117,0.12)] shadow-[0_10px_30px_rgba(43,33,71,0.16)]'
+            : 'bg-white/85 backdrop-blur-[16px] border-white/60 shadow-[0_8px_28px_rgba(43,33,71,0.12)]'
+          }`}>
 
           {/* Logo */}
           <Link href="/"
-            className="font-cormorant font-bold tracking-tight shrink-0 transition-all duration-200
-              hover:opacity-80 select-none"
-            style={{ fontSize: '1.9rem', color: '#433075', letterSpacing: '-0.01em' }}>
+            className="font-luckiest leading-none shrink-0 transition-all duration-200
+              hover:opacity-80 select-none pt-1"
+            style={{ fontSize: '1.55rem', color: '#433075', letterSpacing: '0.02em' }}>
             Bloomies<span style={{ color: '#A58CF4' }}>.</span>
           </Link>
 
           {/* Desktop nav */}
           <ul className="hidden lg:flex items-center gap-7 list-none">
-            {NAV_LINKS.map(link => (
-              <li key={link.href}>
-                <Link href={link.href}
-                  className={`text-[0.78rem] tracking-[0.08em] transition-colors duration-200 relative
-                    after:absolute after:bottom-[-3px] after:left-0 after:w-full after:h-px
-                    after:bg-[#A58CF4] after:scale-x-0 after:transition-transform after:duration-200
-                    hover:after:scale-x-100
-                    ${pathname === link.href
-                      ? 'text-[#433075] font-semibold after:scale-x-100'
-                      : 'text-[#6E6A8C] hover:text-[#433075] font-normal'}`}>
-                  {link.label}
-                </Link>
+            {NAV.map(entry => (
+              <li key={entry.label}>
+                {isGroup(entry)
+                  ? <NavDropdown group={entry} pathname={pathname}/>
+                  : <Link href={entry.href} className={`${linkBase} ${linkState(pathname === entry.href)}`}>
+                      {entry.label}
+                    </Link>}
               </li>
             ))}
           </ul>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             {/* BakersMerch CTA */}
             <a href="https://bakersmerch.com" target="_blank" rel="noopener noreferrer"
               className="hidden md:flex items-center gap-1.5 text-[0.72rem] tracking-[0.06em]
-                text-[#A58CF4] font-semibold px-4 py-2 rounded-full
-                border border-[rgba(165,140,244,0.35)] bg-[rgba(165,140,244,0.06)]
-                hover:bg-[rgba(165,140,244,0.12)] transition-all duration-200">
-              🛍 Shop BakersMerch ↗
+                text-[#433075] font-semibold px-4 py-2.5 rounded-full
+                border border-[rgba(67,48,117,0.25)]
+                hover:bg-[#F3F0FA] transition-colors duration-200">
+              BakersMerch <ArrowUpRight size={13}/>
             </a>
 
-            {/* Order on WhatsApp */}
-            <a href="https://wa.me/2348181154270" target="_blank" rel="noopener noreferrer"
+            {/* Order: goes to the menu, checkout happens in the cart */}
+            <Link href="/#treats"
               className="hidden lg:inline-flex items-center gap-1.5 text-[0.75rem] tracking-[0.04em]
                 bg-[#433075] text-white px-5 py-2.5 rounded-full font-medium
-                hover:bg-[#5B3E8A] transition-all duration-200 hover:shadow-lg">
+                hover:bg-[#5B3E8A] transition-colors duration-200">
               Order Now
-            </a>
+            </Link>
 
             {/* Cart */}
             <button onClick={onCartOpen}
@@ -103,67 +135,61 @@ export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
             </button>
 
             {/* Hamburger */}
-            <button className="lg:hidden p-2 text-[#433075] hover:text-[#A58CF4] transition-colors"
-              onClick={() => setMobileOpen(v => !v)} aria-label="Toggle menu">
+            <button className="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-[#433075] hover:bg-[#F3F0FA] transition-colors"
+              onClick={() => setMobileOpen(v => !v)} aria-label="Toggle menu" aria-expanded={mobileOpen}>
               {mobileOpen ? <X size={22}/> : <Menu size={22}/>}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* ── Mobile drawer ── */}
-      <div className={`fixed inset-0 z-40 lg:hidden transition-all duration-300
-        ${mobileOpen ? 'visible' : 'invisible'}`}>
-        {/* Backdrop */}
-        <div className={`absolute inset-0 bg-[#433075]/30 backdrop-blur-sm transition-opacity duration-300
+      {/* ── Mobile menu: card under the pill ── */}
+      <div className={`fixed inset-0 z-40 lg:hidden ${mobileOpen ? 'visible' : 'invisible'}`}>
+        <div className={`absolute inset-0 bg-[#2B2147]/35 backdrop-blur-sm transition-opacity duration-300
           ${mobileOpen ? 'opacity-100' : 'opacity-0'}`}
           onClick={() => setMobileOpen(false)}/>
 
-        {/* Drawer panel */}
-        <div className={`absolute top-0 right-0 bottom-0 w-[300px]
-          bg-white shadow-2xl flex flex-col transition-transform duration-400 ease-out
-          ${mobileOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className={`absolute top-[80px] inset-x-3 sm:inset-x-6 max-h-[calc(100dvh-96px)]
+          bg-white rounded-3xl shadow-[0_20px_50px_rgba(43,33,71,0.25)] flex flex-col overflow-hidden
+          transition-all duration-300 ease-out origin-top
+          ${mobileOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-[0.98]'}`}>
+          <div className="flex-1 overflow-y-auto px-4 pt-5 pb-3">
+            {/* Same grouping as desktop, shown as labelled sections */}
+            {MOBILE_SECTIONS.map(section => (
+              <div key={section.title} className="mb-5">
+                <p className="text-[0.65rem] tracking-[0.18em] uppercase text-[#6E6A8C]/60 px-2 mb-2">{section.title}</p>
+                <ul className="space-y-1">
+                  {section.links.map(link => (
+                    <li key={link.href}>
+                      <Link href={link.href}
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl
+                          text-[0.9rem] font-medium transition-all
+                          ${pathname === link.href
+                            ? 'bg-[#433075] text-white'
+                            : 'text-[#433075] hover:bg-[#F3F0FA]'}`}>
+                        {link.label}
+                        <ChevronRight size={15} className="opacity-40"/>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
 
-          {/* Drawer header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-[rgba(165,140,244,0.1)]">
-            <span className="font-cormorant text-[1.6rem] font-bold text-[#433075]">
-              Bloomies<span className="text-[#A58CF4]">.</span>
-            </span>
-            <button onClick={() => setMobileOpen(false)} className="p-1.5 text-[#6E6A8C]">
-              <X size={20}/>
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto px-4 py-5">
-            <p className="text-[0.65rem] tracking-[0.18em] uppercase text-[#6E6A8C]/50 px-2 mb-3">Menu</p>
             <ul className="space-y-1">
-              {NAV_LINKS.map(link => (
-                <li key={link.href}>
-                  <Link href={link.href}
-                    className={`flex items-center justify-between px-4 py-3.5 rounded-xl
-                      text-[0.9rem] font-medium transition-all
-                      ${pathname === link.href
-                        ? 'bg-[#433075] text-white'
-                        : 'text-[#433075] hover:bg-[#F3F0FA]'}`}>
-                    {link.label}
-                    <ChevronRight size={15} className="opacity-40"/>
-                  </Link>
-                </li>
-              ))}
-
               {/* BakersMerch in mobile too */}
               <li>
                 <a href="https://bakersmerch.com" target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-between px-4 py-3.5 rounded-xl
-                    text-[0.9rem] font-semibold text-[#A58CF4] hover:bg-[#F3F0FA] transition-all">
-                  🛍 Shop BakersMerch ↗
-                  <ChevronRight size={15} className="opacity-40"/>
+                    text-[0.9rem] font-semibold text-[#433075] hover:bg-[#F3F0FA] transition-all">
+                  Shop BakersMerch
+                  <ArrowUpRight size={15} className="opacity-50"/>
                 </a>
               </li>
             </ul>
           </div>
 
-          <div className="px-4 pb-6 border-t border-[rgba(165,140,244,0.1)] pt-4 space-y-3">
+          <div className="px-4 pb-5 border-t border-[rgba(165,140,244,0.15)] pt-4 space-y-3">
             <a href="https://wa.me/2348181154270?text=Hi%20Bloomies!%20I%27d%20like%20to%20place%20an%20order."
               target="_blank" rel="noopener noreferrer"
               className="flex items-center justify-center gap-2.5 w-full
@@ -171,16 +197,94 @@ export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
               <WAIcon/> Order on WhatsApp
             </a>
             <div className="text-center space-y-1">
-              <p className="text-[0.72rem] text-[#6E6A8C]">📍 Mgbuoba, Port Harcourt</p>
-              <p className="text-[0.72rem] text-[#6E6A8C]">🕐 Mon – Sat · Closes 5 PM</p>
+              <p className="text-[0.78rem] text-[#5E5A7C] flex items-center justify-center gap-1.5"><MapPin size={12}/> Mgbuoba, Port Harcourt</p>
+              <p className="text-[0.78rem] text-[#5E5A7C] flex items-center justify-center gap-1.5"><Clock size={12}/> Mon – Sat, till 5 PM</p>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Spacer */}
-      <div className="h-[70px]"/>
     </>
+  );
+}
+
+function NavDropdown({ group, pathname }: { group: NavGroup; pathname: string }) {
+  const [open, setOpen] = useState(false);
+  const rootRef   = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout>>();
+  const active = group.items.some(i => i.href === pathname);
+  const panelId = `nav-${group.label.toLowerCase().replace(/\s+/g, '-')}`;
+
+  const show = useCallback(() => { clearTimeout(closeTimer.current); setOpen(true); }, []);
+  // Short delay so moving the mouse from the button to the panel doesn't close it.
+  const hide = useCallback(() => {
+    clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setOpen(false), 140);
+  }, []);
+
+  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { setOpen(false); buttonRef.current?.focus(); }
+    };
+    document.addEventListener('pointerdown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={rootRef} className="relative"
+      onPointerEnter={e => e.pointerType === 'mouse' && show()}
+      onPointerLeave={e => e.pointerType === 'mouse' && hide()}
+      onBlur={e => { if (!rootRef.current?.contains(e.relatedTarget as Node)) setOpen(false); }}>
+
+      <button ref={buttonRef} type="button"
+        aria-expanded={open} aria-controls={panelId}
+        onClick={() => setOpen(v => !v)}
+        className={`${linkBase} ${linkState(active || open)} inline-flex items-center gap-1`}>
+        {group.label}
+        <ChevronDown size={13} className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}/>
+      </button>
+
+      {/* pt-4 is an invisible bridge between button and panel so hover isn't lost */}
+      <div id={panelId}
+        className={`absolute left-1/2 top-full pt-6 -translate-x-1/2 transition-all duration-200
+          ${open ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 -translate-y-1 pointer-events-none'}`}>
+        <ul className={`list-none bg-white rounded-2xl p-2 border border-[rgba(165,140,244,0.18)]
+          shadow-[0_18px_48px_rgba(67,48,117,0.16)]
+          ${group.wide ? 'grid grid-cols-2 gap-1 w-[460px]' : 'w-[260px] space-y-1'}`}>
+          {group.items.map(item => {
+            const current = item.href === pathname;
+            return (
+              <li key={item.href}>
+                <Link href={item.href} aria-current={current ? 'page' : undefined}
+                  className={`group block rounded-xl px-4 py-3 transition-colors duration-150
+                    ${current ? 'bg-[#F3F0FA]' : 'hover:bg-[#F7F4FD] focus-visible:bg-[#F7F4FD]'}`}>
+                  <span className="flex items-center justify-between text-[0.85rem] font-semibold text-[#433075]">
+                    {item.label}
+                    <ChevronRight size={14}
+                      className="text-[#A58CF4] opacity-0 -translate-x-1 transition-all duration-150
+                        group-hover:opacity-100 group-hover:translate-x-0"/>
+                  </span>
+                  {item.sub && (
+                    <span className="block mt-0.5 text-[0.72rem] text-[#6E6A8C]">{item.sub}</span>
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
   );
 }
 

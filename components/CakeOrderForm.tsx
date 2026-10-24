@@ -1,16 +1,16 @@
 'use client';
 import { useState } from 'react';
-import { ShoppingBag, Plus, Minus, ChevronDown } from 'lucide-react';
+import { ShoppingBag, Plus, Minus, ChevronDown, Paperclip, Palette } from 'lucide-react';
 import { useCart } from '@/lib/cart';
-import { ADDON_PRICES, ICING_SURCHARGE } from '@/types';
-import type { Product, OneLayerCustomField, BiggerCakeCustomField } from '@/types';
+import { cakePrice, onlineUnitPrice, DELUXE_FLAVOURS, MAX_CANDLES } from '@/lib/pricing';
+import type { Product, OneLayerCustomField, BiggerCakeCustomField, CakeOptions } from '@/types';
 
 /* ─── Static options ────────────────────────────────────────────── */
 const OCCASIONS         = ['Birthday','Wedding','Anniversary','Baby Shower','Graduation','Naming Ceremony','Corporate','Other'];
 const GENDERS           = ['Female','Male','Unisex / Not Specified'];
 const ONE_LAYER_FLAVOURS= ['Vanilla','Chocolate','Red Velvet'];
 const BIGGER_FLAV_REG   = ['Vanilla','Chocolate','Red Velvet'];
-const BIGGER_FLAV_DLX   = ['Carrot','Coconut','Ginger Full Cream','Cookies & Cream'];
+const BIGGER_FLAV_DLX   = DELUXE_FLAVOURS;
 const BIGGER_LAYERS     = ['2 Layers','3 Layers','4 Layers','5 Layers','6 Layers'];
 const TOPPERS           = ['Number','Name','Bride & Groom','Baby','Floral Picks','Stars & Moon','None'];
 // Fallback colours if none defined by admin
@@ -77,7 +77,7 @@ function Textarea({ label, value, onChange, placeholder }: { label: string; valu
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="border border-[rgba(165,140,244,0.15)] rounded-2xl p-5 space-y-4 bg-white">
-      <p className="font-cormorant text-[1.1rem] font-semibold text-[#433075] border-b border-[rgba(165,140,244,0.1)] pb-2">{title}</p>
+      <p className="text-[0.98rem] font-semibold text-[#433075] border-b border-[rgba(165,140,244,0.15)] pb-2">{title}</p>
       {children}
     </div>
   );
@@ -86,9 +86,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function ReferencePhotoTip() {
   return (
     <div className="flex items-start gap-3 bg-[rgba(37,211,102,0.08)] border border-[rgba(37,211,102,0.25)] rounded-xl px-4 py-3">
-      <span className="text-base shrink-0">📎</span>
+      <Paperclip size={15} className="text-[#1f7a44] shrink-0 mt-0.5"/>
       <p className="text-[0.74rem] text-[#1f7a44] leading-relaxed">
-        Got a reference photo or inspiration picture? No need to upload it here — just attach it directly in the chat after you tap <strong>Order via WhatsApp</strong> below.
+        Have a reference photo? Send it to us on WhatsApp. If you pay online, send it after paying and mention your payment reference.
       </p>
     </div>
   );
@@ -126,15 +126,10 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
   const [chamdor,      setChamdor]      = useState(false);
   const [candles,      setCandles]      = useState(0);
 
-  // Price: if size selected, use that size's price; else use product.basePrice
-  const sizeObj = sizes.find(s => s.label === selectedSize);
-  const base     = sizeObj?.price ?? product.basePrice ?? 8500;
-  const icingSurcharge = has('icing') && icing === 'whipped-cream' ? ICING_SURCHARGE['whipped-cream'] : 0;
-  const addonTotal =
-    (has('addon_card')    && card    ? ADDON_PRICES.card    : 0) +
-    (has('addon_chamdor') && chamdor ? ADDON_PRICES.chamdor : 0) +
-    (has('addon_candles') ? candles * ADDON_PRICES.candlePerUnit : 0);
-  const total = base + icingSurcharge + addonTotal;
+  const options: CakeOptions = { size: selectedSize || undefined, icing, card, chamdor, candles };
+  const price = cakePrice(product, options);
+  const { base, icingSurcharge, total } = price;
+  const addonTotal = price.card + price.chamdor + price.candles;
 
   function buildWA() {
     const addOns = [
@@ -168,7 +163,26 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
       has('colour')  ? colour  : '',
       addonTotal > 0 ? '+ add-ons' : '',
     ].filter(Boolean).join(' · ');
-    add({ id:`${product.id}-${Date.now()}`, name:product.name, price:fmt(total), image:product.image, customisation:summary });
+    const details = [
+      hasSizes ? `Size: ${selectedSize}` : '',
+      has('flavour') ? `Flavour: ${flavour}` : '',
+      has('icing') ? `Icing: ${icing === 'whipped-cream' ? 'Whipped cream' : 'Buttercream'}` : '',
+      has('colour') ? `Colour: ${colour}${customColour ? ` (${customColour})` : ''}` : '',
+      has('message') && message ? `Message on cake: ${message}` : '',
+      has('occasion') ? `Occasion: ${occasion}` : '',
+      has('gender') ? `Receiver: ${gender}` : '',
+      has('delivery') && delivDate ? `Date needed: ${delivDate}` : '',
+      has('delivery') && delivAddr ? `Address: ${delivAddr}` : '',
+      has('addon_card') && card ? `Greeting card${cardMsg ? `: "${cardMsg}"` : ''}` : '',
+      has('addon_chamdor') && chamdor ? 'Chamdor wine' : '',
+      has('addon_candles') && candles > 0 ? `Candles: ${candles}` : '',
+      has('notes') && notes ? `Notes: ${notes}` : '',
+    ].filter(Boolean).join('\n');
+    add({
+      id: `${product.id}-${Date.now()}`, name: product.name, price: fmt(total), image: product.image,
+      customisation: summary, details, productId: product.id, options,
+      unitPrice: onlineUnitPrice(product.id, options),
+    });
     onClose?.();
   }
 
@@ -237,7 +251,7 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
       {has('message') && (
         <Section title={`${s++}. Cake Message`}>
           <Input label="What should we write on your cake?" value={message} onChange={setMessage}
-            placeholder="e.g. Happy Birthday Amara! 🎂"/>
+            placeholder="e.g. Happy Birthday Amara!"/>
         </Section>
       )}
 
@@ -259,7 +273,7 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
       )}
 
       {(has('addon_card')||has('addon_chamdor')||has('addon_candles')) && (
-        <Section title={`${s++}. ✨ Add-Ons`}>
+        <Section title={`${s++}. Add-ons`}>
           <div className="space-y-3">
             {has('addon_card') && (<>
               <label className="flex items-center justify-between cursor-pointer bg-[#F3F0FA] rounded-xl px-4 py-3 hover:bg-[#EDE8F8] transition-colors">
@@ -280,7 +294,7 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
                 <div className="flex items-center gap-3">
                   <input type="checkbox" checked={chamdor} onChange={e=>setChamdor(e.target.checked)} className="w-4 h-4 accent-[#A58CF4]"/>
                   <div>
-                    <p className="text-[0.88rem] font-medium text-[#433075]">Chamdor Wine 🍾</p>
+                    <p className="text-[0.88rem] font-medium text-[#433075]">Chamdor wine</p>
                     <p className="text-[0.72rem] text-[#6E6A8C]">Celebrate in style</p>
                   </div>
                 </div>
@@ -292,7 +306,7 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
               <div className="bg-[#F3F0FA] rounded-xl px-4 py-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[0.88rem] font-medium text-[#433075]">Candles 🕯️</p>
+                    <p className="text-[0.88rem] font-medium text-[#433075]">Candles</p>
                     <p className="text-[0.72rem] text-[#6E6A8C]">₦500 per candle</p>
                   </div>
                   <div className="flex items-center gap-3">
@@ -301,7 +315,7 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
                       <Minus size={13}/>
                     </button>
                     <span className="text-[0.9rem] font-semibold text-[#433075] w-5 text-center">{candles}</span>
-                    <button type="button" onClick={()=>setCandles(candles+1)}
+                    <button type="button" onClick={()=>setCandles(Math.min(MAX_CANDLES,candles+1))}
                       className="w-8 h-8 rounded-full bg-white border border-[rgba(165,140,244,0.3)] flex items-center justify-center hover:bg-[#E1D7F0] transition-colors">
                       <Plus size={13}/>
                     </button>
@@ -315,7 +329,7 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
       )}
 
       {has('notes') && (
-        <Section title={`${s++}. 💬 Additional Notes`}>
+        <Section title={`${s++}. Anything else?`}>
           <Textarea label="Any other requests?" value={notes} onChange={setNotes}
             placeholder="Allergies, special instructions…"/>
         </Section>
@@ -386,13 +400,10 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
     setFlavours(prev => prev.includes(f) ? prev.filter(x=>x!==f) : [...prev, f]);
   }
 
-  const sizeObj = sizes.find(s => s.label === selectedSize);
-  const base     = sizeObj?.price ?? product.basePrice ?? 22000;
-  const addonTotal =
-    (has('addon_card')    && card    ? ADDON_PRICES.card    : 0) +
-    (has('addon_chamdor') && chamdor ? ADDON_PRICES.chamdor : 0) +
-    (has('addon_candles') ? candles * ADDON_PRICES.candlePerUnit : 0);
-  const total = base + addonTotal;
+  const options: CakeOptions = { size: selectedSize || undefined, flavours, card, chamdor, candles };
+  const price = cakePrice(product, options);
+  const { base, total } = price;
+  const addonTotal = price.card + price.chamdor + price.candles;
 
   function buildWA() {
     const addOns = [
@@ -427,7 +438,27 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
       (has('flavour_regular')||has('flavour_deluxe')) && flavours.length ? flavours.join(', ') : '',
       product.designStyle ? product.designStyle : '',
     ].filter(Boolean).join(' · ');
-    add({ id:`${product.id}-${Date.now()}`, name:product.name, price:fmt(total), image:product.image, customisation:summary });
+    const details = [
+      product.designStyle ? `Design: ${product.designStyle}` : '',
+      hasSizes ? `Size: ${selectedSize}` : '',
+      has('size_layers') ? `Layers: ${layers}` : '',
+      (has('flavour_regular') || has('flavour_deluxe')) ? `Flavours: ${flavours.join(', ') || 'Not specified'}` : '',
+      has('colour') ? `Colour: ${colour}${customColour ? ` (${customColour})` : ''}` : '',
+      has('topper') ? `Topper: ${topper}` : '',
+      has('occasion') ? `Occasion: ${occasion}` : '',
+      has('gender') ? `Receiver: ${gender}` : '',
+      has('delivery') && delivDate ? `Date needed: ${delivDate}` : '',
+      has('delivery') && delivAddr ? `Address: ${delivAddr}` : '',
+      has('addon_card') && card ? `Greeting card${cardMsg ? `: "${cardMsg}"` : ''}` : '',
+      has('addon_chamdor') && chamdor ? 'Chamdor wine' : '',
+      has('addon_candles') && candles > 0 ? `Candles: ${candles}` : '',
+      has('notes') && notes ? `Notes: ${notes}` : '',
+    ].filter(Boolean).join('\n');
+    add({
+      id: `${product.id}-${Date.now()}`, name: product.name, price: fmt(total), image: product.image,
+      customisation: summary, details, productId: product.id, options,
+      unitPrice: onlineUnitPrice(product.id, options),
+    });
     onClose?.();
   }
 
@@ -438,7 +469,7 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
       {/* Design style info */}
       {product.designStyle && (
         <div className="bg-[#F3F0FA] border border-[rgba(165,140,244,0.25)] rounded-xl px-4 py-3 flex items-center gap-3">
-          <span className="text-xl">🎨</span>
+          <Palette size={18} className="text-[#433075] shrink-0"/>
           <div>
             <p className="text-[0.78rem] font-semibold text-[#433075]">Design Style: {product.designStyle}</p>
             <p className="text-[0.7rem] text-[#6E6A8C]">You can add your colour preference below.</p>
@@ -493,11 +524,11 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
             </div>
           </>)}
           {has('flavour_deluxe') && (<>
-            <Label text="Deluxe Flavours ✨"/>
+            <Label text="Deluxe flavours"/>
             <div className="flex flex-wrap gap-2">
               {BIGGER_FLAV_DLX.map(f => <Chip key={f} label={f} on={flavours.includes(f)} onClick={()=>toggleFlavour(f)}/>)}
             </div>
-            <p className="text-[0.7rem] text-[#6E6A8C]/70 italic">✨ Deluxe flavours may attract additional charges</p>
+            <p className="text-[0.75rem] text-[#5E5A7C]">Deluxe flavours may cost extra.</p>
           </>)}
         </Section>
       )}
@@ -538,7 +569,7 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
       )}
 
       {(has('addon_card')||has('addon_chamdor')||has('addon_candles')) && (
-        <Section title={`${s++}. ✨ Add-Ons`}>
+        <Section title={`${s++}. Add-ons`}>
           <div className="space-y-3">
             {has('addon_card') && (<>
               <label className="flex items-center justify-between cursor-pointer bg-[#F3F0FA] rounded-xl px-4 py-3 hover:bg-[#EDE8F8] transition-colors">
@@ -558,7 +589,7 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
                 <div className="flex items-center gap-3">
                   <input type="checkbox" checked={chamdor} onChange={e=>setChamdor(e.target.checked)} className="w-4 h-4 accent-[#A58CF4]"/>
                   <div>
-                    <p className="text-[0.88rem] font-medium text-[#433075]">Chamdor Wine 🍾</p>
+                    <p className="text-[0.88rem] font-medium text-[#433075]">Chamdor wine</p>
                     <p className="text-[0.72rem] text-[#6E6A8C]">Celebrate in style</p>
                   </div>
                 </div>
@@ -569,7 +600,7 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
               <div className="bg-[#F3F0FA] rounded-xl px-4 py-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[0.88rem] font-medium text-[#433075]">Candles 🕯️</p>
+                    <p className="text-[0.88rem] font-medium text-[#433075]">Candles</p>
                     <p className="text-[0.72rem] text-[#6E6A8C]">₦500 per candle</p>
                   </div>
                   <div className="flex items-center gap-3">
@@ -578,7 +609,7 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
                       <Minus size={13}/>
                     </button>
                     <span className="text-[0.9rem] font-semibold text-[#433075] w-5 text-center">{candles}</span>
-                    <button type="button" onClick={()=>setCandles(candles+1)}
+                    <button type="button" onClick={()=>setCandles(Math.min(MAX_CANDLES,candles+1))}
                       className="w-8 h-8 rounded-full bg-white border border-[rgba(165,140,244,0.3)] flex items-center justify-center hover:bg-[#E1D7F0] transition-colors">
                       <Plus size={13}/>
                     </button>
@@ -592,7 +623,7 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
       )}
 
       {has('notes') && (
-        <Section title={`${s++}. 💬 Additional Notes`}>
+        <Section title={`${s++}. Anything else?`}>
           <Textarea label="Any other requests?" value={notes} onChange={setNotes}
             placeholder="Allergies, special instructions…"/>
         </Section>
@@ -651,9 +682,9 @@ function PriceSummary({ product, selectedSize, base, icingSurcharge, card, chamd
       {candles>0 && <div className="flex justify-between text-[0.85rem] text-white/70"><span>Candles ×{candles}</span><span>+₦{(candles*500).toLocaleString()}</span></div>}
       <div className="border-t border-white/15 pt-3 flex justify-between">
         <span className="text-white font-semibold">Estimated Total</span>
-        <span className="font-cormorant text-[1.3rem] font-semibold text-[#E1D7F0]">{`₦${total.toLocaleString()}`}</span>
+        <span className="font-luckiest tracking-[0.02em] text-[1.35rem] text-[#E2BBFA]">{`₦${total.toLocaleString()}`}</span>
       </div>
-      <p className="text-[0.68rem] text-white/35 text-center pt-1">Final price confirmed on WhatsApp</p>
+      <p className="text-[0.75rem] text-white/70 text-center pt-1">We&apos;ll confirm the final price before we bake.</p>
     </div>
   );
 }

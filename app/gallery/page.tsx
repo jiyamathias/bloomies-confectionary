@@ -14,7 +14,7 @@ export default function GalleryPage() {
     <>
       <PageHeader
         title="Our" titleEm="Gallery"
-        subtitle="A peek into the sweetness we create. Every cake is handcrafted with love — click any piece to order yours on WhatsApp."
+        subtitle="Cakes we've made for birthdays, weddings and everything in between. See one you like? Tap it to ask for the same."
       />
 
       {/* Filter tabs */}
@@ -42,8 +42,8 @@ export default function GalleryPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="group relative rounded-2xl overflow-hidden border border-[rgba(165,140,244,0.15)]
-                bg-white transition-all duration-300
-                hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(67,48,117,0.15)]"
+                bg-white transition-shadow duration-200
+                hover:shadow-[0_14px_34px_rgba(67,48,117,0.14)]"
               style={{ animationDelay: `${i * 40}ms` }}>
 
               {/* Image */}
@@ -58,41 +58,38 @@ export default function GalleryPage() {
                   transition-all duration-300 flex items-center justify-center">
                   <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300
                     bg-white text-[#433075] text-[0.78rem] font-semibold px-5 py-2.5 rounded-full shadow-lg flex items-center gap-2">
-                    💬 Order on WhatsApp
+                    Order one like this
                   </span>
                 </div>
               </div>
 
               {/* Info */}
               <div className="p-3.5">
-                <p className="font-cormorant text-[1.05rem] font-semibold text-[#433075] leading-tight mb-0.5">
+                <p className="text-[0.92rem] font-semibold text-[#433075] leading-tight mb-0.5">
                   {item.title}
                 </p>
-                <p className="text-[0.7rem] text-[#6E6A8C]">{item.category}</p>
+                <p className="text-[0.75rem] text-[#5E5A7C]">{item.category}</p>
               </div>
             </a>
           ))}
         </div>
 
         {/* BakersMerch CTA */}
-        <div className="mt-16 bg-gradient-to-br from-[#F3F0FA] to-[#E1D7F0]
-          rounded-2xl p-8 sm:p-12 text-center border border-[rgba(165,140,244,0.2)]">
-          <p className="text-[0.72rem] tracking-[0.18em] uppercase text-[#A58CF4] mb-3">✦ BakersMerch</p>
-          <h2 className="font-cormorant text-[clamp(1.8rem,4vw,2.8rem)] text-[#433075] font-normal mb-3">
-            Love baking too? Shop <em className="italic text-[#A58CF4]">BakersMerch</em>
+        <div className="mt-16 bg-[#E2BBFA] rounded-2xl p-8 sm:p-12 text-center">
+          <h2 className="font-luckiest tracking-[0.02em] text-[clamp(1.7rem,4vw,2.5rem)] text-[#433075] leading-tight mb-3">
+            Bake too? Visit BakersMerch
           </h2>
-          <p className="text-[0.88rem] text-[#6E6A8C] mb-7 max-w-md mx-auto">
-            Premium baking tools, boxes, stands and accessories for bakers who mean business.
+          <p className="text-[0.95rem] text-[#433075]/85 mb-7 max-w-md mx-auto">
+            Baking tools, cake boxes, stands and accessories for home and professional bakers.
           </p>
           <a
             href="https://bakersmerch.com"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#433075] text-white px-10 py-4
-              rounded-full text-[0.88rem] font-semibold hover:bg-[#6E6A8C]
-              transition-all duration-300 hover:-translate-y-0.5
-              hover:shadow-[0_12px_30px_rgba(67,48,117,0.3)] active:scale-[0.97]">
-            Visit BakersMerch →
+              rounded-full text-[0.88rem] font-semibold hover:bg-[#5B3E8A]
+              transition-colors duration-200 active:scale-[0.97]">
+            Go to BakersMerch ↗
           </a>
         </div>
       </div>

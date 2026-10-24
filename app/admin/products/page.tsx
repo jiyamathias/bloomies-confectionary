@@ -268,7 +268,7 @@ function ProductsContent() {
       {/* ── Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="font-cormorant text-[1.9rem] font-semibold text-[#433075]">Products</h1>
+          <h1 className="font-luckiest tracking-[0.02em] text-[2.1rem] leading-none text-[#433075]">Products</h1>
           <p className="text-[0.82rem] text-[#6E6A8C]">Showing {filtered.length} of {list.length} products</p>
         </div>
         <button onClick={openNew}
@@ -418,7 +418,7 @@ function ProductsContent() {
             {/* Modal header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-[rgba(165,140,244,0.12)] sticky top-0 bg-white z-10 rounded-t-3xl">
               <div>
-                <h2 className="font-cormorant text-[1.4rem] font-semibold text-[#433075]">
+                <h2 className="text-[1.1rem] font-semibold text-[#433075]">
                   {modal === 'new' ? 'Add New Product' : 'Edit Product'}
                 </h2>
                 {step === 'details' && modal === 'new' && (
@@ -582,7 +582,7 @@ function ProductsContent() {
                     <div className="bg-[#F3F0FA] px-5 py-3.5 flex items-center gap-2.5">
                       <Palette size={16} className="text-[#A58CF4]"/>
                       <div>
-                        <p className="font-cormorant text-[1.05rem] font-semibold text-[#433075]">Cake Colours</p>
+                        <p className="text-[1.05rem] font-semibold text-[#433075]">Cake Colours</p>
                         <p className="text-[0.68rem] text-[#6E6A8C]">These are the exact colours customers can choose from.</p>
                       </div>
                     </div>
@@ -630,7 +630,7 @@ function ProductsContent() {
                     <div className="bg-[#F3F0FA] px-5 py-3.5 flex items-center gap-2.5">
                       <Ruler size={16} className="text-[#A58CF4]"/>
                       <div>
-                        <p className="font-cormorant text-[1.05rem] font-semibold text-[#433075]">Sizes &amp; Pricing</p>
+                        <p className="text-[1.05rem] font-semibold text-[#433075]">Sizes &amp; Pricing</p>
                         <p className="text-[0.68rem] text-[#6E6A8C]">Each size has its own price. Selecting a size updates the order total.</p>
                       </div>
                     </div>
@@ -710,7 +710,7 @@ function ProductsContent() {
                   <div className="border-2 border-[#A58CF4]/20 rounded-2xl overflow-hidden">
                     <div className="bg-[#F3F0FA] px-5 py-3.5 flex items-center justify-between">
                       <div>
-                        <p className="font-cormorant text-[1.05rem] font-semibold text-[#433075]">Customer Customization Options</p>
+                        <p className="text-[1.05rem] font-semibold text-[#433075]">Customer Customization Options</p>
                         <p className="text-[0.68rem] text-[#6E6A8C] mt-0.5">Tick what customers can choose when ordering this cake.</p>
                       </div>
                       <div className="flex gap-3 shrink-0">
@@ -788,7 +788,7 @@ function ProductsContent() {
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6">
           <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center">
             <div className="text-4xl mb-4">🗑️</div>
-            <h3 className="font-cormorant text-[1.4rem] text-[#433075] font-semibold mb-2">Delete this product?</h3>
+            <h3 className="text-[1.1rem] text-[#433075] font-semibold mb-2">Delete this product?</h3>
             <p className="text-[0.85rem] text-[#6E6A8C] mb-6">This action cannot be undone.</p>
             <div className="flex gap-3">
               <button onClick={() => setDeleteId(null)}

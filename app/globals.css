@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -34,8 +34,6 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--lavender); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--deep-purple); }
 
-/* ─── Font helpers ──────────────────────────────────────────────── */
-.font-cormorant { font-family: 'Cormorant Garamond', Georgia, serif; }
 
 /* ─── Marquee ───────────────────────────────────────────────────── */
 .marquee-track { animation: slideMarquee 30s linear infinite; }
@@ -108,7 +106,24 @@ body {
               opacity 0.7s cubic-bezier(0.55, 0, 1, 0.45);
 }
 
-/* No overlay — images show at full vibrancy */
+/* Soft blur so the photos read as atmosphere, not competition for the text.
+   Slight scale hides the blurred, faded edges. */
+.hero-bg-slide img {
+  filter: blur(4px);
+  transform: scale(1.08);
+}
+
+/* Dark brand-tinted overlay for white text. Darkest in the middle where
+   the headline sits, so contrast holds up on bright photos. */
+.hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, rgba(18, 10, 34, 0.35) 0%, rgba(18, 10, 34, 0) 70%),
+    linear-gradient(180deg, rgba(18, 10, 34, 0.55) 0%, rgba(30, 18, 58, 0.6) 50%, rgba(18, 10, 34, 0.75) 100%);
+}
 
 /* ─── Mobile: stack top/bottom instead of left/right ─────────────── */
 @media (max-width: 768px) {
@@ -186,8 +201,8 @@ body {
 *:focus-visible { outline: 2px solid var(--lavender); outline-offset: 3px; }
 
 /* ─── Category card hover ───────────────────────────────────────── */
-.cat-card { transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease; }
-.cat-card:hover { transform: translateY(-6px) scale(1.015); box-shadow: 0 24px 56px rgba(67,48,117,0.16); }
+.cat-card { transition: box-shadow 0.25s ease; }
+.cat-card:hover { box-shadow: 0 14px 34px rgba(67,48,117,0.18); }
 
 /* ─── Horizontal rule with ornament ────────────────────────────── */
 .ornament-line {

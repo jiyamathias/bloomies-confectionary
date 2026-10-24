@@ -1,9 +1,10 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Zap, MapPin, ChevronRight, Star } from 'lucide-react';
+import { Zap, ChevronRight, Star, ArrowRight } from 'lucide-react';
 import BestSellers from '@/components/BestSellers';
 import HeroBackdrop from '@/components/HeroBackdrop';
+import SectionHeading from '@/components/SectionHeading';
 
 const CATS = [
   { label: 'Cakes',              sub: 'One layer · Custom designs',   href: '/cakes',        img: '/images/cat-cakes.jpg'      },
@@ -53,19 +54,17 @@ export default function HomePage() {
             </span>
           </div> */}
 
-          <p className="font-cormorant font-bold leading-none mb-4 animate-fade-up delay-1"
-            style={{ fontSize:'clamp(3rem,8vw,6.5rem)', color:'#433075', letterSpacing:'-0.02em',
-              textShadow:'0 2px 24px rgba(255,255,255,0.8)' }}>
-            Bloomies<span style={{ color:'#A58CF4' }}>.</span>
+          <p className="font-luckiest text-white leading-none mb-5 animate-fade-up delay-1"
+            style={{ fontSize:'clamp(3.25rem,9vw,7rem)', letterSpacing:'0.02em',
+              textShadow:'0 4px 0 rgba(67,48,117,0.55), 0 10px 40px rgba(0,0,0,0.45)' }}>
+            Bloomies<span className="text-[#A58CF4]">.</span>
           </p>
 
-          <h1 className="font-cormorant leading-[1.08] mb-7 animate-fade-up delay-2"
-            style={{ fontSize:'clamp(1.8rem,4vw,3.4rem)', color:'#433075',
-              textShadow:'0 2px 20px rgba(255,255,255,0.75)' }}>
+          <h1 className="font-luckiest text-white leading-[1.12] mb-8 animate-fade-up delay-2 max-w-2xl"
+            style={{ fontSize:'clamp(1.45rem,3.6vw,2.75rem)', letterSpacing:'0.03em',
+              textShadow:'0 2px 0 rgba(67,48,117,0.5), 0 6px 28px rgba(0,0,0,0.45)' }}>
             Baked with love,{' '}
-            <em className="font-light italic" style={{ color:'#6B4C9A' }}>
-              for people with good taste.
-            </em>
+            <span className="text-[#D9CCFF]">for people with good taste.</span>
           </h1>
 
           {/* <p className="leading-relaxed mb-9 max-w-lg animate-fade-up delay-3 font-medium"
@@ -74,32 +73,27 @@ export default function HomePage() {
             Premium cakes, pastries &amp; confections crafted fresh every day in Port Harcourt. Every bite, an experience.
           </p> */}
 
-          <div className="flex flex-col sm:flex-row gap-3 mb-7 animate-fade-up delay-3">
-            <a href="https://wa.me/2348181154270?text=Hi%20Bloomies!%20I%27d%20like%20to%20place%20an%20order."
-              target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2.5 text-white
-                px-7 py-4 rounded-full font-semibold text-[0.9rem]
-                transition-all duration-300 hover:-translate-y-1 active:scale-[0.97]"
-              style={{
-                background:'linear-gradient(135deg,#433075 0%,#6B4C9A 100%)',
-                boxShadow:'0 8px 28px rgba(67,48,117,0.45)',
-              }}>
-              <WAIcon/> Order on WhatsApp
-            </a>
+          <div className="flex flex-col sm:flex-row gap-3 mb-7 animate-fade-up delay-3 w-full sm:w-auto">
             <Link href="/cakes"
               className="inline-flex items-center justify-center gap-2
-                px-7 py-4 rounded-full font-semibold text-[0.9rem]
-                bg-white/90 border-2 border-[#433075] text-[#433075]
-                hover:bg-[#433075] hover:text-white hover:-translate-y-1
-                transition-all duration-300 active:scale-[0.97]">
-              Explore Cakes <ChevronRight size={15}/>
+                px-8 py-4 rounded-full font-semibold text-[0.92rem]
+                bg-white text-[#433075] shadow-[0_6px_20px_rgba(0,0,0,0.25)]
+                hover:bg-[#E2BBFA] transition-colors duration-200 active:scale-[0.97]">
+              Order a Cake <ArrowRight size={16}/>
             </Link>
+            <a href="#treats"
+              className="inline-flex items-center justify-center gap-2
+                px-8 py-4 rounded-full font-semibold text-[0.92rem]
+                bg-white/10 backdrop-blur-sm border-2 border-white/80 text-white
+                hover:bg-white hover:text-[#433075] transition-colors duration-200 active:scale-[0.97]">
+              See All Treats
+            </a>
           </div>
 
           <div className="inline-flex items-center gap-2 animate-fade-up delay-4
-            bg-white/90 border border-[rgba(46,125,50,0.35)]
-            text-[#2E7D32] px-4 py-2 rounded-full text-[0.72rem] font-medium mb-9">
-            <Zap size={12} fill="currentColor"/>
+            bg-white/10 backdrop-blur-sm border border-white/25
+            text-white px-4 py-2 rounded-full text-[0.72rem] font-medium mb-9">
+            <Zap size={12} fill="currentColor" className="text-[#7EE08A]"/>
             Same-day delivery available on select items
           </div>
 
@@ -116,12 +110,6 @@ export default function HomePage() {
           </div> */}
         </div>
 
-        {/* Scroll hint */}
-        <div className="absolute bottom-6 left-1/2 scroll-hint z-[2] hidden lg:flex flex-col items-center gap-1.5"
-          style={{ transform:'translateX(-50%)' }}>
-          <span style={{ fontSize:'0.58rem', letterSpacing:'0.16em', color:'rgba(67,48,117,0.4)', textTransform:'uppercase' }}>Scroll</span>
-          <div style={{ width:'1px', height:'36px', background:'linear-gradient(to bottom,rgba(165,140,244,0.5),transparent)' }}/>
-        </div>
       </section>
 
       {/* ════════════════ MARQUEE ════════════════════ */}
@@ -135,23 +123,10 @@ export default function HomePage() {
       </div> */}
 
       {/* ════════════════ CATEGORIES ═════════════════ */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-12 sm:py-16 lg:py-24">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 lg:mb-10">
-          <div>
-            <div className="flex items-center gap-3 mb-2.5">
-              <span className="w-7 h-px bg-[#A58CF4]"/>
-              <span className="text-[0.68rem] tracking-[0.2em] uppercase text-[#A58CF4] font-medium">Our Collections</span>
-            </div>
-            <h2 className="font-cormorant font-normal text-[#433075] leading-tight"
-              style={{ fontSize:'clamp(1.9rem,4vw,3.2rem)' }}>
-              Everything Sweet<br/>
-              <em className="italic font-light text-[#A58CF4]">&amp; Savory</em>
-            </h2>
-          </div>
-          <p className="text-[0.85rem] text-[#6E6A8C] max-w-xs leading-relaxed">
-            Every item made fresh daily. Tap a category to explore.
-          </p>
-        </div>
+      <section id="treats" className="scroll-mt-20 max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-12 sm:py-16 lg:py-24">
+        <SectionHeading className="mb-8 lg:mb-10"
+          title="Pick your treat"
+          subtitle="Everything is baked in our Mgbuoba kitchen. Tap a category to see prices and order."/>
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <div className="col-span-2 lg:col-span-1">
@@ -184,9 +159,9 @@ export default function HomePage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-[rgba(165,140,244,0.12)]">
             {[['1,000+','Satisfied Clients'],['★ 5.0','Google Rating'],['Same Day','Delivery Available'],['Fresh Daily','Made Every Morning']].map(([n,l])=>(
               <div key={l} className="bg-white px-4 sm:px-6 py-7 sm:py-8 text-center">
-                <div className="font-cormorant font-bold text-[#433075] leading-none mb-1"
-                  style={{ fontSize:'clamp(1.6rem,3vw,2.4rem)' }}>{n}</div>
-                <div className="text-[0.65rem] sm:text-[0.72rem] text-[#6E6A8C] tracking-[0.05em] uppercase">{l}</div>
+                <div className="font-luckiest tracking-[0.02em] text-[#433075] leading-none mb-1.5"
+                  style={{ fontSize:'clamp(1.5rem,2.8vw,2.2rem)' }}>{n}</div>
+                <div className="text-[0.72rem] sm:text-[0.8rem] text-[#5E5A7C]">{l}</div>
               </div>
             ))}
           </div>
@@ -194,40 +169,24 @@ export default function HomePage() {
       </div>
 
       {/* ════════════════ REVIEWS ════════════════════ */}
-      <section className="py-12 sm:py-16 lg:py-24"
-        style={{ background:'linear-gradient(180deg,#FAFAFA 0%,#F3F0FA 100%)' }}>
+      <section className="py-12 sm:py-16 lg:py-24 bg-[#F3F0FA]">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="w-7 h-px bg-[#A58CF4]"/>
-            <span className="text-[0.68rem] tracking-[0.2em] uppercase text-[#A58CF4] font-medium">Client Love</span>
-          </div>
-          <h2 className="font-cormorant font-normal text-[#433075] mb-8"
-            style={{ fontSize:'clamp(1.9rem,4vw,3.2rem)' }}>
-            What People Are <em className="italic font-light text-[#A58CF4]">Saying</em>
-          </h2>
+          <SectionHeading className="mb-8" title="What our customers say"/>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {REVIEWS.map((r,i)=>(
-              <div key={i} className="bg-white rounded-2xl p-5 sm:p-6 flex flex-col
-                border border-[rgba(165,140,244,0.12)]
-                hover:border-[#A58CF4]/35 hover:shadow-[0_16px_48px_rgba(67,48,117,0.09)]
-                transition-all duration-300">
-                <div className="flex gap-0.5 mb-4">
-                  {[...Array(5)].map((_,j)=>(<Star key={j} size={11} fill="#A58CF4" className="text-[#A58CF4]"/>))}
+              <figure key={i} className="bg-white rounded-2xl p-5 sm:p-6 flex flex-col
+                border border-[rgba(165,140,244,0.18)]">
+                <div className="flex gap-0.5 mb-3" aria-label="5 out of 5 stars">
+                  {[...Array(5)].map((_,j)=>(<Star key={j} size={13} fill="#433075" className="text-[#433075]"/>))}
                 </div>
-                <p className="font-cormorant italic text-[#433075] leading-[1.65] flex-1 mb-5"
-                  style={{ fontSize:'clamp(0.98rem,1.5vw,1.08rem)' }}>
+                <blockquote className="text-[#433075] text-[0.92rem] leading-[1.65] flex-1 mb-5">
                   {r.q}
-                </p>
-                <div className="flex items-center gap-3 pt-4 border-t border-[rgba(165,140,244,0.1)]">
-                  <div className="w-8 h-8 rounded-full bg-[#433075] flex items-center justify-center text-white text-[0.7rem] font-bold shrink-0">
-                    {r.initial}
-                  </div>
-                  <div>
-                    <div className="text-[0.82rem] font-semibold text-[#433075]">{r.name}</div>
-                    <div className="text-[0.65rem] text-[#6E6A8C]">Google Review</div>
-                  </div>
-                </div>
-              </div>
+                </blockquote>
+                <figcaption className="pt-4 border-t border-[rgba(165,140,244,0.15)]">
+                  <div className="text-[0.85rem] font-semibold text-[#433075]">{r.name}</div>
+                  <div className="text-[0.72rem] text-[#5E5A7C]">Google review</div>
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>
@@ -236,18 +195,18 @@ export default function HomePage() {
       {/* ════════════════ PLATFORMS ══════════════════ */}
       <section className="border-y border-[rgba(165,140,244,0.12)] py-6 sm:py-8 bg-white">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-center">
-          <span className="text-[0.68rem] tracking-[0.14em] uppercase text-[#6E6A8C]/60 font-medium">Also available on</span>
-          {[['🟢 Glovo','#'],['🟠 Chowdeck','#']].map(([label,href])=>(
-            <a key={label} href={href}
-              className="bg-[#F3F0FA] border border-[rgba(165,140,244,0.2)] rounded-full
-                px-5 py-2 text-[0.82rem] font-medium text-[#433075]
-                hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
+          <span className="text-[0.85rem] text-[#5E5A7C]">You can also order us on</span>
+          {/* TODO: link these to the real Glovo / Chowdeck store pages once we have the URLs */}
+          {['Glovo','Chowdeck'].map(label=>(
+            <span key={label}
+              className="bg-[#F3F0FA] border border-[rgba(165,140,244,0.25)] rounded-full
+                px-5 py-2 text-[0.85rem] font-semibold text-[#433075]">
               {label}
-            </a>
+            </span>
           ))}
           <div className="hidden sm:block w-px h-5 bg-[rgba(165,140,244,0.2)]"/>
-          <span className="flex items-center gap-2 text-[0.78rem] text-[#6E6A8C]">
-            <span className="w-2 h-2 rounded-full bg-[#4CAF50]"/> Mon – Sat · Closes 5 PM
+          <span className="flex items-center gap-2 text-[0.85rem] text-[#5E5A7C]">
+            <span className="w-2 h-2 rounded-full bg-[#4CAF50]"/> Open Mon – Sat, till 5 PM
           </span>
           {/* <span className="flex items-center gap-1.5 text-[0.78rem] text-[#6E6A8C]">
             <MapPin size={12}/> Mgbuoba, Port Harcourt
@@ -258,41 +217,35 @@ export default function HomePage() {
       {/* ════════════════ CUSTOM CTA ═════════════════ */}
       <section className="py-12 sm:py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10">
-          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl p-8 sm:p-12 lg:p-16
-            flex flex-col lg:flex-row items-center gap-8 lg:gap-14"
-            style={{ background:'linear-gradient(135deg,#433075 0%,#2D1F55 60%,#1A1035 100%)' }}>
-            <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-10"
-              style={{ background:'radial-gradient(circle,#A58CF4,transparent)' }}/>
-            <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full opacity-10"
-              style={{ background:'radial-gradient(circle,#E1D7F0,transparent)' }}/>
-            <div className="relative shrink-0 hidden lg:flex gap-3 items-center">
+          <div className="rounded-2xl sm:rounded-3xl bg-[#433075] p-8 sm:p-12 lg:p-14
+            flex flex-col lg:flex-row items-center gap-8 lg:gap-14">
+            <div className="shrink-0 hidden lg:flex items-end">
               {[
-                { src:'https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=200&q=80&fit=crop', rotate:'-6deg', w:'w-20 h-20' },
-                { src:'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=250&q=80&fit=crop', rotate:'3deg',  w:'w-28 h-28' },
-                { src:'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=180&q=80&fit=crop', rotate:'-4deg', w:'w-16 h-16' },
+                { src:'/images/hero/3.webp', rotate:'-5deg', size:'w-24 h-28' },
+                { src:'/images/hero/2.webp', rotate:'3deg',  size:'w-32 h-36' },
+                { src:'/images/hero/8.webp', rotate:'-3deg', size:'w-24 h-28' },
               ].map((item,i)=>(
-                <div key={i} className={`${item.w} rounded-xl overflow-hidden shadow-xl relative -ml-3 first:ml-0`}
+                <div key={item.src} className={`${item.size} rounded-xl overflow-hidden relative border-4 border-white shadow-lg ${i ? '-ml-4' : ''}`}
                   style={{ transform:`rotate(${item.rotate})` }}>
-                  <Image src={item.src} alt="" fill className="object-cover" sizes="128px" unoptimized/>
+                  <Image src={item.src} alt="" fill className="object-cover" sizes="128px"/>
                 </div>
               ))}
             </div>
-            <div className="relative z-10 text-center lg:text-left flex-1">
-              <div className="text-[0.68rem] tracking-[0.2em] uppercase text-[#A58CF4] mb-3">✦ Custom Orders</div>
-              <h2 className="font-cormorant text-white mb-3 font-normal"
-                style={{ fontSize:'clamp(1.7rem,3.5vw,2.8rem)' }}>
-                Didn&apos;t find what you&apos;re looking for?
-                <em className="italic font-light text-[#E1D7F0] block">Place a custom order.</em>
+            <div className="text-center lg:text-left flex-1">
+              <h2 className="font-luckiest tracking-[0.02em] text-white leading-[1.08] mb-3"
+                style={{ fontSize:'clamp(1.7rem,3.5vw,2.6rem)' }}>
+                Got a cake idea in your head?
               </h2>
-              <p className="text-white/55 text-[0.88rem] mb-8 max-w-md mx-auto lg:mx-0 leading-relaxed">
-                Share a reference photo on WhatsApp and let&apos;s create something extraordinary together.
+              <p className="text-white/80 text-[0.95rem] mb-7 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+                Send us a photo or describe it on WhatsApp: size, colours, theme, date. We&apos;ll tell you
+                what&apos;s possible and give you a price before we start.
               </p>
               <a href="https://wa.me/2348181154270?text=Hi%20Bloomies%2C%20I%27d%20like%20to%20place%20a%20custom%20order!"
                 target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 bg-white text-[#433075]
-                  px-8 py-4 rounded-full font-semibold text-[0.9rem]
-                  hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 active:scale-[0.97]">
-                <WAIcon dark/> Order via WhatsApp
+                  px-7 py-4 rounded-full font-semibold text-[0.92rem]
+                  hover:bg-[#E2BBFA] transition-colors duration-200 active:scale-[0.97]">
+                <WAIcon dark/> Plan a custom cake
               </a>
             </div>
           </div>
@@ -312,15 +265,15 @@ function CategoryCard({ label, sub, href, img, className='' }: {
       <Image src={img} alt={label} fill
         sizes="(max-width:640px) 50vw,(max-width:1024px) 50vw,33vw"
         className="object-cover transition-transform duration-500 group-hover:scale-[1.07]"/>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent"/>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"/>
       <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/15 backdrop-blur-sm
         flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:bg-white/90 transition-all duration-300">
         <ChevronRight size={13} className="text-[#433075]"/>
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-4">
-        <div className="font-cormorant text-white font-semibold leading-tight mb-0.5"
-          style={{ fontSize:'clamp(1.1rem,2vw,1.5rem)' }}>{label}</div>
-        <div className="text-white/60 text-[0.67rem] sm:text-[0.7rem]">{sub}</div>
+        <div className="font-luckiest tracking-[0.03em] text-white leading-tight mb-1"
+          style={{ fontSize:'clamp(1.15rem,2vw,1.6rem)' }}>{label}</div>
+        <div className="text-white/85 text-[0.72rem] sm:text-[0.78rem]">{sub}</div>
       </div>
     </Link>
   );

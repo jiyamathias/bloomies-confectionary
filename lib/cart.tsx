@@ -1,6 +1,10 @@
 'use client';
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode } from 'react';
 import type { CartItem } from '@/types';
+import { formatNaira } from '@/lib/pricing';
+
+export const WHATSAPP_NUMBER = '2348181154270';
+const STORAGE_KEY = 'bloomies_cart_v1';
 
 interface CartCtx {
   items: CartItem[];
@@ -13,8 +17,29 @@ interface CartCtx {
 
 const CartContext = createContext<CartCtx | null>(null);
 
+function readStored(): CartItem[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter(i => i && typeof i.id === 'string' && i.qty > 0) : [];
+  } catch {
+    return [];
+  }
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const loaded = useRef(false);
+
+  // Keep the cart across reloads and the trip to the payment page and back.
+  useEffect(() => {
+    setItems(readStored());
+    loaded.current = true;
+  }, []);
+  useEffect(() => {
+    if (!loaded.current) return;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch { /* storage unavailable */ }
+  }, [items]);
 
   const add = useCallback((item: Omit<CartItem, 'qty'>) => {
     setItems(prev => {
@@ -50,26 +75,37 @@ export function useCart() {
   return ctx;
 }
 
-export function buildWhatsAppMessage(items: CartItem[], name: string, phone: string): string {
-  const lines = items.map(i => `• ${i.name} ×${i.qty} (${i.price})`).join('\n');
-  return `🌸 *New Order — Bloomies Website*\n\n👤 Name: ${name}\n📱 Phone: ${phone}\n\n🛒 *Order:*\n${lines}\n\nKindly confirm availability and total. Thank you!`;
+/** Total in naira if every item can be paid online, otherwise null. */
+export function payableTotal(items: CartItem[]): number | null {
+  if (!items.length || items.some(i => typeof i.unitPrice !== 'number')) return null;
+  return items.reduce((s, i) => s + (i.unitPrice as number) * i.qty, 0);
 }
 
-export function buildBuilderMessage(s: {
-  size: string; layers: string; flavours: string[]; style: string;
-  colour: string; toppings: string[]; occasion: string; gender: string;
-  message: string; notes: string;
-}): string {
-  return `🌸 *Bloomies — Cake Builder Order*\n\n` +
-    `📏 Size: ${s.size}\n` +
-    `🎂 Layers: ${s.layers}\n` +
-    `🍰 Flavours: ${s.flavours.join(', ') || 'Not selected'}\n` +
-    `✨ Design: ${s.style}\n` +
-    `🎨 Colour: ${s.colour}\n` +
-    `🎀 Toppings: ${s.toppings.join(', ') || 'None'}\n` +
-    `🎉 Occasion: ${s.occasion}\n` +
-    `👤 Receiver: ${s.gender || 'Not specified'}\n` +
-    `📝 Message on cake: ${s.message || 'None'}\n` +
-    `💬 Extra notes: ${s.notes || 'None'}\n\n` +
-    `Please advise on pricing and availability. Thank you!`;
+export interface OrderContact {
+  name: string;
+  phone: string;
+  method: 'pickup' | 'delivery';
+  address?: string;
+}
+
+export function buildWhatsAppMessage(items: CartItem[], c: OrderContact, paidRef?: string): string {
+  const lines = items.map(i => {
+    const price = typeof i.unitPrice === 'number' ? formatNaira(i.unitPrice * i.qty) : i.price;
+    const extra = i.details ? `\n${i.details.split('\n').map(l => `   ${l}`).join('\n')}` : '';
+    return `• ${i.name} ×${i.qty} (${price})${extra}`;
+  }).join('\n');
+  const total = payableTotal(items);
+  const fulfilment = c.method === 'delivery' ? `Delivery to: ${c.address || 'TBD'}` : 'Pickup at Mgbuoba';
+
+  return (paidRef ? `🌸 *Paid Order ${paidRef} — Bloomies Website*\n\n` : `🌸 *New Order — Bloomies Website*\n\n`) +
+    `👤 Name: ${c.name || 'Customer'}\n📱 Phone: ${c.phone || '—'}\n🚚 ${fulfilment}\n\n` +
+    `🛒 *Order:*\n${lines}\n\n` +
+    (total !== null ? `💰 Items total: ${formatNaira(total)}\n\n` : '') +
+    (paidRef
+      ? `I've paid online. Payment reference: ${paidRef}. Please confirm the delivery fee if any. Thank you!`
+      : `Kindly confirm availability and total. Thank you!`);
+}
+
+export function whatsappLink(text: string) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }

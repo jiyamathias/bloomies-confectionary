@@ -48,6 +48,31 @@ Admin password: **`bloomies2025`**
 
 ---
 
+## 💳 Online Payments (Flutterwave)
+
+Customers can pay from the cart with card, bank transfer or USSD. WhatsApp ordering stays available as an option.
+
+**Turn it on**
+1. Copy `.env.example` to `.env.local` and set `FLW_SECRET_KEY` (Flutterwave dashboard → Settings → API keys).
+   Use the **test** key (`FLWSECK_TEST-…`) first; switch to the live key when ready.
+2. Set `SITE_URL` to the live address (e.g. `https://bloomies.ng`) on the server.
+3. Restart the site. Without a key, the cart quietly falls back to WhatsApp-only.
+
+**What can be paid online**
+- Cakes built in the cake form (price is calculated from size, icing and add-ons).
+- Items with an exact price, set as `unitPrice` in `lib/products.ts` (e.g. Meat Pies `unitPrice: 5000`).
+- Anything priced "From…", "Custom Pricing", deluxe flavours and event orders still go through WhatsApp.
+  To make an item payable, give it a `unitPrice`.
+
+**How it works**
+- `app/api/checkout` recalculates every price on the server (`lib/pricing.ts`) and creates the Flutterwave payment.
+- After paying, customers land on `/checkout/complete`, which confirms the payment with Flutterwave
+  (`app/api/checkout/verify`) and offers to send the order details on WhatsApp.
+- Each paid order shows in the Flutterwave dashboard with the customer's phone, pickup/delivery and order summary.
+- Delivery fees aren't charged online; they're confirmed on WhatsApp.
+
+---
+
 ## ⭐ Best Sellers Section (Admin)
 
 Go to `/admin/best-sellers` to:
