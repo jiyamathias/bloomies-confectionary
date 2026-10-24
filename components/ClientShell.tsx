@@ -16,7 +16,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
       {!isAdmin && <Navbar onCartOpen={() => setCartOpen(true)} />}
       <main className="min-h-screen">{children}</main>
       {!isAdmin && <Footer />}
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+      {!isAdmin && <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />}
     </CartProvider>
   )
 }

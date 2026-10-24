@@ -48,8 +48,8 @@ export default function DailyTreatsPage() {
                 <p className="text-[0.8rem] font-semibold text-[#5E5A7C] mb-3">{p.price}</p>
                 <button
                   onClick={() => handleAdd(p)}
-                  className="mt-auto w-full bg-[#433075] text-white text-[0.72rem] font-semibold
-                    py-2 rounded-full transition-all duration-200
+                  className="mt-auto w-full bg-[#433075] text-white text-[0.8rem] font-semibold
+                    py-2.5 rounded-full transition-all duration-200
                     hover:bg-[#5B3E8A] active:scale-[0.97]"
                 >
                   Add to cart

@@ -16,7 +16,7 @@ export default function PageHeader({ title, titleEm, subtitle, tag }: Props) {
     <section className="bg-[#E2BBFA]">
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 pt-28 sm:pt-32 pb-10 sm:pb-12">
         <Link href="/"
-          className="inline-flex items-center gap-1.5 text-[0.78rem] font-medium
+          className="inline-flex items-center gap-1.5 text-[0.85rem] font-medium py-2 -my-2
             text-[#433075]/75 hover:text-[#433075] transition-colors mb-6 group">
           <ArrowLeft size={13} className="group-hover:-translate-x-0.5 transition-transform"/>
           Home

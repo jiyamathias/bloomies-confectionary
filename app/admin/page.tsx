@@ -64,22 +64,22 @@ export default function AdminOverview() {
 
       {/* KPI row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-        <StatTile hero label={`Sales · ${RANGE_LABEL[rangeKey].toLowerCase()}`} value={naira(k.sales, true)}
+        <StatTile hero className="col-span-2 lg:col-span-1" label={`Sales · ${RANGE_LABEL[rangeKey].toLowerCase()}`} value={naira(k.sales, true)}
           delta={pctChange(k.sales, kp.sales)} sub={vsLabel}/>
         <StatTile label="Orders" value={k.orders.toLocaleString()} delta={pctChange(k.orders, kp.orders)}
           sub={k.cancelled ? `${k.cancelled} cancelled` : vsLabel}/>
         <StatTile label="Average order" value={naira(k.avgOrder)} delta={pctChange(k.avgOrder, kp.avgOrder)} sub={vsLabel}/>
         {channel === 'all' ? (
-          <StatTile label="Profit (sales − expenses)" value={naira(k.profit, true)} delta={pctChange(k.profit, kp.profit)}
+          <StatTile className="col-span-2 lg:col-span-1" label="Profit (sales − expenses)" value={naira(k.profit, true)} delta={pctChange(k.profit, kp.profit)}
             sub={k.sales ? `${pct(k.profit / k.sales)} margin` : undefined}/>
         ) : (
-          <StatTile label="Collected so far" value={naira(k.collected, true)}
+          <StatTile className="col-span-2 lg:col-span-1" label="Collected so far" value={naira(k.collected, true)}
             sub={k.sales ? `${pct(k.collected / k.sales)} of sales` : undefined}/>
         )}
       </div>
 
       {/* Trend + insights */}
-      <div className="grid lg:grid-cols-3 gap-4 mb-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         <ChartCard className="lg:col-span-2" title="Sales over time"
           subtitle={`${naira(k.sales)} from ${k.orders} orders`}
           table={{ columns: ['Period', 'Orders', 'Sales'], rows: v.series.map(p => [p.full, p.orders, naira(p.value)]) }}>
@@ -99,7 +99,7 @@ export default function AdminOverview() {
       </div>
 
       {/* When orders come in */}
-      <div className="grid lg:grid-cols-3 gap-4 mb-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         <ChartCard className="lg:col-span-2" title="Busiest hours"
           subtitle={peak.share ? <>Most orders come in <strong className="text-[#2B2147]">{peak.label}</strong> ({pct(peak.share)} of orders)</> : 'No orders in this period'}
           table={{ columns: ['Hour', 'Orders'], rows: v.byHour.map(h => [`${h.label} – ${hourLabel(h.hour + 1)}`, h.value]) }}>
@@ -127,7 +127,7 @@ export default function AdminOverview() {
       </ChartCard>
 
       {/* What sells, and where */}
-      <div className="grid lg:grid-cols-3 gap-4 mb-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         <ChartCard title="Sales by category"
           table={{ columns: ['Category', 'Sales'], rows: v.categories.map(c => [c.label, naira(c.value)]) }}>
           <HBarChart data={v.categories} format={n => naira(n, true)}/>
@@ -182,7 +182,7 @@ export default function AdminOverview() {
       </ChartCard>
 
       {/* Day-to-day */}
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <OrderList title="Due in the next 7 days" icon={<Clock size={16}/>} empty="Nothing due this week."
           rows={v.due.map(o => ({
             id: o.id, primary: `${o.customerName} · ${o.items.map(i => i.name).join(', ')}`,
@@ -215,10 +215,10 @@ function OrderList({ title, icon, rows, empty }: {
   rows: { id: string; primary: string; secondary: string; right: string; alert?: boolean }[];
 }) {
   return (
-    <section className="bg-white rounded-2xl border border-[#E6E0F3] p-5">
-      <div className="flex items-center justify-between mb-3">
+    <section className="bg-white rounded-2xl border border-[#E6E0F3] p-4 sm:p-5 min-w-0">
+      <div className="flex items-center justify-between gap-3 mb-3">
         <h2 className="flex items-center gap-2 text-[0.98rem] font-semibold text-[#2B2147]">{icon} {title}</h2>
-        <Link href="/admin/sales" className="text-[0.8rem] text-[#433075] font-medium inline-flex items-center gap-1 hover:underline">
+        <Link href="/admin/sales" className="text-[0.82rem] text-[#433075] font-medium inline-flex items-center gap-1 py-2 -my-2 hover:underline shrink-0">
           Sales log <ArrowRight size={13}/>
         </Link>
       </div>

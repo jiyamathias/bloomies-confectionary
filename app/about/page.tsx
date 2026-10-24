@@ -27,7 +27,7 @@ export default function AboutPage() {
 
       <section className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-14 lg:py-20">
         {/* ── The bakery ── */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-24">
           <div className="relative">
             <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden aspect-[4/5]">
               <Image
@@ -84,7 +84,7 @@ export default function AboutPage() {
         {/* ── The owner ──
             TODO: replace with the owner's real name, a short story in their own words, and their photo
             (about-baker.jpg is a placeholder image). */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-24">
           <div>
             <SectionHeading className="mb-5" title="The baker behind Bloomies"/>
             <p className="text-[0.95rem] text-[#5E5A7C] leading-relaxed mb-4">

@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-10">
 
           {/* Brand */}
-          <div className="sm:col-span-2 lg:col-span-1">
+          <div className="col-span-2 lg:col-span-1">
             <div className="font-luckiest text-[1.6rem] tracking-[0.02em] leading-none mb-3">
               Bloomies<span className="text-[#E2BBFA]">.</span>
             </div>
@@ -25,7 +25,7 @@ export default function Footer() {
           {/* Menu */}
           <div>
             <h4 className="text-[0.75rem] tracking-[0.12em] uppercase text-white/60 mb-4">Menu</h4>
-            <ul className="space-y-2.5 list-none">
+            <ul className="space-y-0.5 list-none">
               {[
                 ['/cakes',        'Cakes'                ],
                 ['/pastries',     'Pastries'             ],
@@ -36,7 +36,7 @@ export default function Footer() {
               ].map(([href, label]) => (
                 <li key={href}>
                   <Link href={href}
-                    className="text-[0.82rem] text-white/75 hover:text-[#E2BBFA] transition-colors">
+                    className="inline-block py-2 text-[0.88rem] text-white/75 hover:text-[#E2BBFA] transition-colors">
                     {label}
                   </Link>
                 </li>
@@ -47,7 +47,7 @@ export default function Footer() {
           {/* Company */}
           <div>
             <h4 className="text-[0.75rem] tracking-[0.12em] uppercase text-white/60 mb-4">Company</h4>
-            <ul className="space-y-2.5 list-none">
+            <ul className="space-y-0.5 list-none">
               {[
                 ['/about',   'Our Story'    ],
                 ['/about#reviews', 'Reviews' ],
@@ -56,14 +56,14 @@ export default function Footer() {
               ].map(([href, label]) => (
                 <li key={label}>
                   <Link href={href}
-                    className="text-[0.82rem] text-white/75 hover:text-[#E2BBFA] transition-colors">
+                    className="inline-block py-2 text-[0.88rem] text-white/75 hover:text-[#E2BBFA] transition-colors">
                     {label}
                   </Link>
                 </li>
               ))}
               <li>
                 <a href="https://wa.me/2348181154270" target="_blank" rel="noopener noreferrer"
-                  className="text-[0.82rem] text-white/75 hover:text-[#E2BBFA] transition-colors">
+                  className="inline-block py-2 text-[0.88rem] text-white/75 hover:text-[#E2BBFA] transition-colors">
                   Custom Order
                 </a>
               </li>
@@ -75,11 +75,11 @@ export default function Footer() {
             <h4 className="text-[0.75rem] tracking-[0.12em] uppercase text-white/60 mb-4">Contact</h4>
             <div className="space-y-3">
               <a href="tel:08181154270"
-                className="flex gap-2.5 text-[0.8rem] text-white/75 hover:text-[#E2BBFA] transition-colors">
+                className="flex gap-2.5 py-1 text-[0.85rem] text-white/75 hover:text-[#E2BBFA] transition-colors">
                 <Phone size={14} className="text-[#E2BBFA] shrink-0 mt-0.5" /> 08181154270
               </a>
               <a href="https://instagram.com/bloomies.ng" target="_blank" rel="noopener noreferrer"
-                className="flex gap-2.5 text-[0.8rem] text-white/75 hover:text-[#E2BBFA] transition-colors">
+                className="flex gap-2.5 py-1 text-[0.85rem] text-white/75 hover:text-[#E2BBFA] transition-colors">
                 <Instagram size={14} className="text-[#E2BBFA] shrink-0 mt-0.5" /> @bloomies.ng
               </a>
               <div className="flex gap-2.5 text-[0.8rem] text-white/75">
@@ -112,7 +112,7 @@ export default function Footer() {
               <a key={href} href={href} aria-label={label}
                 target={href.startsWith('http') ? '_blank' : undefined}
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/[0.1] flex items-center justify-center
+                className="w-10 h-10 rounded-full bg-white/[0.1] flex items-center justify-center
                   text-white hover:bg-[#E2BBFA] hover:text-[#433075] transition-colors duration-200">
                 <Icon size={16}/>
               </a>

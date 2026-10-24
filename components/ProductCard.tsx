@@ -84,7 +84,7 @@ export default function ProductCard({ product, onToast }: {
 
           {/* Badge */}
           {product.badge && (
-            <span className={`absolute top-3 left-3 text-[0.6rem] tracking-[0.08em]
+            <span className={`absolute top-3 left-3 text-[0.68rem] tracking-[0.08em]
               font-bold px-2.5 py-1 rounded-full uppercase shadow-sm
               ${BADGE_STYLES[product.badge_color || 'rose']}`}>
               {product.badge}
@@ -115,34 +115,35 @@ export default function ProductCard({ product, onToast }: {
         </div>
 
         {/* Body */}
-        <div className="p-4 flex flex-col flex-1">
+        <div className="p-3.5 sm:p-4 flex flex-col flex-1">
           <h3 className="text-[0.98rem] font-semibold text-[#433075] mb-1 leading-snug">
             {product.name}
           </h3>
-          <p className="text-[0.8rem] text-[#5E5A7C] leading-relaxed mb-2 flex-1 line-clamp-2">
+          <p className="text-[0.8rem] text-[#5E5A7C] leading-relaxed mb-2 line-clamp-2">
             {product.description}
           </p>
           {product.moq && (
             <p className="text-[0.72rem] text-[#5E5A7C] mb-2">{product.moq}</p>
           )}
 
-          <div className="flex items-center justify-between mt-auto pt-3
-            border-t border-[rgba(165,140,244,0.1)]">
-            <span className="text-[0.9rem] font-semibold text-[#433075]">
+          {/* Phones: price on its own line, full-width action below. Wider screens: side by side. */}
+          <div className="flex flex-col items-stretch gap-2.5 sm:flex-row sm:items-center sm:justify-between mt-auto pt-3
+            border-t border-[rgba(165,140,244,0.12)]">
+            <span className="text-[0.92rem] font-semibold text-[#433075] leading-tight">
               {product.price}
             </span>
 
             {isCake(product.category) && product.in_stock && (
-              <span className="text-[0.7rem] text-[#433075] bg-[#F3F0FA]
-                px-3 py-1.5 rounded-full font-medium border border-[rgba(165,140,244,0.2)]">
+              <span className="text-center text-[0.8rem] text-[#433075] bg-[#F3F0FA]
+                px-4 py-2.5 rounded-full font-semibold border border-[rgba(165,140,244,0.3)] whitespace-nowrap">
                 Customise
               </span>
             )}
             {!isCake(product.category) && !isWA && product.in_stock && (
               <button
                 onClick={e => { e.stopPropagation(); handleClick(); }}
-                className="text-[0.72rem] bg-[#433075] text-white px-3.5 py-2 rounded-full
-                  font-medium hover:bg-[#5B3E8A] transition-colors duration-200 active:scale-[0.96]">
+                className="text-[0.8rem] bg-[#433075] text-white px-5 py-2.5 rounded-full
+                  font-semibold hover:bg-[#5B3E8A] transition-colors duration-200 active:scale-[0.96]">
                 Add
               </button>
             )}
@@ -150,8 +151,8 @@ export default function ProductCard({ product, onToast }: {
               <a href={`https://wa.me/2348181154270?text=Hi%20Bloomies%2C%20I%27d%20like%20to%20order%20${encodeURIComponent(product.name)}!`}
                 target="_blank" rel="noopener noreferrer"
                 onClick={e => e.stopPropagation()}
-                className="text-[0.72rem] bg-[#25D366] text-white px-3.5 py-2 rounded-full
-                  font-medium hover:bg-[#1EB85A] transition-all duration-200">
+                className="text-center text-[0.8rem] bg-[#25D366] text-white px-4 py-2.5 rounded-full
+                  font-semibold hover:bg-[#1EB85A] transition-colors duration-200 whitespace-nowrap">
                 Ask on WhatsApp
               </a>
             )}
@@ -182,7 +183,7 @@ export default function ProductCard({ product, onToast }: {
                   <p className="text-[0.78rem] text-[#A58CF4] font-medium">{product.price}</p>
                 </div>
                 <button onClick={() => setModalOpen(false)}
-                  className="w-9 h-9 rounded-full bg-white border border-[rgba(165,140,244,0.25)]
+                  aria-label="Close" className="w-10 h-10 rounded-full bg-white border border-[rgba(165,140,244,0.25)]
                     flex items-center justify-center text-[#6E6A8C]
                     hover:border-[#433075] hover:text-[#433075] transition-all shrink-0">
                   <X size={16}/>

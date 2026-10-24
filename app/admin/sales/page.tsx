@@ -123,7 +123,33 @@ export default function SalesLogPage() {
       </div>
 
       <div className="bg-white border border-[#E6E0F3] rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Phones: one card per order */}
+        <ul className="md:hidden divide-y divide-[#F1EEF8]">
+          {rows.slice(0, limit).map(o => {
+            const bal = balanceOf(o);
+            return (
+              <li key={o.id}>
+                <button onClick={() => setOpenId(o.id)} className="w-full text-left px-4 py-3.5 flex justify-between gap-3 active:bg-[#FAF9FD]">
+                  <div className="min-w-0">
+                    <p className="flex items-center gap-2 text-[0.92rem] font-semibold text-[#2B2147]">
+                      <span className="truncate">{o.customerName}</span>
+                      <span className={`shrink-0 px-2 py-0.5 rounded-full text-[0.7rem] font-semibold ${STATUS_STYLE[o.status]}`}>{STATUS_LABEL[o.status]}</span>
+                    </p>
+                    <p className="text-[0.82rem] text-[#2B2147] truncate mt-0.5">{o.items.map(i => `${i.qty}× ${i.name}`).join(', ')}</p>
+                    <p className="text-[0.75rem] text-[#5E5A7C] mt-0.5">{fmtDate(o.createdAt)} · {o.orderNumber} · {CHANNEL_LABEL[o.channel]}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-[0.92rem] font-semibold text-[#2B2147] tabular-nums">{naira(o.total)}</p>
+                    <p className={`text-[0.75rem] mt-0.5 ${bal > 0 ? 'text-[#B42318] font-semibold' : 'text-[#8A86A6]'}`}>{bal > 0 ? `${naira(bal)} owed` : 'Paid'}</p>
+                  </div>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* Tablets and up: full table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-[0.83rem]">
             <thead className="bg-[#FAF9FD] text-[#5E5A7C] text-left">
               <tr>
@@ -249,7 +275,7 @@ function OrderDetails({ order, onClose, onUpdate, onDelete }: {
               <button onClick={() => setConfirmDelete(false)} className="px-3 py-1.5 rounded-lg border border-[#D5D0E4]">Keep</button>
             </div>
           ) : (
-            <button onClick={() => setConfirmDelete(true)} className="text-[#B42318] text-[0.82rem] hover:underline">Delete order</button>
+            <button onClick={() => setConfirmDelete(true)} className="text-[#B42318] text-[0.85rem] py-2 hover:underline">Delete order</button>
           )}
         </div>
       </div>

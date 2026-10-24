@@ -17,23 +17,22 @@ export default function GalleryPage() {
         subtitle="Cakes we've made for birthdays, weddings and everything in between. See one you like? Tap it to ask for the same."
       />
 
-      {/* Filter tabs */}
-      <div className="border-b border-[rgba(165,140,244,0.15)] overflow-x-auto">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 flex gap-0">
+      {/* Filter pills (wrap on small screens instead of scrolling off) */}
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 pt-6 sm:pt-8">
+        <div role="radiogroup" aria-label="Filter cakes" className="flex flex-wrap gap-2">
           {FILTERS.map(f => (
-            <button key={f} onClick={() => setActive(f)}
-              className={`px-5 py-4 text-[0.82rem] tracking-[0.04em] whitespace-nowrap
-                border-b-2 transition-all duration-200
+            <button key={f} role="radio" aria-checked={active === f} onClick={() => setActive(f)}
+              className={`px-4 py-2.5 rounded-full text-[0.85rem] font-medium border transition-colors
                 ${active === f
-                  ? 'border-[#433075] text-[#433075] font-medium'
-                  : 'border-transparent text-[#6E6A8C] hover:text-[#433075]'}`}>
+                  ? 'bg-[#433075] border-[#433075] text-white'
+                  : 'bg-white border-[rgba(67,48,117,0.2)] text-[#433075] hover:bg-[#F3F0FA]'}`}>
               {f}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-14">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 pt-6 pb-8 sm:pb-10 lg:pb-14">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
           {filtered.map((item, i) => (
             <a

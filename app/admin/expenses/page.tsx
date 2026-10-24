@@ -70,7 +70,7 @@ export default function ExpensesPage() {
         <StatTile label="Profit margin" value={`${Math.round(margin * 100)}%`} sub="of every ₦1 of sales"/>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-4 mb-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
         <section className="bg-white rounded-2xl border border-[#E6E0F3] p-5">
           <h2 className="text-[0.98rem] font-semibold text-[#2B2147] mb-4">Add an expense</h2>
           <div className="space-y-3">
@@ -128,7 +128,26 @@ export default function ExpensesPage() {
 
       <section className="bg-white rounded-2xl border border-[#E6E0F3] overflow-hidden">
         <h2 className="text-[0.98rem] font-semibold text-[#2B2147] px-5 pt-5 pb-3">Expense log</h2>
-        <div className="overflow-x-auto">
+        {/* Phones: one card per expense */}
+        <ul className="md:hidden divide-y divide-[#F1EEF8] border-t border-[#F1EEF8]">
+          {v.exp.slice(0, 100).map(e => (
+            <li key={e.id} className="px-4 py-3 flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-[0.9rem] font-medium text-[#2B2147] truncate">{e.description}</p>
+                <p className="text-[0.75rem] text-[#5E5A7C]">
+                  {e.category} · {new Date(e.date).toLocaleDateString('en-NG', { day: 'numeric', month: 'short' })} · {e.paymentMethod === 'pos' ? 'POS' : e.paymentMethod}
+                </p>
+              </div>
+              <div className="flex items-center gap-1 shrink-0">
+                <span className="text-[0.9rem] font-semibold text-[#2B2147] tabular-nums">{naira(e.amount)}</span>
+                <button onClick={() => deleteExpense(e.id)} aria-label={`Delete ${e.description}`}
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-[#8A86A6] hover:text-[#B42318] hover:bg-[#FDECEC]"><Trash2 size={15}/></button>
+              </div>
+            </li>
+          ))}
+        </ul>
+        {/* Tablets and up: full table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-[0.83rem]">
             <thead className="bg-[#FAF9FD] text-[#5E5A7C] text-left">
               <tr>{['Date', 'Category', 'Description', 'Paid by', 'Amount', ''].map((h, i) => (
@@ -144,7 +163,7 @@ export default function ExpensesPage() {
                   <td className="px-3 py-2.5 capitalize">{e.paymentMethod === 'pos' ? 'POS' : e.paymentMethod}</td>
                   <td className="px-3 py-2.5 text-right tabular-nums font-semibold text-[#2B2147]">{naira(e.amount)}</td>
                   <td className="px-3 py-2.5 text-right">
-                    <button onClick={() => deleteExpense(e.id)} aria-label={`Delete ${e.description}`} className="text-[#8A86A6] hover:text-[#B42318]"><Trash2 size={15}/></button>
+                    <button onClick={() => deleteExpense(e.id)} aria-label={`Delete ${e.description}`} className="w-9 h-9 inline-flex items-center justify-center rounded-full text-[#8A86A6] hover:text-[#B42318] hover:bg-[#FDECEC]"><Trash2 size={15}/></button>
                   </td>
                 </tr>
               ))}
