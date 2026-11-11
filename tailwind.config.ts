@@ -38,7 +38,7 @@ const config: Config = {
         },
         fadeUp: {
           from: { opacity: '0', transform: 'translateY(24px)' },
-          to:   { opacity: '1', transform: 'translateY(0)' },
+          to:   { opacity: '1', transform: 'none' },
         },
         bob: {
           '0%, 100%': { transform: 'translateX(-50%) translateY(0)' },

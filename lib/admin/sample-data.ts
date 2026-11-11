@@ -65,7 +65,7 @@ export function generateSampleData(now = new Date()): SampleData {
   const customers = Array.from({ length: 900 }, (_, i) => ({
     name: `${FIRST[Math.floor(r() * FIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}`,
     phone: `080${String(10000000 + Math.floor(r() * 89999999))}`,
-    area: pick(r, [['GRA Phase 2', 3], ['Rumuola', 3], ['Mgbuoba', 4], ['Woji', 2], ['Trans-Amadi', 2], ['D-Line', 2], ['Ada George', 3], ['Eliozu', 2]]),
+    area: pick(r, [['GRA Phase 2', 3], ['Rumuola', 3], ['Rumuokoro', 4], ['Woji', 2], ['Trans-Amadi', 2], ['D-Line', 2], ['Ada George', 3], ['Eliozu', 2]]),
     i,
   }));
 

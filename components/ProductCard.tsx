@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { X, ShoppingBag, Images } from 'lucide-react';
 import { useCart } from '@/lib/cart';
@@ -25,6 +26,16 @@ export default function ProductCard({ product, onToast }: {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const galleryImages = product.images?.length ? product.images : [product.image];
   const hasGallery = galleryImages.length > 1;
+
+  // Stop the page behind a popup from scrolling (matters most on phones).
+  useEffect(() => {
+    if (!modalOpen && !galleryOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setModalOpen(false); setGalleryOpen(false); } };
+    document.addEventListener('keydown', onKey);
+    return () => { document.body.style.overflow = prev; document.removeEventListener('keydown', onKey); };
+  }, [modalOpen, galleryOpen]);
 
   function handleClick() {
     if (!product.in_stock) return;
@@ -160,12 +171,17 @@ export default function ProductCard({ product, onToast }: {
         </div>
       </div>
 
-      {/* ── Cake customisation modal ── */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4"
-          style={{ background: 'rgba(67,48,117,0.5)', backdropFilter: 'blur(8px)' }}>
-          <div className="bg-[#FAFAFA] rounded-t-3xl sm:rounded-3xl w-full sm:max-w-xl
-            max-h-[95vh] overflow-y-auto shadow-2xl flex flex-col">
+      {/* ── Cake customisation modal ──
+          Rendered into <body> so it always covers the whole screen, even when the card sits
+          inside an animated/transformed wrapper (which would otherwise trap a fixed element). */}
+      {modalOpen && createPortal(
+        <div role="dialog" aria-modal="true" aria-label={`Customise ${product.name}`}
+          className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4"
+          style={{ background: 'rgba(67,48,117,0.5)', backdropFilter: 'blur(8px)' }}
+          onClick={() => setModalOpen(false)}>
+          <div onClick={e => e.stopPropagation()}
+            className="bg-[#FAFAFA] rounded-t-3xl sm:rounded-3xl w-full sm:max-w-xl
+            max-h-[92vh] max-h-[92dvh] overflow-y-auto overscroll-contain shadow-2xl flex flex-col">
 
             {/* Header */}
             <div className="sticky top-0 bg-[#FAFAFA] z-10 px-5 pt-5 pb-4
@@ -198,12 +214,14 @@ export default function ProductCard({ product, onToast }: {
               <CakeOrderForm product={product} onClose={() => setModalOpen(false)}/>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
 
       {/* ── Quick-view photo lightbox (non-cake products, or a closer look before customising) ── */}
-      {galleryOpen && (
-        <div className="fixed inset-0 z-[75] flex items-center justify-center p-4"
+      {galleryOpen && createPortal(
+        <div role="dialog" aria-modal="true" aria-label={`Photos of ${product.name}`}
+          className="fixed inset-0 z-[75] flex items-center justify-center p-4"
           style={{ background: 'rgba(67,48,117,0.55)', backdropFilter: 'blur(8px)' }}
           onClick={() => setGalleryOpen(false)}>
           <div className="bg-white rounded-2xl p-4 sm:p-5 max-w-md w-full shadow-2xl"
@@ -212,15 +230,16 @@ export default function ProductCard({ product, onToast }: {
               <h3 className="text-[1.02rem] font-semibold text-[#433075] leading-tight">
                 {product.name}
               </h3>
-              <button onClick={() => setGalleryOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#F3F0FA] flex items-center justify-center
+              <button onClick={() => setGalleryOpen(false)} aria-label="Close"
+                className="w-10 h-10 rounded-full bg-[#F3F0FA] flex items-center justify-center
                   text-[#6E6A8C] hover:text-[#433075] transition-colors shrink-0">
                 <X size={15}/>
               </button>
             </div>
             <ProductGallery images={galleryImages} alt={product.name} aspect="80%"/>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
