@@ -18,7 +18,7 @@ export default function Footer() {
               Baked with love, for people with good taste.
             </p>
             <p className="text-[0.85rem] text-white/70 leading-relaxed">
-              Cakes, pastries and small chops from Mgbuoba, Port Harcourt.
+              Cakes, pastries and small chops from Port Harcourt.
             </p>
           </div>
 
@@ -84,7 +84,7 @@ export default function Footer() {
               </a>
               <div className="flex gap-2.5 text-[0.8rem] text-white/75">
                 <MapPin size={14} className="text-[#E2BBFA] shrink-0 mt-0.5" />
-                <span>No 33 Amadimati Street, Mgbuoba, Port Harcourt</span>
+                <span>No 33 Amadimati Street, Port Harcourt</span>
               </div>
               <div className="flex gap-2.5 text-[0.8rem] text-white/75">
                 <Clock size={14} className="text-[#E2BBFA] shrink-0 mt-0.5" />

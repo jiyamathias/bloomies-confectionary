@@ -126,7 +126,7 @@ export default function HomePage() {
       <section id="treats" className="scroll-mt-20 max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-12 sm:py-16 lg:py-24">
         <SectionHeading className="mb-8 lg:mb-10"
           title="Pick your treat"
-          subtitle="Everything is baked in our Mgbuoba kitchen. Tap a category to see prices and order."/>
+          subtitle="Everything is baked fresh in our Port Harcourt kitchen. Tap a category to see prices and order."/>
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <div className="col-span-2 lg:col-span-1">
@@ -209,7 +209,7 @@ export default function HomePage() {
             <span className="w-2 h-2 rounded-full bg-[#4CAF50]"/> Open Mon – Sat, till 5 PM
           </span>
           {/* <span className="flex items-center gap-1.5 text-[0.78rem] text-[#6E6A8C]">
-            <MapPin size={12}/> Mgbuoba, Port Harcourt
+            <MapPin size={12}/> Port Harcourt
           </span> */}
         </div>
       </section>

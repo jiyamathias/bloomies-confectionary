@@ -197,7 +197,7 @@ export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
               <WAIcon/> Order on WhatsApp
             </a>
             <div className="text-center space-y-1">
-              <p className="text-[0.78rem] text-[#5E5A7C] flex items-center justify-center gap-1.5"><MapPin size={12}/> Mgbuoba, Port Harcourt</p>
+              <p className="text-[0.78rem] text-[#5E5A7C] flex items-center justify-center gap-1.5"><MapPin size={12}/> Port Harcourt</p>
               <p className="text-[0.78rem] text-[#5E5A7C] flex items-center justify-center gap-1.5"><Clock size={12}/> Mon – Sat, till 5 PM</p>
             </div>
           </div>

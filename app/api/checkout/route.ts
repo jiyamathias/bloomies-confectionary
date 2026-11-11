@@ -84,7 +84,7 @@ export async function POST(req: Request) {
       // Shows on the transaction in the Flutterwave dashboard, so the bakery can see what was ordered.
       meta: {
         customer_phone: phone,
-        fulfilment: method === 'delivery' ? `Delivery: ${address}` : 'Pickup at Mgbuoba',
+        fulfilment: method === 'delivery' ? `Delivery: ${address}` : 'Pickup',
         order: order.slice(0, 1800),
       },
     });

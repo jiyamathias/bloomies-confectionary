@@ -2,9 +2,20 @@ import PageHeader from '@/components/PageHeader';
 import { WhatsAppBtn } from '@/components/WhatsAppBtn';
 import { Clock, MapPin } from 'lucide-react';
 
-const SECTIONS: { letter: string; title: string; body: React.ReactNode }[] = [
+// Shown in this order; the A, B, C… badges come from the position.
+const SECTIONS: { title: string; body: React.ReactNode }[] = [
   {
-    letter: 'A',
+    title: 'Availability & Opening Hours',
+    body: (
+      <p>
+        Bloomies is open Monday through Saturday and closed on Sundays. Ready-to-go items such as cake slices,
+        pastries and daily treats are generally available in-store during opening hours, while bigger and
+        custom cakes are made strictly to order — please reach out in advance to confirm availability for your
+        date.
+      </p>
+    ),
+  },
+  {
     title: 'Ordering & Payment',
     body: (
       <>
@@ -15,8 +26,6 @@ const SECTIONS: { letter: string; title: string; body: React.ReactNode }[] = [
         <ul className="list-disc pl-5 space-y-1 marker:text-[#A58CF4]">
           <li>Online on this website: card, bank transfer or USSD, processed by Flutterwave</li>
           <li>Bank transfer</li>
-          <li>POS on pickup or delivery</li>
-          <li>Cash on pickup</li>
         </ul>
         <p>
           You can pay online for items with a fixed price and for cakes you build on our cakes page.
@@ -32,7 +41,6 @@ const SECTIONS: { letter: string; title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    letter: 'B',
     title: 'Cake Customisation & Reference Photos',
     body: (
       <p>
@@ -44,32 +52,42 @@ const SECTIONS: { letter: string; title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    letter: 'C',
     title: 'Delivery & Pickup',
     body: (
       <p>
         Same-day delivery is available on select one-layer cakes and daily treats when ordered before 12 PM.
         Bigger and custom cakes require advance notice — please share your event date as early as possible.
         Delivery fees depend on your location within or outside Port Harcourt and will be confirmed on
-        WhatsApp before your order is finalised. Pickup is available from our Mgbuoba location during opening
+        WhatsApp before your order is finalised. Pickup is available during opening
         hours.
       </p>
     ),
   },
   {
-    letter: 'D',
-    title: 'Cancellations & Changes',
+    title: 'Cancellations & Refunds',
     body: (
-      <p>
-        We understand plans change. Orders cancelled more than 48 hours before the delivery or collection date
-        receive a full refund of any deposit paid. Cancellations made within 48 hours of delivery attract a
-        10% charge on the total order value to cover ingredients and preparation already underway. Same-day
-        orders, once confirmed, cannot be cancelled or refunded.
-      </p>
+      <>
+        <p>
+          Orders cancelled 72 hours or more before the delivery date may be eligible for a full refund.
+          However, if we have already sourced or purchased specific items for your custom order, the refund
+          will be less the cost of those items. This is because we often begin purchasing custom materials as
+          soon as payment is confirmed.
+        </p>
+        <ul className="list-disc pl-5 space-y-2 marker:text-[#A58CF4]">
+          <li>
+            For cancellations made less than 72 hours before the delivery date, we do not offer refunds.
+            Instead, customers may reschedule their order to another date within 3 months of the original
+            delivery date.
+          </li>
+          <li>
+            Same-day orders are non-refundable. Once a same-day order is confirmed, we begin production
+            immediately, so refunds cannot be issued.
+          </li>
+        </ul>
+      </>
     ),
   },
   {
-    letter: 'E',
     title: 'Freshness, Quality & Storage',
     body: (
       <p>
@@ -82,7 +100,6 @@ const SECTIONS: { letter: string; title: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    letter: 'F',
     title: 'Your Privacy & Information',
     body: (
       <p>
@@ -93,18 +110,6 @@ const SECTIONS: { letter: string; title: string; body: React.ReactNode }[] = [
         Flutterwave keeps a record of the payment and your order summary so we can match it to your order.
         We never sell your details, and we only use your contact information to follow up on orders or
         respond to enquiries you initiate.
-      </p>
-    ),
-  },
-  {
-    letter: 'G',
-    title: 'Availability & Opening Hours',
-    body: (
-      <p>
-        Bloomies is open Monday through Saturday and closed on Sundays. Ready-to-go items such as cake slices,
-        pastries and daily treats are generally available in-store during opening hours, while bigger and
-        custom cakes are made strictly to order — please reach out in advance to confirm availability for your
-        date.
       </p>
     ),
   },
@@ -120,13 +125,13 @@ export default function PolicyPage() {
 
       <div className="max-w-3xl mx-auto px-5 sm:px-6 lg:px-10 py-10 sm:py-14">
         <div className="space-y-5">
-          {SECTIONS.map(s => (
-            <section key={s.letter}
+          {SECTIONS.map((s, i) => (
+            <section key={s.title}
               className="bg-white border border-[rgba(165,140,244,0.14)] rounded-2xl p-6 sm:p-7">
               <div className="flex items-start gap-4">
                 <span className="shrink-0 w-9 h-9 rounded-full bg-[#E2BBFA]
                   flex items-center justify-center font-luckiest text-[1.05rem] text-[#433075] pt-0.5">
-                  {s.letter}
+                  {String.fromCharCode(65 + i)}
                 </span>
                 <div className="min-w-0">
                   <h2 className="text-[1.08rem] font-semibold text-[#433075] mb-2 leading-snug">
@@ -153,7 +158,7 @@ export default function PolicyPage() {
                 <Clock size={13}/> Mon – Sat, closes 5 PM · Closed Sundays
               </p>
               <p className="text-white/80 text-[0.85rem] flex items-center gap-2 justify-center sm:justify-start">
-                <MapPin size={13}/> No 33 Amadimati Street, Mgbuoba, Port Harcourt
+                <MapPin size={13}/> No 33 Amadimati Street, Port Harcourt
               </p>
             </div>
           </div>
@@ -165,7 +170,7 @@ export default function PolicyPage() {
         </div>
 
         <p className="text-[0.75rem] text-[#5E5A7C] text-center mt-6">
-          Last updated October 2026 · Bloomies Confectioneries, Port Harcourt
+          Last updated November 2026 · Bloomies Confectioneries, Port Harcourt
         </p>
       </div>
     </>

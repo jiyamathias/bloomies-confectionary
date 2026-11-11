@@ -49,9 +49,9 @@ export default function AboutPage() {
           </div>
 
           <div>
-            <SectionHeading className="mb-5" title="Baked in Mgbuoba"/>
+            <SectionHeading className="mb-5" title="Baked in Port Harcourt"/>
             <p className="text-[0.95rem] text-[#5E5A7C] leading-relaxed mb-4">
-              Bloomies Confectioneries is a bakery on Amadimati Street in Mgbuoba, Port Harcourt. We make
+              Bloomies Confectioneries is a bakery in Port Harcourt. We make
               one-layer and celebration cakes, pastries, small chops and daily treats, and we deliver
               across the city.
             </p>

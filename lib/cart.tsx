@@ -95,7 +95,7 @@ export function buildWhatsAppMessage(items: CartItem[], c: OrderContact, paidRef
     return `• ${i.name} ×${i.qty} (${price})${extra}`;
   }).join('\n');
   const total = payableTotal(items);
-  const fulfilment = c.method === 'delivery' ? `Delivery to: ${c.address || 'TBD'}` : 'Pickup at Mgbuoba';
+  const fulfilment = c.method === 'delivery' ? `Delivery to: ${c.address || 'TBD'}` : 'Pickup';
 
   return (paidRef ? `🌸 *Paid Order ${paidRef} — Bloomies Website*\n\n` : `🌸 *New Order — Bloomies Website*\n\n`) +
     `👤 Name: ${c.name || 'Customer'}\n📱 Phone: ${c.phone || '—'}\n🚚 ${fulfilment}\n\n` +

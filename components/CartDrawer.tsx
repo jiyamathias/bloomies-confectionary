@@ -214,7 +214,7 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
                   <textarea className={`${field} resize-none`} rows={2} value={address}
                     onChange={e => setAddress(e.target.value)} placeholder="Delivery address" autoComplete="street-address" />
                 ) : (
-                  <p className="text-[0.75rem] text-[#5E5A7C]">Pick up from No 33 Amadimati Street, Mgbuoba. Mon – Sat, till 5 PM.</p>
+                  <p className="text-[0.75rem] text-[#5E5A7C]">Pickup is available Mon – Sat, till 5 PM.</p>
                 )}
               </div>
             </div>

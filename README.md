@@ -137,7 +137,7 @@ bloomies/
 
 - **Phone:** 08181154270  
 - **Instagram:** @bloomies.ng  
-- **Location:** No 33 Amadimati Street, Mgbuoba, Port Harcourt  
+- **Location:** No 33 Amadimati Street, Port Harcourt  
 - **Hours:** Open daily · Closes 5 PM  
 - **Order via:** Glovo, Chowdeck, WhatsApp
 
