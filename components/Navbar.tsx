@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ShoppingBag, Menu, X, ChevronRight, ChevronDown, MapPin, Clock, ArrowUpRight } from 'lucide-react';
 import { useCart } from '@/lib/cart';
+import { useContact, useSection, waLink } from '@/lib/content/store';
 
 type NavLink  = { href: string; label: string; sub?: string };
 type NavGroup = { label: string; items: NavLink[]; wide?: boolean };
@@ -11,37 +12,35 @@ type NavEntry = NavLink | NavGroup;
 
 const isGroup = (e: NavEntry): e is NavGroup => 'items' in e;
 
-// Grouped so the bar stays short: products in one dropdown, info pages in another.
-const NAV: NavEntry[] = [
-  {
-    label: 'Our Treats',
-    wide: true,
-    items: [
-      { href: '/cakes',        label: 'Cakes',        sub: 'One layer · Custom designs'   },
-      { href: '/pastries',     label: 'Pastries',     sub: 'Pies · Rolls · Cinnamon buns' },
-      { href: '/small-chops',  label: 'Small Chops',  sub: 'Packages for every gathering' },
-      { href: '/daily-treats', label: 'Daily Treats', sub: 'Banana bread · Slices · More' },
-    ],
-  },
-  { href: '/events',  label: 'Events'  },
-  { href: '/gallery', label: 'Gallery' },
-  {
-    label: 'About',
-    items: [
-      { href: '/about',  label: 'Our Story',  sub: 'Who we are & how we bake'    },
-      { href: '/policy', label: 'Our Policy', sub: 'Ordering, delivery & refunds' },
-    ],
-  },
-];
+type NavContent = ReturnType<typeof useSection<'site', 'nav'>>;
+const TREAT_LINKS = ['/cakes', '/pastries', '/small-chops', '/daily-treats'];
 
-// Mobile drawer: each dropdown becomes a section; plain links share an "Explore" section.
-const MOBILE_SECTIONS = NAV.reduce<{ title: string; links: NavLink[] }[]>((out, e) => {
-  if (isGroup(e)) return [...out, { title: e.label, links: e.items }];
-  const explore = out.find(sec => sec.title === 'Explore');
-  if (explore) explore.links.push(e);
-  else out.push({ title: 'Explore', links: [e] });
-  return out;
-}, []);
+// Grouped so the bar stays short: products in one dropdown, info pages in another.
+// Labels come from the CMS (Admin → Website content → Site-wide → Top menu).
+function buildNav(n: NavContent): NavEntry[] {
+  return [
+    { label: n.treatsLabel, wide: true,
+      items: TREAT_LINKS.map((href, i) => ({ href, label: n.treats[i]?.label ?? '', sub: n.treats[i]?.sub })) },
+    { href: '/events',  label: n.eventsLabel },
+    { href: '/gallery', label: n.galleryLabel },
+    { label: n.aboutLabel,
+      items: [
+        { href: '/about',  label: n.storyLabel,  sub: n.storySub },
+        { href: '/policy', label: n.policyLabel, sub: n.policySub },
+      ] },
+  ];
+}
+
+// Mobile menu: each dropdown becomes a section; plain links share an "Explore" section.
+function mobileSections(nav: NavEntry[]) {
+  return nav.reduce<{ title: string; links: NavLink[] }[]>((out, e) => {
+    if (isGroup(e)) return [...out, { title: e.label, links: e.items }];
+    const explore = out.find(sec => sec.title === 'Explore');
+    if (explore) explore.links.push(e);
+    else out.push({ title: 'Explore', links: [e] });
+    return out;
+  }, []);
+}
 
 const linkBase = `text-[0.78rem] tracking-[0.08em] transition-colors duration-200 relative
   after:absolute after:bottom-[-3px] after:left-0 after:w-full after:h-px
@@ -56,6 +55,10 @@ export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { count } = useCart();
   const pathname   = usePathname();
+  const navText = useSection('site', 'nav');
+  const contact = useContact();
+  const NAV = buildNav(navText);
+  const MOBILE_SECTIONS = mobileSections(NAV);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 24);
@@ -102,12 +105,12 @@ export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
           {/* Right actions */}
           <div className="flex items-center gap-2 shrink-0">
             {/* BakersMerch CTA */}
-            <a href="https://bakersmerch.com" target="_blank" rel="noopener noreferrer"
+            <a href={navText.merchUrl} target="_blank" rel="noopener noreferrer"
               className="hidden md:flex items-center gap-1.5 text-[0.72rem] tracking-[0.06em]
                 text-[#433075] font-semibold px-4 py-2.5 rounded-full
                 border border-[rgba(67,48,117,0.25)]
                 hover:bg-[#F3F0FA] transition-colors duration-200">
-              BakersMerch <ArrowUpRight size={13}/>
+              {navText.merchLabel} <ArrowUpRight size={13}/>
             </a>
 
             {/* Order: goes to the menu, checkout happens in the cart */}
@@ -115,7 +118,7 @@ export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
               className="hidden lg:inline-flex items-center gap-1.5 text-[0.75rem] tracking-[0.04em]
                 bg-[#433075] text-white px-5 py-2.5 rounded-full font-medium
                 hover:bg-[#5B3E8A] transition-colors duration-200">
-              Order Now
+              {navText.orderLabel}
             </Link>
 
             {/* Cart */}
@@ -179,10 +182,10 @@ export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
             <ul className="space-y-1">
               {/* BakersMerch in mobile too */}
               <li>
-                <a href="https://bakersmerch.com" target="_blank" rel="noopener noreferrer"
+                <a href={navText.merchUrl} target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-between px-4 py-3.5 rounded-xl
                     text-[0.9rem] font-semibold text-[#433075] hover:bg-[#F3F0FA] transition-all">
-                  Shop BakersMerch
+                  Shop {navText.merchLabel}
                   <ArrowUpRight size={15} className="opacity-50"/>
                 </a>
               </li>
@@ -190,15 +193,15 @@ export default function Navbar({ onCartOpen }: { onCartOpen: () => void }) {
           </div>
 
           <div className="px-4 pb-5 border-t border-[rgba(165,140,244,0.15)] pt-4 space-y-3">
-            <a href="https://wa.me/2348181154270?text=Hi%20Bloomies!%20I%27d%20like%20to%20place%20an%20order."
+            <a href={waLink(contact.whatsapp, "Hi Bloomies! I'd like to place an order.")}
               target="_blank" rel="noopener noreferrer"
               className="flex items-center justify-center gap-2.5 w-full
                 bg-[#25D366] text-white py-3.5 rounded-full text-[0.88rem] font-semibold">
               <WAIcon/> Order on WhatsApp
             </a>
             <div className="text-center space-y-1">
-              <p className="text-[0.78rem] text-[#5E5A7C] flex items-center justify-center gap-1.5"><MapPin size={12}/> Port Harcourt</p>
-              <p className="text-[0.78rem] text-[#5E5A7C] flex items-center justify-center gap-1.5"><Clock size={12}/> Mon – Sat, till 5 PM</p>
+              <p className="text-[0.78rem] text-[#5E5A7C] flex items-center justify-center gap-1.5"><MapPin size={12}/> {contact.city}</p>
+              <p className="text-[0.78rem] text-[#5E5A7C] flex items-center justify-center gap-1.5"><Clock size={12}/> {contact.hours}</p>
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { X, Minus, Plus, Trash2, ShoppingBag, Lock, Loader2 } from 'lucide-react
 import { useCart, buildWhatsAppMessage, whatsappLink, payableTotal } from '@/lib/cart';
 import { formatNaira } from '@/lib/pricing';
 import { WAIcon } from '@/components/WhatsAppBtn';
+import { useContact } from '@/lib/content/store';
 
 export const PENDING_ORDER_KEY = 'bloomies_pending_order';
 const CONTACT_KEY = 'bloomies_contact';
@@ -13,6 +14,7 @@ type Method = 'pickup' | 'delivery';
 
 export default function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, count, changeQty, remove } = useCart();
+  const contact = useContact();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -214,7 +216,7 @@ export default function CartDrawer({ open, onClose }: { open: boolean; onClose: 
                   <textarea className={`${field} resize-none`} rows={2} value={address}
                     onChange={e => setAddress(e.target.value)} placeholder="Delivery address" autoComplete="street-address" />
                 ) : (
-                  <p className="text-[0.75rem] text-[#5E5A7C]">Pickup is available Mon – Sat, till 5 PM.</p>
+                  <p className="text-[0.75rem] text-[#5E5A7C]">Pickup is available {contact.hours}.</p>
                 )}
               </div>
             </div>

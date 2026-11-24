@@ -2,8 +2,8 @@
 import { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode } from 'react';
 import type { CartItem } from '@/types';
 import { formatNaira } from '@/lib/pricing';
+import { currentWhatsApp } from '@/lib/content/store';
 
-export const WHATSAPP_NUMBER = '2348181154270';
 const STORAGE_KEY = 'bloomies_cart_v1';
 
 interface CartCtx {
@@ -107,5 +107,6 @@ export function buildWhatsAppMessage(items: CartItem[], c: OrderContact, paidRef
 }
 
 export function whatsappLink(text: string) {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+  // Number comes from the CMS (Site-wide → Contact details).
+  return `https://wa.me/${currentWhatsApp().replace(/\D/g, '')}?text=${encodeURIComponent(text)}`;
 }

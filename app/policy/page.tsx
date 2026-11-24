@@ -1,145 +1,34 @@
+'use client';
 import PageHeader from '@/components/PageHeader';
+import RichText from '@/components/RichText';
 import { WhatsAppBtn } from '@/components/WhatsAppBtn';
 import { Clock, MapPin } from 'lucide-react';
+import { useContact, useSection, waLink } from '@/lib/content/store';
 
-// Shown in this order; the A, B, C… badges come from the position.
-const SECTIONS: { title: string; body: React.ReactNode }[] = [
-  {
-    title: 'Availability & Opening Hours',
-    body: (
-      <p>
-        Bloomies is open Monday through Saturday and closed on Sundays. Ready-to-go items such as cake slices,
-        pastries and daily treats are generally available in-store during opening hours, while bigger and
-        custom cakes are made strictly to order — please reach out in advance to confirm availability for your
-        date.
-      </p>
-    ),
-  },
-  {
-    title: 'Ordering & Payment',
-    body: (
-      <>
-        <p>
-          Orders are confirmed once full payment (or the agreed deposit for custom cakes) has been received.
-          We accept the following payment methods:
-        </p>
-        <ul className="list-disc pl-5 space-y-1 marker:text-[#A58CF4]">
-          <li>Online on this website: card, bank transfer or USSD, processed by Flutterwave</li>
-          <li>Bank transfer</li>
-        </ul>
-        <p>
-          You can pay online for items with a fixed price and for cakes you build on our cakes page.
-          You pay the price shown at checkout. Delivery fees are not included and are confirmed with you on
-          WhatsApp.
-        </p>
-        <p>
-          Prices marked &ldquo;From&rdquo;, custom designs, deluxe flavours and event orders are quoted on
-          WhatsApp before you pay. Custom and bigger cakes ordered this way require a minimum deposit of 50%
-          of the total cost to begin work, with the balance cleared before the cake leaves our kitchen.
-        </p>
-      </>
-    ),
-  },
-  {
-    title: 'Cake Customisation & Reference Photos',
-    body: (
-      <p>
-        Every cake is made to order based on the flavour, colour, size and design details you select on our
-        website. If you have a picture of a design you love, there&apos;s no need to upload anything here —
-        simply attach it directly in the WhatsApp chat once you tap &ldquo;Order via WhatsApp&rdquo;. Our team
-        will let you know if a design needs any adjustment for the size or flavour you&apos;ve chosen.
-      </p>
-    ),
-  },
-  {
-    title: 'Delivery & Pickup',
-    body: (
-      <p>
-        Same-day delivery is available on select one-layer cakes and daily treats when ordered before 12 PM.
-        Bigger and custom cakes require advance notice — please share your event date as early as possible.
-        Delivery fees depend on your location within or outside Port Harcourt and will be confirmed on
-        WhatsApp before your order is finalised. Pickup is available during opening
-        hours.
-      </p>
-    ),
-  },
-  {
-    title: 'Cancellations & Refunds',
-    body: (
-      <>
-        <p>
-          Orders cancelled 72 hours or more before the delivery date may be eligible for a full refund.
-          However, if we have already sourced or purchased specific items for your custom order, the refund
-          will be less the cost of those items. This is because we often begin purchasing custom materials as
-          soon as payment is confirmed.
-        </p>
-        <ul className="list-disc pl-5 space-y-2 marker:text-[#A58CF4]">
-          <li>
-            For cancellations made less than 72 hours before the delivery date, we do not offer refunds.
-            Instead, customers may reschedule their order to another date within 3 months of the original
-            delivery date.
-          </li>
-          <li>
-            Same-day orders are non-refundable. Once a same-day order is confirmed, we begin production
-            immediately, so refunds cannot be issued.
-          </li>
-        </ul>
-      </>
-    ),
-  },
-  {
-    title: 'Freshness, Quality & Storage',
-    body: (
-      <p>
-        Everything we make is baked fresh and is at its best within 24–48 hours of collection or delivery.
-        Cakes and pastries are perishable — please refrigerate cream-based items and consume promptly. We
-        carefully inspect every order before it leaves our kitchen, but we cannot be held responsible for
-        changes in texture or appearance caused by delays, improper storage, or temperature exposure after the
-        order has been received in good condition.
-      </p>
-    ),
-  },
-  {
-    title: 'Your Privacy & Information',
-    body: (
-      <p>
-        We only collect the information you choose to share with us — your name, phone number, delivery
-        address, email and order details — to prepare, deliver and communicate with you about your order.
-        WhatsApp conversations are stored within WhatsApp under Meta&apos;s own privacy terms. If you pay
-        online, your payment is handled by Flutterwave: we never see or store your card details, and
-        Flutterwave keeps a record of the payment and your order summary so we can match it to your order.
-        We never sell your details, and we only use your contact information to follow up on orders or
-        respond to enquiries you initiate.
-      </p>
-    ),
-  },
-];
-
+// Sections, their order and wording come from the CMS (Admin → Website content → Policy).
 export default function PolicyPage() {
+  const head = useSection('policy', 'header');
+  const { items } = useSection('policy', 'sections');
+  const box = useSection('policy', 'contact');
+  const contact = useContact();
+
   return (
     <>
-      <PageHeader
-        title="Our Policy"
-        subtitle="How ordering, payment, delivery, cancellations and your information work at Bloomies."
-      />
+      <PageHeader cms="policy.header" title={head.title} subtitle={head.subtitle} badge={head.tag}/>
 
       <div className="max-w-3xl mx-auto px-5 sm:px-6 lg:px-10 py-10 sm:py-14">
-        <div className="space-y-5">
-          {SECTIONS.map((s, i) => (
-            <section key={s.title}
-              className="bg-white border border-[rgba(165,140,244,0.14)] rounded-2xl p-6 sm:p-7">
+        <div data-cms="policy.sections" className="space-y-5">
+          {items.map((s, i) => (
+            <section key={i} className="bg-white border border-[rgba(165,140,244,0.14)] rounded-2xl p-6 sm:p-7">
               <div className="flex items-start gap-4">
                 <span className="shrink-0 w-9 h-9 rounded-full bg-[#E2BBFA]
                   flex items-center justify-center font-luckiest text-[1.05rem] text-[#433075] pt-0.5">
-                  {String.fromCharCode(65 + i)}
+                  {String.fromCharCode(65 + (i % 26))}
                 </span>
                 <div className="min-w-0">
-                  <h2 className="text-[1.08rem] font-semibold text-[#433075] mb-2 leading-snug">
-                    {s.title}
-                  </h2>
-                  <div className="text-[0.92rem] text-[#5E5A7C] leading-relaxed space-y-3">
-                    {s.body}
-                  </div>
+                  <h2 className="text-[1.08rem] font-semibold text-[#433075] mb-2 leading-snug">{s.title}</h2>
+                  <RichText text={s.body} className="text-[0.92rem] text-[#5E5A7C] leading-relaxed space-y-3"
+                    listClassName="list-disc pl-5 space-y-2 marker:text-[#A58CF4]"/>
                 </div>
               </div>
             </section>
@@ -147,31 +36,27 @@ export default function PolicyPage() {
         </div>
 
         {/* Contact / questions */}
-        <div className="mt-8 bg-[#433075] rounded-2xl p-7 sm:p-9 text-center sm:text-left
+        <div data-cms="policy.contact" className="mt-8 bg-[#433075] rounded-2xl p-7 sm:p-9 text-center sm:text-left
           sm:flex sm:items-center sm:justify-between gap-6">
           <div className="mb-5 sm:mb-0">
-            <h3 className="font-luckiest tracking-[0.02em] text-[1.5rem] text-white mb-2">
-              Questions about any of this?
-            </h3>
+            <h3 className="font-luckiest tracking-[0.02em] text-[1.5rem] text-white mb-2">{box.title}</h3>
             <div className="space-y-1.5">
               <p className="text-white/80 text-[0.85rem] flex items-center gap-2 justify-center sm:justify-start">
-                <Clock size={13}/> Mon – Sat, closes 5 PM · Closed Sundays
+                <Clock size={13}/> {contact.hours} · {contact.closed}
               </p>
-              <p className="text-white/80 text-[0.85rem] flex items-center gap-2 justify-center sm:justify-start">
-                <MapPin size={13}/> No 33 Amadimati Street, Port Harcourt
-              </p>
+              {contact.address && (
+                <p className="text-white/80 text-[0.85rem] flex items-center gap-2 justify-center sm:justify-start">
+                  <MapPin size={13}/> {contact.address}
+                </p>
+              )}
             </div>
           </div>
-          <WhatsAppBtn
-            href="https://wa.me/2348181154270?text=Hi%20Bloomies%2C%20I%20have%20a%20question%20about%20your%20policy."
-            className="px-7 py-3.5 text-[0.85rem] shrink-0">
-            Chat with Us
+          <WhatsAppBtn href={waLink(contact.whatsapp, box.message)} className="px-7 py-3.5 text-[0.85rem] shrink-0">
+            {box.button}
           </WhatsAppBtn>
         </div>
 
-        <p className="text-[0.75rem] text-[#5E5A7C] text-center mt-6">
-          Last updated November 2026 · Bloomies Confectioneries, Port Harcourt
-        </p>
+        {box.updated && <p className="text-[0.75rem] text-[#5E5A7C] text-center mt-6">{box.updated}</p>}
       </div>
     </>
   );

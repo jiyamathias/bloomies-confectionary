@@ -5,12 +5,13 @@ import { ToastContainer, useToast } from '@/components/Toast';
 import { useCart } from '@/lib/cart';
 import { PRODUCTS } from '@/lib/products';
 import { onlineUnitPrice } from '@/lib/pricing';
-import SameDayTag from '@/components/SameDayTag';
+import { useSection } from '@/lib/content/store';
 
 export default function DailyTreatsPage() {
   const treats = PRODUCTS.filter(p => p.category === 'daily-treats');
   const { add } = useCart();
   const { toasts, show } = useToast();
+  const head = useSection('dailyTreats', 'header');
 
   function handleAdd(p: typeof treats[0]) {
     add({ id: p.id, name: p.name, price: p.price, image: p.image, productId: p.id, unitPrice: onlineUnitPrice(p.id) });
@@ -19,12 +20,7 @@ export default function DailyTreatsPage() {
 
   return (
     <>
-      <PageHeader
-        title="Daily"
-        titleEm="Treats"
-        subtitle="Cake slices, banana bread, cupcakes and other grab-and-go treats, made fresh each day."
-        tag={<SameDayTag>All items same day</SameDayTag>}
-      />
+      <PageHeader cms="dailyTreats.header" title={head.title} subtitle={head.subtitle} badge={head.tag}/>
 
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-14">
         {/* Mobile: 2-col grid | Desktop: 6-col */}
