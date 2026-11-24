@@ -3,18 +3,21 @@ import { useState } from 'react';
 import Image from 'next/image';
 import PageHeader from '@/components/PageHeader';
 import { GALLERY } from '@/lib/products';
+import { useContact, useSection, waLink } from '@/lib/content/store';
 
 const FILTERS = ['All', 'One Layer', 'Bigger Cake', 'Custom Cake'];
 
 export default function GalleryPage() {
+  const head = useSection('gallery', 'header');
+  const cards = useSection('gallery', 'cards');
+  const merch = useSection('gallery', 'merch');
+  const contact = useContact();
   const [active, setActive] = useState('All');
   const filtered = active === 'All' ? GALLERY : GALLERY.filter(g => g.category === active);
 
   return (
     <>
-      <PageHeader
-        title="Our" titleEm="Gallery"
-        subtitle="Cakes we've made for birthdays, weddings and everything in between. See one you like? Tap it to ask for the same."
+      <PageHeader cms="gallery.header" title={head.title} subtitle={head.subtitle} badge={head.tag}
       />
 
       {/* Filter pills (wrap on small screens instead of scrolling off) */}
@@ -37,7 +40,7 @@ export default function GalleryPage() {
           {filtered.map((item, i) => (
             <a
               key={item.id}
-              href={`https://wa.me/2348181154270?text=Hi%20Bloomies%2C%20I%27d%20like%20to%20order%20a%20${encodeURIComponent(item.title)}%20cake!`}
+              href={waLink(contact.whatsapp, `Hi Bloomies, I'd like to order a ${item.title} cake!`)}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative rounded-2xl overflow-hidden border border-[rgba(165,140,244,0.15)]
@@ -57,7 +60,7 @@ export default function GalleryPage() {
                   transition-all duration-300 flex items-center justify-center">
                   <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300
                     bg-white text-[#433075] text-[0.78rem] font-semibold px-5 py-2.5 rounded-full shadow-lg flex items-center gap-2">
-                    Order one like this
+                    {cards.hoverLabel}
                   </span>
                 </div>
               </div>
@@ -74,23 +77,23 @@ export default function GalleryPage() {
         </div>
 
         {/* BakersMerch CTA */}
-        <div className="mt-16 bg-[#E2BBFA] rounded-2xl p-8 sm:p-12 text-center">
+        {merch.visible && (
+        <div data-cms="gallery.merch" className="mt-16 bg-[#E2BBFA] rounded-2xl p-8 sm:p-12 text-center">
           <h2 className="font-luckiest tracking-[0.02em] text-[clamp(1.7rem,4vw,2.5rem)] text-[#433075] leading-tight mb-3">
-            Bake too? Visit BakersMerch
+            {merch.title}
           </h2>
-          <p className="text-[0.95rem] text-[#433075]/85 mb-7 max-w-md mx-auto">
-            Baking tools, cake boxes, stands and accessories for home and professional bakers.
-          </p>
+          <p className="text-[0.95rem] text-[#433075]/85 mb-7 max-w-md mx-auto">{merch.body}</p>
           <a
-            href="https://bakersmerch.com"
+            href={merch.url}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#433075] text-white px-10 py-4
               rounded-full text-[0.88rem] font-semibold hover:bg-[#5B3E8A]
               transition-colors duration-200 active:scale-[0.97]">
-            Go to BakersMerch ↗
+            {merch.button}
           </a>
         </div>
+        )}
       </div>
     </>
   );

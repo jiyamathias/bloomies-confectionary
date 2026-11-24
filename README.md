@@ -73,6 +73,28 @@ Customers can pay from the cart with card, bank transfer or USSD. WhatsApp order
 
 ---
 
+## ✏️ Website Content (CMS)
+
+**Admin → Website content** edits the headings, text and photos on every page, plus site-wide
+contact details (WhatsApp number, phone, Instagram, address, hours), the top menu and the footer.
+
+- **Draft and publish:** edits save as a draft automatically; the live preview shows the draft.
+  Nothing changes for visitors until **Publish changes**. **Discard** throws the draft away.
+- **Sections:** optional sections have a Shown/Hidden switch; any edited section can be reset to the original.
+- **Lists:** reviews, policy sections, hero slides, platters, etc. can be added, removed and reordered.
+- **Long text:** a blank line starts a new paragraph; a line starting with `- ` becomes a bullet.
+- **Photos:** upload (resized automatically), pick one already on the site, or paste a link.
+
+How it's built:
+- `lib/content/defaults.ts` holds the original content; the CMS stores only what the admin changes.
+- `lib/content/schema.ts` describes each page's sections and fields; the editor is generated from it.
+- `lib/content/store.ts` provides `useSection(page, section)` for pages and the draft/publish functions.
+- **Preview build only:** draft and published content are kept in the browser's localStorage, so they
+  only show in the browser where they were made. With the Neon backend they move to the database
+  (and uploaded photos to file storage); pages keep calling `useSection` unchanged.
+
+---
+
 ## ⭐ Best Sellers Section (Admin)
 
 Go to `/admin/best-sellers` to:

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard, Package, Star, Image as ImageIcon, LogOut, ExternalLink, Menu, X,
-  Receipt, Users, Wallet,
+  Receipt, Users, Wallet, PenLine,
 } from 'lucide-react';
 import { AdminDataProvider } from '@/lib/admin/store';
 
@@ -25,6 +25,7 @@ const NAV_GROUPS = [
   {
     title: 'Website',
     items: [
+      { href: '/admin/content',      label: 'Website content', Icon: PenLine },
       { href: '/admin/products',     label: 'Products',        Icon: Package },
       { href: '/admin/best-sellers', label: 'Best Sellers',    Icon: Star },
       { href: '/admin/gallery',      label: 'Gallery Manager', Icon: ImageIcon },

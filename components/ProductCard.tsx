@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { X, ShoppingBag, Images } from 'lucide-react';
 import { useCart } from '@/lib/cart';
+import { useContact, waLink } from '@/lib/content/store';
 import { onlineUnitPrice } from '@/lib/pricing';
 import CakeOrderForm from '@/components/CakeOrderForm';
 import ProductGallery from '@/components/ProductGallery';
@@ -22,6 +23,7 @@ export default function ProductCard({ product, onToast }: {
   onToast?: (msg: string) => void;
 }) {
   const { add } = useCart();
+  const contact = useContact();
   const [modalOpen, setModalOpen] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const galleryImages = product.images?.length ? product.images : [product.image];
@@ -159,7 +161,7 @@ export default function ProductCard({ product, onToast }: {
               </button>
             )}
             {isWA && (
-              <a href={`https://wa.me/2348181154270?text=Hi%20Bloomies%2C%20I%27d%20like%20to%20order%20${encodeURIComponent(product.name)}!`}
+              <a href={waLink(contact.whatsapp, `Hi Bloomies, I'd like to order ${product.name}!`)}
                 target="_blank" rel="noopener noreferrer"
                 onClick={e => e.stopPropagation()}
                 className="text-center text-[0.8rem] bg-[#25D366] text-white px-4 py-2.5 rounded-full

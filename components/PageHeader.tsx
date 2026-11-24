@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import Smile from '@/components/Smile';
+import SameDayTag from '@/components/SameDayTag';
 
 interface Props {
   title: string;
@@ -8,12 +9,17 @@ interface Props {
   titleEm?: string;
   subtitle: string;
   tag?: React.ReactNode;
+  /** Plain-text badge from the CMS (shown as the white pill). */
+  badge?: string;
+  /** "page.section" id so the admin preview can scroll here. */
+  cms?: string;
 }
 
 // Top banner for inner pages. Uses the logo's lilac so every page opens on-brand.
-export default function PageHeader({ title, titleEm, subtitle, tag }: Props) {
+export default function PageHeader({ title, titleEm, subtitle, tag, badge, cms }: Props) {
+  const aside = tag ?? (badge ? <SameDayTag>{badge}</SameDayTag> : null);
   return (
-    <section className="bg-[#E2BBFA]">
+    <section data-cms={cms} className="bg-[#E2BBFA]">
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 pt-28 sm:pt-32 pb-10 sm:pb-12">
         <Link href="/"
           className="inline-flex items-center gap-1.5 text-[0.85rem] font-medium py-2 -my-2
@@ -31,7 +37,7 @@ export default function PageHeader({ title, titleEm, subtitle, tag }: Props) {
             <Smile className="w-[92px] h-auto mt-3 text-[#433075]" tongue="#A58CF4"/>
             <p className="text-[0.95rem] text-[#433075]/85 mt-3 leading-relaxed max-w-lg">{subtitle}</p>
           </div>
-          {tag && <div className="shrink-0">{tag}</div>}
+          {aside && <div className="shrink-0">{aside}</div>}
         </div>
       </div>
     </section>

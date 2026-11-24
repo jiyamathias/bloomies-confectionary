@@ -6,6 +6,7 @@ import { ToastContainer, useToast } from '@/components/Toast';
 import { PRODUCTS, DEFAULT_BEST_SELLERS, getBestSellersConfig } from '@/lib/products';
 import type { BestSellersConfig } from '@/lib/products';
 import type { Product } from '@/types';
+import { useSection } from '@/lib/content/store';
 
 const INITIAL_SHOW = 4; // show 4 first, up to 6 total
 
@@ -13,6 +14,7 @@ export default function BestSellers() {
   const [config,   setConfig]   = useState<BestSellersConfig>(DEFAULT_BEST_SELLERS);
   const [showAll,  setShowAll]  = useState(false);
   const { toasts, show } = useToast();
+  const { subtitle } = useSection('home', 'bestSellers');
 
   // Load from localStorage on mount (picks up admin edits)
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function BestSellers() {
       {/* Header */}
       <SectionHeading className="mb-8 sm:mb-10"
         title={config.title}
-        subtitle="The ones people keep coming back for."/>
+        subtitle={subtitle}/>
 
       {/* Product grid */}
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">

@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { ShoppingBag, Plus, Minus, ChevronDown, Paperclip, Palette } from 'lucide-react';
-import { useCart } from '@/lib/cart';
+import { useCart, whatsappLink } from '@/lib/cart';
 import { cakePrice, onlineUnitPrice, DELUXE_FLAVOURS, MAX_CANDLES } from '@/lib/pricing';
 import type { Product, OneLayerCustomField, BiggerCakeCustomField, CakeOptions } from '@/types';
 
@@ -153,7 +153,7 @@ function OneLayerForm({ product, onClose }: { product: Product; onClose?: () => 
       `📎 Reference photo (if any): attaching it in this chat\n` +
       `\n💰 *Estimated Total: ${fmt(total)}*\n\nPlease confirm availability and final price. Thank you!`;
 
-    window.open(`https://wa.me/2348181154270?text=${encodeURIComponent(msg)}`, '_blank');
+    window.open(whatsappLink(msg), '_blank');
   }
 
   function addToCart() {
@@ -428,7 +428,7 @@ function BiggerCakeForm({ product, onClose }: { product: Product; onClose?: () =
       `📎 Reference photo (if any): attaching it in this chat\n` +
       `\n💰 *Estimated Total: ${fmt(total)}*\n\nPlease confirm availability and final price. Thank you!`;
 
-    window.open(`https://wa.me/2348181154270?text=${encodeURIComponent(msg)}`, '_blank');
+    window.open(whatsappLink(msg), '_blank');
   }
 
   function addToCart() {
