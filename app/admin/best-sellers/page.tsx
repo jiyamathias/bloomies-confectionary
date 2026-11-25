@@ -5,8 +5,6 @@ import { Pencil, Save, X, GripVertical, Plus, Trash2, CheckCircle } from 'lucide
 import {
   PRODUCTS,
   DEFAULT_BEST_SELLERS,
-  getBestSellersConfig,
-  saveBestSellersConfig,
 } from '@/lib/products';
 import type { BestSellersConfig } from '@/lib/products';
 import type { Product } from '@/types';
@@ -21,11 +19,17 @@ export default function AdminBestSellersPage() {
   const [toast,       setToast]       = useState('');
   const [saved,       setSaved]       = useState(false);
 
-  // Load from localStorage on mount
   useEffect(() => {
-    const cfg = getBestSellersConfig();
-    setConfig(cfg);
-    setTitle(cfg.title);
+    fetch('/api/settings?key=best_sellers')
+      .then(r => r.json())
+      .then(d => {
+        if (d.value?.productIds) {
+          const cfg: BestSellersConfig = { title: d.value.title ?? DEFAULT_BEST_SELLERS.title, productIds: d.value.productIds };
+          setConfig(cfg);
+          setTitle(cfg.title);
+        }
+      })
+      .catch(() => { /* use defaults */ });
   }, []);
 
   function flash(msg: string) {
@@ -34,10 +38,12 @@ export default function AdminBestSellersPage() {
     setTimeout(() => { setToast(''); setSaved(false); }, 2600);
   }
 
-  function saveAll(cfg: BestSellersConfig) {
-    saveBestSellersConfig(cfg);
-    // notify the home page in case it's open in same tab
-    window.dispatchEvent(new Event('bloomies:bestsellers'));
+  async function saveAll(cfg: BestSellersConfig) {
+    await fetch('/api/settings?key=best_sellers', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value: cfg }),
+    }).catch(() => { /* ignore */ });
     flash('Best Sellers section updated!');
   }
 
