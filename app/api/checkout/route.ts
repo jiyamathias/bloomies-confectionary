@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { PRODUCTS } from '@/lib/products';
 import { onlineUnitPrice, quoteReason, formatNaira, MAX_CANDLES } from '@/lib/pricing';
 import { createPaymentLink, createTxRef, paymentsEnabled } from '@/lib/flutterwave';
+import { getDb, hasDatabase } from '@/lib/db';
+import { orders, orderItems } from '@/lib/db/schema';
 import type { CakeOptions } from '@/types';
 
 export const dynamic = 'force-dynamic';
@@ -71,7 +73,60 @@ export async function POST(req: Request) {
 
   const txRef = createTxRef(total);
   const origin = process.env.SITE_URL || new URL(req.url).origin;
-  const order = lines.join(' | ');
+  const orderDesc = lines.join(' | ');
+
+  // Persist order to DB (if available) so it appears in the sales log
+  // regardless of whether the customer completes payment.
+  let dbOrderId: string | undefined;
+  if (hasDatabase()) {
+    try {
+      const db = getDb();
+      const lineItems = (rawItems as Record<string, unknown>[]).map((raw, i) => {
+        const productId = str(raw?.productId, 60);
+        const qty = raw.qty as number;
+        const options = parseOptions(raw?.options);
+        const unit = onlineUnitPrice(productId, options)!;
+        const product = PRODUCTS.find(p => p.id === productId)!;
+        return {
+          productId,
+          name: product.name,
+          category: product.category,
+          qty,
+          unitPrice: unit,
+          details: str(raw?.details, 600) || null,
+        };
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const [dbOrder] = await db.insert(orders).values({
+        customerName:    name,
+        customerPhone:   phone,
+        customerEmail:   email,
+        channel:         'website',
+        fulfilment:      method,
+        deliveryAddress: method === 'delivery' ? address : null,
+        subtotal:        total,
+        deliveryFee:     0,
+        discount:        0,
+        total,
+        paymentMethod:   'online',
+        source:          'website',
+        txRef,
+        status:          'pending',
+        dueAt:           new Date(),
+      } as any).returning();
+
+      dbOrderId = dbOrder.id;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await db.insert(orderItems).values(
+        lineItems.map(it => ({ orderId: dbOrder.id, ...it })) as any
+      );
+    } catch (err) {
+      // DB errors should not block payment
+      console.error('[checkout] DB order creation failed:', err);
+    }
+  }
 
   try {
     const link = await createPaymentLink({
@@ -81,11 +136,10 @@ export async function POST(req: Request) {
       customer: { name, email, phone },
       description: `${lines.length} item${lines.length > 1 ? 's' : ''} from Bloomies`,
       logoUrl: `${origin}/images/bloomies-logo.jpg`,
-      // Shows on the transaction in the Flutterwave dashboard, so the bakery can see what was ordered.
       meta: {
         customer_phone: phone,
         fulfilment: method === 'delivery' ? `Delivery: ${address}` : 'Pickup',
-        order: order.slice(0, 1800),
+        order: orderDesc.slice(0, 1800),
       },
     });
     return NextResponse.json({ link, txRef, amount: total });

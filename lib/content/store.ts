@@ -1,13 +1,10 @@
 'use client';
-// Content store for the preview build.
-//
-// What the admin saves is kept as "overrides" on top of DEFAULT_CONTENT, in two copies:
-//   draft      what the admin is editing (shown in the live preview)
-//   published  what visitors see
-// PREVIEW ONLY: both live in this browser's localStorage. With the Neon backend these become
-// two rows (or two JSON columns) read on the server; the hooks below keep the same shape.
+// Content store: merges server-fetched DB overrides with localStorage preview edits.
+// Published content is fetched server-side and injected via ContentProvider.
+// Draft edits (CMS editor preview) still use localStorage for instant feedback.
 import { useSyncExternalStore } from 'react';
 import { DEFAULT_CONTENT, type Content, type PageKey } from '@/lib/content/defaults';
+import { useServerContent } from '@/lib/content/provider';
 
 export type Overrides = { [page: string]: { [section: string]: Record<string, unknown> } };
 
@@ -51,11 +48,23 @@ function subscribe(onChange: () => void) {
 
 /** Overrides the current visitor should see (draft inside the admin preview, published otherwise). */
 function useOverrides(): Overrides {
-  return useSyncExternalStore(
+  const serverContent = useServerContent();
+  const lsOverrides = useSyncExternalStore(
     subscribe,
     () => readKey(isPreview() ? DRAFT_KEY : PUBLISHED_KEY),
-    () => EMPTY, // server render and first paint use the original content
+    () => EMPTY,
   );
+  // In preview mode, localStorage draft wins (live editing feedback).
+  // On public pages, server-fetched published content is base; localStorage only
+  // adds anything if someone manually wrote to it (legacy fallback).
+  const serverBase = isPreview() ? serverContent.draft : serverContent.published;
+  if (Object.keys(lsOverrides).length === 0) return serverBase;
+  // Deep-merge: server provides the floor, localStorage adds on top
+  const merged: Overrides = { ...serverBase };
+  for (const page of Object.keys(lsOverrides)) {
+    merged[page] = { ...(serverBase[page] ?? {}), ...lsOverrides[page] };
+  }
+  return merged;
 }
 
 export function mergeSection<T extends object>(defaults: T, override?: Record<string, unknown>): T {

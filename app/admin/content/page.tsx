@@ -7,9 +7,7 @@ import {
 import Link from 'next/link';
 import { DEFAULT_CONTENT } from '@/lib/content/defaults';
 import { PAGES, type PageDef, type SectionDef } from '@/lib/content/schema';
-import {
-  discardDraft, publishDraft, readDraft, readPublished, saveDraft, type Overrides,
-} from '@/lib/content/store';
+import type { Overrides } from '@/lib/content/store';
 import { FieldEditor, Switch } from '@/components/admin/cms/fields';
 
 const PAGE_ICONS: Record<string, typeof Home> = {
@@ -39,11 +37,35 @@ export default function WebsiteContentPage() {
   const [confirm, setConfirm] = useState<'discard' | null>(null);
   const [mobilePreview, setMobilePreview] = useState(false);
 
+  // Auto-save timer ref
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
-    setDraft(readDraft()); setPublished(readPublished());
-    try { const last = localStorage.getItem('bloomies_cms_page'); if (last && PAGES.some(p => p.id === last)) { setPageId(last); setOpenSection(PAGES.find(p => p.id === last)!.sections[0]?.id ?? null); } } catch { /* ignore */ }
-    setReady(true);
+    // Load draft and published from API
+    Promise.all([
+      fetch('/api/content?v=draft').then(r => r.json()).catch(() => ({ data: {} })),
+      fetch('/api/content?v=published').then(r => r.json()).catch(() => ({ data: {} })),
+    ]).then(([d, p]) => {
+      setDraft(d.data ?? {});
+      setPublished(p.data ?? {});
+    }).finally(() => {
+      try { const last = localStorage.getItem('bloomies_cms_page'); if (last && PAGES.some(p => p.id === last)) { setPageId(last); setOpenSection(PAGES.find(p => p.id === last)!.sections[0]?.id ?? null); } } catch { /* ignore */ }
+      setReady(true);
+    });
   }, []);
+
+  async function saveDraftToApi(data: Overrides) {
+    try {
+      const res = await fetch('/api/content', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data }),
+      });
+      if (!res.ok) setError('Could not save draft.');
+    } catch {
+      setError('Could not save draft.');
+    }
+  }
 
   const page = PAGES.find(p => p.id === pageId) ?? PAGES[0];
   const unpublished = useMemo(() => changedIds(draft, published), [draft, published]);
@@ -58,7 +80,9 @@ export default function WebsiteContentPage() {
 
   const commit = useCallback((next: Overrides) => {
     setDraft(next);
-    setError(saveDraft(next) ?? '');
+    // Debounce API save by 800ms to avoid a request on every keystroke
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => saveDraftToApi(next), 800);
   }, []);
 
   function sectionValue(section: SectionDef): Obj {
@@ -84,16 +108,21 @@ export default function WebsiteContentPage() {
     commit(next);
   }
 
-  function publish() {
-    const err = publishDraft();
-    if (err) { setError(err); return; }
-    setPublished(readPublished());
+  async function publish() {
+    // Flush any pending save first
+    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
+    await saveDraftToApi(draft);
+    const res = await fetch('/api/content?action=publish', { method: 'POST' });
+    if (!res.ok) { setError('Could not publish.'); return; }
+    setPublished(draft);
     flash('Published. Your changes are now live on the website.');
   }
 
-  function discard() {
-    discardDraft();
-    setDraft(readDraft());
+  async function discard() {
+    const res = await fetch('/api/content?action=discard', { method: 'POST' });
+    if (!res.ok) { setError('Could not discard.'); return; }
+    const d = await fetch('/api/content?v=draft').then(r => r.json()).catch(() => ({ data: {} }));
+    setDraft(d.data ?? {});
     setConfirm(null);
     flash('Unpublished changes discarded.');
   }

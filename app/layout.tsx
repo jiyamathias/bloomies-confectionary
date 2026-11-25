@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import ClientShell from '@/components/ClientShell'
+import { fetchPublishedContent } from '@/lib/content/server'
 
 // Brand display font (same as the logo on Canva)
 // Self-hosted so builds don't depend on reaching Google Fonts.
@@ -31,11 +32,12 @@ export const viewport: Viewport = {
   maximumScale: 5,
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const publishedContent = await fetchPublishedContent();
   return (
     <html lang="en" className={luckiest.variable}>
       <body className="bg-[#FAFAFE] antialiased">
-        <ClientShell>{children}</ClientShell>
+        <ClientShell publishedContent={publishedContent}>{children}</ClientShell>
       </body>
     </html>
   )

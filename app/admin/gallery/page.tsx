@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Upload, Trash2, X } from 'lucide-react';
 import { GALLERY } from '@/lib/products';
@@ -14,21 +14,38 @@ export default function GalleryAdminPage() {
   const [delId, setDelId]     = useState<string | null>(null);
   const [form, setForm]       = useState({ title: '', category: 'One Layer', image: '' });
 
+  useEffect(() => {
+    fetch('/api/gallery')
+      .then(r => r.json())
+      .then(d => { if (Array.isArray(d.gallery)) setItems(d.gallery); })
+      .catch(() => { /* use static defaults */ });
+  }, []);
+
   function flash(msg: string) {
     setToast(msg);
     setTimeout(() => setToast(''), 2600);
   }
 
-  function addItem() {
+  async function addItem() {
     if (!form.title.trim() || !form.image.trim()) { flash('Please fill in all fields'); return; }
-    const newItem: GalleryItem = { id: `gallery-${Date.now()}`, ...form };
-    setItems(prev => [newItem, ...prev]);
-    setModal(false);
-    setForm({ title: '', category: 'One Layer', image: '' });
-    flash('Cake added to gallery ✓');
+    const res = await fetch('/api/gallery', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: form.title, category: form.category, image: form.image }),
+    });
+    if (res.ok) {
+      const d = await res.json();
+      setItems(prev => [d.item, ...prev]);
+      setModal(false);
+      setForm({ title: '', category: 'One Layer', image: '' });
+      flash('Cake added to gallery ✓');
+    } else {
+      flash('Could not add item. Try again.');
+    }
   }
 
-  function remove(id: string) {
+  async function remove(id: string) {
+    await fetch(`/api/gallery/${id}`, { method: 'DELETE' }).catch(() => { /* ignore */ });
     setItems(prev => prev.filter(i => i.id !== id));
     setDelId(null);
     flash('Removed from gallery');
